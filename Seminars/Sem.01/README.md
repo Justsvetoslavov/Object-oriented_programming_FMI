@@ -281,7 +281,7 @@ std::cout << sizeof(ex2) << std::endl; // 8
 std::cout << sizeof(ex3) << std::endl; // 24
 ```
 <i>Представяне на ExampleA в паметта:</i> <br />
-![Padding}](Images/padding.png)
+![Padding](images/padding.png)
 
 ## [**Обединения**](https://en.cppreference.com/w/cpp/language/union)
 Обединенията са част от паметта, която се поделя при съхранение на две или повече променливи. <br />
@@ -334,7 +334,7 @@ int main()
 }
 ```
 
-![Union](Images/union.jpg)
+![Union](images/union.JPG)
 
 ## **Задачи**
 

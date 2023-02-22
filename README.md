@@ -53,11 +53,11 @@
     - **The description of the pull Request should be**
         ```
         \<name\> \<lastname\>
-        \<group\> \<fn\>
+        \<major\> \<group\> \<fn\>
 
         Example:
         John Doe 
-        2 2MI0600192
+        SI 2 2MI0600192
         ```
 
 

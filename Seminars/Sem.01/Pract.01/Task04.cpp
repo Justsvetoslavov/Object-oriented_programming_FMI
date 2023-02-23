@@ -1,7 +1,7 @@
 #include <iostream>
 
 struct Student{
-	char* name;
+	char name[31];
 	size_t fn;
 };
 
@@ -18,7 +18,7 @@ void printSt(const Student& st) {
 }
 
 int main() {
-	char name[30];
+	char name[31];
 	size_t fn;
 	std::cin >> name;
 	std::cin >> fn;

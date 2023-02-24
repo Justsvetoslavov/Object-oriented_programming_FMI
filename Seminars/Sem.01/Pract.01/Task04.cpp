@@ -4,6 +4,8 @@ using std::cin;
 using std::cout;
 using std::endl;
 
+const int MAX_NAME_SIZE = 30;
+
 void copyStr(char* copy, const char* arr)
 {
 	int count = 0;
@@ -37,7 +39,7 @@ struct Student
 
 void initStudent(Student& student, const char* name, const unsigned int& facultyNumber)
 {
-	if (getStrLength(name) <= 30)
+	if (getStrLength(name) <= MAX_NAME_SIZE)
 	{
 		copyStr(student.name, name);
 		student.facultyNumber = facultyNumber;

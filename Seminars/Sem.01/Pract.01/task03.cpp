@@ -19,7 +19,7 @@ void inputMatrix(int **matrix, const int rows, const int cols) {
     }
 }
 
-int **transposeMatrix(int **matrix, const int rows, const int cols) {
+int **transposeMatrix(const int *const *matrix, const int rows, const int cols) {
     int **transposedMatrix = createMatrix(cols, rows);
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {
@@ -29,7 +29,7 @@ int **transposeMatrix(int **matrix, const int rows, const int cols) {
     return transposedMatrix;
 }
 
-void printMatrix(int **matrix, const int rows, const int cols) {
+void printMatrix(const int *const *matrix, const int rows, const int cols) {
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {
             cout << matrix[i][j] << " ";
@@ -38,7 +38,7 @@ void printMatrix(int **matrix, const int rows, const int cols) {
     }
 }
 
-void deleteMatrix(int **matrix, const int rows) {
+void deleteMatrix(const int *const *matrix, const int rows) {
     for (int i = 0; i < rows; i++) {
         delete[] matrix[i];
     }

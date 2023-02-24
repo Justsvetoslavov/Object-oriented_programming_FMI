@@ -2,8 +2,10 @@
 
 using std::cin, std::cout, std::endl;
 
+const int nameSize = 30;
+
 struct Student {
-    char name[31];
+    char name[nameSize + 1];
     unsigned int facultyNumber;
 };
 

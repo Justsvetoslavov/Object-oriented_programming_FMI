@@ -1,6 +1,6 @@
 #include <iostream>
 
-using namespace std;
+using std::cin, std::cout, std::endl;
 
 int lowerByPointer(const int *num1, const int *num2) {
     return *num1 < *num2 ? *num1 : *num2;

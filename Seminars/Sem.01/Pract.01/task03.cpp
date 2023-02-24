@@ -1,6 +1,6 @@
 #include <iostream>
 
-using namespace std;
+using std::cin, std::cout, std::endl;
 
 int **createMatrix(const int rows, const int cols) {
     int **matrix = new int *[rows];

@@ -1,30 +1,28 @@
-<iostream>
+#include <iostream>
 
-using namespace std;
+using std::cin, std::cout, std::endl;
 
 struct Student {
-   char name[30];
-   int facultyNumber;
+    char name[31];
+    unsigned int facultyNumber;
 };
 
 void initStudent(Student &student) {
-   cout << "Enter name: ";
-   cin.getline(student.name, 30);
-   do {
-       cout << "Enter faculty number: ";
-       cin >> student.facultyNumber;
-   } while (student.facultyNumber <= 0);
-   cin.ignore();
+    cout << "Enter name: ";
+    cin.getline(student.name, 31);
+    cout << "Enter faculty number: ";
+    cin >> student.facultyNumber;
+    cin.ignore();
 }
 
-void printStudent(Student const &student) {
-   cout << "Name: " << student.name << endl;
-   cout << "Faculty number: " << student.facultyNumber << endl;
+void printStudent(const Student &student) {
+    cout << "Name: " << student.name << endl;
+    cout << "Faculty number: " << student.facultyNumber << endl;
 }
 
 int main() {
-   Student student{};
-   initStudent(student);
-   printStudent(student);
-   return 0;
+    Student student{};
+    initStudent(student);
+    printStudent(student);
+    return 0;
 }

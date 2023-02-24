@@ -1,6 +1,6 @@
 #include <iostream>
 
-using namespace std;
+using std::cin, std::cout, std::endl;
 
 void inputElements(int *arr, const int N) {
     for (int i = 0; i < N; i++) {

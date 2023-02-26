@@ -6,11 +6,17 @@ using std::cout;
 using std::endl;
 using std::swap;
 
-const int MAX_NAME_SIZE = 30;
+const int MAX_NAME_SIZE = 31;
 const double EPSYLON = 0.0000001;
 
+// return true if second is bigger, else false
+bool compareDoubles(const double firstNum, const double secondNum)
+{
+	return (secondNum - firstNum) > EPSYLON;
+}
+
 // 8
-struct StudentInGroup
+struct Student
 {
 	double grade;
 	char name[MAX_NAME_SIZE];
@@ -18,13 +24,13 @@ struct StudentInGroup
 
 struct Group
 {
-	StudentInGroup* students;
+	Student* students;
 	double averageGrade;
 	int numberOfStudents;
 	char major[MAX_NAME_SIZE];
 };
 
-void initStudentInGroup(StudentInGroup& student)
+void initStudent(Student& student)
 {
 	cout << "Student grade: ";
 	cin >> student.grade;
@@ -35,7 +41,7 @@ void initStudentInGroup(StudentInGroup& student)
 	cout << endl;
 }
 
-void calculateGroupAverageGrade(Group& group)
+void calculateAverageGrade(Group& group)
 {
 	double sum = 0;
 
@@ -49,7 +55,7 @@ void calculateGroupAverageGrade(Group& group)
 
 }
 
-void initGroup(const int& numberOfStudents, Group& group)
+void initGroup(const int numberOfStudents, Group& group)
 {
 	cin.ignore();
 	cout << "Group major: ";
@@ -57,25 +63,25 @@ void initGroup(const int& numberOfStudents, Group& group)
 	cout << endl;
 
 	group.numberOfStudents = numberOfStudents;
-	group.students = new StudentInGroup[numberOfStudents];
+	group.students = new Student[numberOfStudents];
 
 	for (size_t i = 0; i < numberOfStudents; i++)
 	{
-		StudentInGroup student;
-		initStudentInGroup(student);
+		Student student;
+		initStudent(student);
 		group.students[i] = student;
 	}
 
-	calculateGroupAverageGrade(group);
+	calculateAverageGrade(group);
 }
 
-int getStudentsReceivingScolarshipCount(const double& minimumGrade, const Group& group)
+int getCountOfStudentsReceivingScolarship(const double minimumGrade, const Group& group)
 {
 	int count = 0;
 
 	for (size_t i = 0; i < group.numberOfStudents; i++)
 	{
-		bool isStudentReceivingScolarship = isSecondBiggerThanFirst(minimumGrade, group.students[i].grade);
+		bool isStudentReceivingScolarship = compareDoubles(minimumGrade, group.students[i].grade);
 		if (isStudentReceivingScolarship)
 		{
 			count++;
@@ -85,15 +91,15 @@ int getStudentsReceivingScolarshipCount(const double& minimumGrade, const Group&
 	return count;
 }
 
-StudentInGroup* GetStudentsReceivingScolarship(const double& minimumGrade, const Group& group)
+Student* GetStudentsReceivingScolarship(const double minimumGrade, const Group& group)
 {
 	int index = 0;
-	int count = getStudentsReceivingScolarshipCount(minimumGrade, group);
-	StudentInGroup* studentsReceivingScolarship = new StudentInGroup[count];
+	int count = getCountOfStudentsReceivingScolarship(minimumGrade, group);
+	Student* studentsReceivingScolarship = new Student[count];
 
 	for (size_t i = 0; i < group.numberOfStudents; i++)
 	{
-		bool isStudentReceivingScolarship = isSecondBiggerThanFirst(minimumGrade, group.students[i].grade);
+		bool isStudentReceivingScolarship = compareDoubles(minimumGrade, group.students[i].grade);
 		if (isStudentReceivingScolarship)
 		{
 			studentsReceivingScolarship[index++] = group.students[i];
@@ -103,13 +109,13 @@ StudentInGroup* GetStudentsReceivingScolarship(const double& minimumGrade, const
 	return studentsReceivingScolarship;
 }
 
-void sortStudents(StudentInGroup* studentsReceivingScolarship, const int& count)
+void sortStudentsByGrade(Student* studentsReceivingScolarship, const int count)
 {
 	for (size_t i = 0; i < count - 1; i++)
 	{
 		for (size_t j = 0; j < count - i - 1; j++)
 		{
-			if (isSecondBiggerThanFirst(studentsReceivingScolarship[j].grade, studentsReceivingScolarship[j + 1].grade))
+			if (compareDoubles(studentsReceivingScolarship[j].grade, studentsReceivingScolarship[j + 1].grade))
 			{
 				swap(studentsReceivingScolarship[j].grade, studentsReceivingScolarship[j + 1].grade);
 			}
@@ -117,12 +123,12 @@ void sortStudents(StudentInGroup* studentsReceivingScolarship, const int& count)
 	}
 }
 
-void printStudentsReceivingSalarySortedByGrade(const double& minimumGrade, const Group& group)
+void printStudentsReceivingScolarshipSortedByGrade(const double minimumGrade, const Group& group)
 {
-	StudentInGroup* studentsReceivingScolarship = GetStudentsReceivingScolarship(minimumGrade, group);
-	int count = getStudentsReceivingScolarshipCount(minimumGrade, group);
+	Student* studentsReceivingScolarship = GetStudentsReceivingScolarship(minimumGrade, group);
+	int count = getCountOfStudentsReceivingScolarship(minimumGrade, group);
 
-	sortStudents(studentsReceivingScolarship, count);
+	sortStudentsByGrade(studentsReceivingScolarship, count);
 
 	for (size_t i = 0; i < count; i++)
 	{
@@ -144,5 +150,5 @@ int main()
 	Group group;
 	initGroup(numberOfStudents, group);
 
-	printStudentsReceivingSalarySortedByGrade(4.5, group);
+	printStudentsReceivingScolarshipSortedByGrade(4.5, group);
 }

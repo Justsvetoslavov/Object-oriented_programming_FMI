@@ -5,7 +5,7 @@ using std::cout;
 using std::endl;
 using std::swap;
 
-const int MAX_NAME_SIZE = 30;
+const int MAX_NAME_SIZE = 31;
 const double EPSYLON = 0.0000001;
 
 void printStr(const char* str)

@@ -34,7 +34,7 @@ void initMovie(Movie& movie)
 	movie.genre = (Genre)genre;
 }
 
-void printMovies(const Movie* moviesArr, const int& count)
+void printMovies(const Movie* moviesArr, const int count)
 {
 	for (size_t i = 0; i < count; i++)
 	{
@@ -58,12 +58,12 @@ void printMovies(const Movie* moviesArr, const int& count)
 }
 
 // return true if second is bigger, else false
-bool compareDoubles(const double& firstNum, const double& secondNum)
+bool compareDoubles(const double firstNum, const double secondNum)
 {
 	return (secondNum - firstNum) > EPSYLON;
 }
 
-void sortMoviesByRating(Movie* movies, const int& count)
+void sortMoviesByRating(Movie* movies, const int count)
 {
 	for (size_t i = 0; i < count - 1; ++i)
 	{
@@ -80,7 +80,7 @@ void sortMoviesByRating(Movie* movies, const int& count)
 	}
 }
 
-void PrintNameOfBestRatedMovie(const Movie* movies, const int& count)
+void PrintNameOfBestRatedMovie(const Movie* movies, const int count)
 {
 	int indexOfBest = 0;
 

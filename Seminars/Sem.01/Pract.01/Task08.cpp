@@ -141,6 +141,8 @@ void printStudentsReceivingScolarshipSortedByGrade(const double minimumGrade, co
 		cout << studentsReceivingScolarship[i].name;
 		cout << endl;
 	}
+
+	delete[] studentsReceivingScolarship;
 }
 
 int main()
@@ -152,4 +154,7 @@ int main()
 	initGroup(numberOfStudents, group);
 
 	printStudentsReceivingScolarshipSortedByGrade(4.5, group);
+
+	delete[] group.students;
+	group.numberOfStudents = 0;
 }

@@ -37,7 +37,7 @@ struct Student
 	char name[MAX_NAME_SIZE];
 };
 
-void initStudent(Student& student, const char* name, const unsigned int& facultyNumber)
+void initStudent(Student& student, const char* name, const unsigned int facultyNumber)
 {
 	if (getStrLength(name) <= MAX_NAME_SIZE)
 	{
@@ -47,7 +47,7 @@ void initStudent(Student& student, const char* name, const unsigned int& faculty
 }
 
 void printStudentInfo(const Student& student)
-{
+{	
 	cout << "Student:" << endl << "Name: " << student.name << endl << "FN: " << student.facultyNumber;
 }
 

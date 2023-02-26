@@ -67,13 +67,16 @@ void sortMoviesByRating(Movie* movies, const int& count)
 {
 	for (size_t i = 0; i < count - 1; ++i)
 	{
-		for (size_t j = 0; j < count - i - 1; ++j)
+		size_t indexOfMaxElement = i;
+		for (size_t j = i + 1; j < count; ++j)
 		{
-			if (compareDoubles(movies[j].rating, movies[j + 1].rating))
+			if (compareDoubles(movies[indexOfMaxElement].rating, movies[j].rating))
 			{
-				swap(movies[j], movies[j + 1]);
+				indexOfMaxElement = j;
 			}
 		}
+
+		swap(movies[i], movies[indexOfMaxElement]);
 	}
 }
 

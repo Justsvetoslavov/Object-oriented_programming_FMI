@@ -3,7 +3,6 @@
 using std::cin;
 using std::cout;
 using std::endl;
-using std::swap;
 
 const int MAX_NAME_SIZE = 31;
 const double EPSYLON = 0.0000001;
@@ -23,6 +22,13 @@ struct Movie
 	int duration;
 	char name[MAX_NAME_SIZE];
 };
+
+void mySwap(Movie& firstMovie, Movie& secondMovie)
+{
+	Movie& temp = firstMovie;
+	firstMovie = secondMovie;
+	secondMovie = temp;
+}
 
 void initMovie(Movie& movie)
 {
@@ -76,7 +82,7 @@ void sortMoviesByRating(Movie* movies, const int count)
 			}
 		}
 
-		swap(movies[i], movies[indexOfMaxElement]);
+		mySwap(movies[i], movies[indexOfMaxElement]);
 	}
 }
 

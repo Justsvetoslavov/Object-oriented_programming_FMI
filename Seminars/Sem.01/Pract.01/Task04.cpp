@@ -4,7 +4,7 @@ using std::cin;
 using std::cout;
 using std::endl;
 
-const int MAX_NAME_SIZE = 30;
+const int MAX_NAME_SIZE = 31;
 
 void copyStr(char* copy, const int copyLenght, const char* arr, const int arrLength)
 {

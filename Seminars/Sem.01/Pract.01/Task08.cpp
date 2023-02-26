@@ -4,7 +4,6 @@
 using std::cin;
 using std::cout;
 using std::endl;
-using std::swap;
 
 const int MAX_NAME_SIZE = 31;
 const double EPSYLON = 0.0000001;
@@ -29,6 +28,13 @@ struct Group
 	int numberOfStudents;
 	char major[MAX_NAME_SIZE];
 };
+
+void mySwap(Student& firstStudent, Student& secondStudent)
+{
+	Student& temp = firstStudent;
+	firstStudent = secondStudent;
+	secondStudent = temp;
+}
 
 void initStudent(Student& student)
 {
@@ -120,7 +126,7 @@ void sortStudentsByGrade(Student* studentsReceivingScolarship, const int count)
 			}
 		}
 
-		swap(movies[i], movies[indexOfMaxElement]);
+		mySwap(studentsReceivingScolarship[i], studentsReceivingScolarship[indexOfMaxElement]);
 	}
 }
 

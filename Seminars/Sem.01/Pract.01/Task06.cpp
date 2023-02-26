@@ -7,9 +7,9 @@ using std::endl;
 
 const double EPSYLON = 0.0000001;
 const FIRST_QUADRANT = 1;
-const SECOND_QUADRANT = 1;
-const THIRD_QUADRANT = 1;
-const FORTH_QUADRANT = 1;
+const SECOND_QUADRANT = 2;
+const THIRD_QUADRANT = 3;
+const FORTH_QUADRANT = 4;
 const Point CENTER{ 0,0 };
 
 // 6 
@@ -31,7 +31,7 @@ void printPoint(const Point& point)
 
 double getDistBetweenCenterOfTheCoordSystemAndPoint(const Point& point)
 {
-	return sqrt(pow(point.x, 2) + pow(point.y, 2));
+	return sqrt(point.x * point.x + point.y * point.y);
 }
 
 unsigned double getDistanceBetweenTwoPoins(const Point& firstPoint, const Point& secondPoint)

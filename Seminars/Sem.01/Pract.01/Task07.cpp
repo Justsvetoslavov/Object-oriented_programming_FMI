@@ -8,17 +8,6 @@ using std::swap;
 const int MAX_NAME_SIZE = 31;
 const double EPSYLON = 0.0000001;
 
-void printStr(const char* str)
-{
-	int count = 0;
-
-	while (str[count] != '\0')
-	{
-		cout << str[count++];
-	}
-
-}
-
 enum class Genre
 {
 	Comedy,
@@ -52,7 +41,7 @@ void printMovies(const Movie* moviesArr, const int& count)
 		Movie movie = moviesArr[i];
 		cout << i + 1 << "." << endl;
 		cout << "Movie name: ";
-		printStr(movie.name);
+		cout << movie.name;
 		cout << endl;
 		cout << "Duration: " << movie.duration << endl;
 		cout << "Rating: " << movie.rating << endl;

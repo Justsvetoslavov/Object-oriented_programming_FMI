@@ -16,12 +16,7 @@ struct ComplexNum
 
 ComplexNum getSumOfTwoComplexNumbers(const ComplexNum& firstNum, const ComplexNum& secondNum)
 {
-	ComplexNum sum;
-
-	sum.realPart = firstNum.realPart + secondNum.realPart;
-	sum.imaginaryPart = firstNum.imaginaryPart + secondNum.imaginaryPart;
-
-	return sum;
+	return ComplexNum{(firstNum.realPart + secondNum.realPart), (firstNum.imaginaryPart + secondNum.imaginaryPart)};
 }
 
 void printComplexNum(const ComplexNum& num)

@@ -2,11 +2,7 @@
 
 using std::cout;
 
-const OPENING_BRACKET = "(";
-const CLOSING_BRACKET = ")";
 const IMAGINARY_SYMBOL = "i";
-const COMMA = ",";
-const WHITESPACE = " ";
 
 struct ComplexNum
 {
@@ -21,7 +17,7 @@ ComplexNum getSumOfTwoComplexNumbers(const ComplexNum& firstNum, const ComplexNu
 
 void printComplexNum(const ComplexNum& num)
 {
-	cout << OPENING_BRACKET << num.realPart << COMMA << WHITESPACE << num.imaginaryPart << IMAGINARY_SYMBOL << CLOSING_BRACKET;
+	cout << "(" << num.realPart << ", " << num.imaginaryPart << IMAGINARY_SYMBOL << ")";
 }
 
 int main()

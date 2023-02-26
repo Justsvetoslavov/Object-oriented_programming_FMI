@@ -22,5 +22,8 @@ void printComplexNum(const ComplexNum& num)
 
 int main()
 {
-	
+	ComplexNum firstNum{ 5,3 };
+	ComplexNum secondNum{ 3,1 };
+
+	printComplexNum(getSumOfTwoComplexNumbers(firstNum, secondNum));
 }

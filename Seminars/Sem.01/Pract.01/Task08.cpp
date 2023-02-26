@@ -111,13 +111,16 @@ void sortStudentsByGrade(Student* studentsReceivingScolarship, const int count)
 {
 	for (size_t i = 0; i < count - 1; i++)
 	{
+		size_t indexOfMaxElement = i;
 		for (size_t j = 0; j < count - i - 1; j++)
 		{
-			if (compareDoubles(studentsReceivingScolarship[j].grade, studentsReceivingScolarship[j + 1].grade))
+			if (compareDoubles(studentsReceivingScolarship[indexOfMaxElement].grade, studentsReceivingScolarship[j].grade))
 			{
-				swap(studentsReceivingScolarship[j].grade, studentsReceivingScolarship[j + 1].grade);
+				indexOfMaxElement = j;
 			}
 		}
+
+		swap(movies[i], movies[indexOfMaxElement]);
 	}
 }
 

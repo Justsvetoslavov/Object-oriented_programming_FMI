@@ -81,8 +81,7 @@ int getCountOfStudentsReceivingScolarship(const double minimumGrade, const Group
 
 	for (size_t i = 0; i < group.numberOfStudents; i++)
 	{
-		bool isStudentReceivingScolarship = compareDoubles(minimumGrade, group.students[i].grade);
-		if (isStudentReceivingScolarship)
+		if (compareDoubles(minimumGrade, group.students[i].grade))
 		{
 			count++;
 		}
@@ -99,8 +98,7 @@ Student* GetStudentsReceivingScolarship(const double minimumGrade, const Group& 
 
 	for (size_t i = 0; i < group.numberOfStudents; i++)
 	{
-		bool isStudentReceivingScolarship = compareDoubles(minimumGrade, group.students[i].grade);
-		if (isStudentReceivingScolarship)
+		if (compareDoubles(minimumGrade, group.students[i].grade))
 		{
 			studentsReceivingScolarship[index++] = group.students[i];
 		}

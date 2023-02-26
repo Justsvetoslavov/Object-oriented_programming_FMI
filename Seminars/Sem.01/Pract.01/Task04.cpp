@@ -6,17 +6,20 @@ using std::endl;
 
 const int MAX_NAME_SIZE = 30;
 
-void copyStr(char* copy, const char* arr)
+void copyStr(char* copy, const int copyLenght, const char* arr, const int arrLength)
 {
-	int count = 0;
-
-	while (arr[count] != '\0')
+	if (copyLenght >= arrLength)
 	{
-		copy[count] = arr[count];
-		count++;
-	}
+		int count = 0;
 
-	copy[count] = '\0';
+		while (arr[count] != '\0')
+		{
+			copy[count] = arr[count];
+			count++;
+		}
+
+		copy[count] = '\0';
+	}
 }
 
 int getStrLength(const char* str)
@@ -41,7 +44,7 @@ void initStudent(Student& student, const char* name, const unsigned int& faculty
 {
 	if (getStrLength(name) <= MAX_NAME_SIZE)
 	{
-		copyStr(student.name, name);
+		copyStr(student.name, getStrLength(student.name), name, getStrLength(name));
 		student.facultyNumber = facultyNumber;
 	}
 }

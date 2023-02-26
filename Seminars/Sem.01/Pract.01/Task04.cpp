@@ -48,9 +48,7 @@ void initStudent(Student& student, const char* name, const unsigned int& faculty
 
 void printStudentInfo(const Student& student)
 {
-	const char* studentName = student.name;
-
-	cout << "Student:" << endl << "Name: " << studentName << endl << "FN: " << student.facultyNumber;
+	cout << "Student:" << endl << "Name: " << student.name << endl << "FN: " << student.facultyNumber;
 }
 
 int main()

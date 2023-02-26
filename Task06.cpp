@@ -5,13 +5,6 @@ using std::cout;
 using std::cin;
 using std::endl;
 
-int deg(int num, int deg) {
-    int res = 1;
-    for (size_t i = 0; i < deg; i++)
-        res *= num;
-    return res;
-}
-
 struct Point {
     int x, y;
 };
@@ -22,35 +15,36 @@ void read_point(const Point &p) {
 }
 
 void write(Point& p) {
-    int x, y;
-    cin >> x >> y;
-    p.x = x;
-    p.y = y;
+    cin >> p.x >> p.y;
 }
 
 void distance_from_zero(const Point& p) {
-    cout << sqrt(deg(p.x, 2) + deg(p.y, 2)) << endl;
+    cout << sqrt(p.x * p.x + p.y * p.y) << endl;
 }
 
 void distance_between_points(const Point& a, const Point& b) {
-    cout << sqrt(deg(a.x - b.x, 2) + deg(a.y - b.y, 2)) << endl;
+    cout << sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y)) << endl;
 }
 
-void kvadrant(const Point& p) {
+void quadrant(const Point& p) {
     if (p.x > 0 && p.y > 0)
-        cout << "I";
+        cout << "I\n";
     else if (p.x < 0 && p.y > 0)
-        cout << "II";
+        cout << "II\n";
     else if (p.x < 0 && p.y < 0)
-        cout << "III";
+        cout << "III\n";
     else if (p.x > 0 && p.y < 0)
-        cout << "IV";
+        cout << "IV\n";
     else if (p.x == 0 && p.y == 0)
-        cout << "center";
+        cout << "Center\n";
+    else if (p.x == 0)
+        cout << "On X-axis\n";
+    else if (p.y == 0)
+        cout << "On Y-axis\n";
 }
 
 bool in_circle(const Point& p, int r) {
-    if (deg(p.x, 2) + deg(p.y, 2) <= deg(r, 2))
+    if (p.x * p.x + p.y * p.y <= r * r)
         return true;
     return false;
 }
@@ -62,6 +56,6 @@ int main() {
     distance_from_zero(a);
     write(b);
     distance_between_points(a, b);
-    kvadrant(a);
-    cout << endl << in_circle(a, 10);
+    quadrant(a);
+    cout << in_circle(a, 10);
 }

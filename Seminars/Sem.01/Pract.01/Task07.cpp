@@ -68,7 +68,8 @@ void printMovies(const Movie* moviesArr, const int& count)
 	}
 }
 
-bool isSecondBiggerThanFirst(const double& firstNum, const double& secondNum)
+// return true if second is bigger, else false
+bool compareDoubles(const double& firstNum, const double& secondNum)
 {
 	double diff = secondNum - firstNum;
 
@@ -86,7 +87,7 @@ void sortMoviesByRating(Movie* movies, const int& count)
 	{
 		for (size_t j = 0; j < count - i - 1; ++j)
 		{
-			if (isSecondBiggerThanFirst(movies[j].rating, movies[j + 1].rating))
+			if (compareDoubles(movies[j].rating, movies[j + 1].rating))
 			{
 				swap(movies[j], movies[j + 1]);
 			}
@@ -100,7 +101,7 @@ void PrintNameOfBestRatedMovie(const Movie* movies, const int& count)
 
 	for (size_t i = 1; i < count; i++)
 	{
-		if (isSecondBiggerThanFirst(movies[indexOfBest].rating, movies[i].rating))
+		if (compareDoubles(movies[indexOfBest].rating, movies[i].rating))
 		{
 			indexOfBest = i;
 		}

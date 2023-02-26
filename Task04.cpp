@@ -4,8 +4,10 @@ using std::cout;
 using std::cin;
 using std::endl;
 
+const int NAME_SIZE_MAX = 30;
+
 struct Student {
-    char name[30];
+    char name[NAME_SIZE_MAX + 1];
     uint64_t fac_num;
 };
 
@@ -16,8 +18,9 @@ void initStudent(const Student& student) {
 
 void str_trans(char str1[], const char str2[]) {
     int rotator = -1;
-    while (str2[++rotator] != '\0')
+    while (str2[++rotator] != '\0' && rotator != NAME_SIZE_MAX)
         str1[rotator] = str2[rotator];
+    str1[rotator] = '\0';
 }
 
 void change_info(Student& student, const char name[], int fac_num) {

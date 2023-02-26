@@ -60,14 +60,7 @@ void printMovies(const Movie* moviesArr, const int& count)
 // return true if second is bigger, else false
 bool compareDoubles(const double& firstNum, const double& secondNum)
 {
-	double diff = secondNum - firstNum;
-
-	if (diff > EPSYLON)
-	{
-		return true;
-	}
-
-	return false;
+	return (secondNum - firstNum) > EPSYLON;
 }
 
 void sortMoviesByRating(Movie* movies, const int& count)

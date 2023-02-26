@@ -72,7 +72,7 @@ int getQuadrant(const Point& point)
 }
 
 // 1 - inside, 0 - on the circle, -1 - outside
-bool isPointNnCircleOrInIt(const Point& point, const Point& centerOfCoordSystem, const unsigned double& radius)
+bool isPointNnCircleOrInIt(const Point& point, const Point& centerOfCoordSystem, const unsigned double radius)
 {
 	unsigned double distance = getDistanceBetweenTwoPoins(point, centerOfCoordSystem);
 	double diff = distance - radius;

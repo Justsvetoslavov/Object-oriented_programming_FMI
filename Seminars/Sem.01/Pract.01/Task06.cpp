@@ -6,10 +6,6 @@ using std::cout;
 using std::endl;
 
 const double EPSYLON = 0.0000001;
-const OPENING_BRACKET = "(";
-const CLOSING_BRACKET = ")";
-const COMMA = ",";
-const WHITESPACE = " ";
 const FIRST_QUADRANT = 1;
 const SECOND_QUADRANT = 1;
 const THIRD_QUADRANT = 1;
@@ -30,7 +26,7 @@ void initPoint(Point& point)
 
 void printPoint(const Point& point)
 {
-	cout << OPENING_BRACKET << point.x << COMMA << WHITESPACE << point.y << CLOSING_BRACKET << endl;
+	cout << "(" << point.x << ", " << point.y << ")" << endl;
 }
 
 double getDistBetweenCenterOfTheCoordSystemAndPoint(const Point& point)

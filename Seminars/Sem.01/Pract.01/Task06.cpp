@@ -36,7 +36,8 @@ double getDistBetweenCenterOfTheCoordSystemAndPoint(const Point& point)
 
 unsigned double getDistanceBetweenTwoPoins(const Point& firstPoint, const Point& secondPoint)
 {
-	return sqrt(pow((firstPoint.x - secondPoint.x), 2) + pow((firstPoint.y - secondPoint.y), 2));
+	return sqrt((firstPoint.x - secondPoint.x) * (firstPoint.x - secondPoint.x) + 
+				(firstPoint.y - secondPoint.y) * (firstPoint.y - secondPoint.y));
 }
 
 int getQuadrant(const Point& point)

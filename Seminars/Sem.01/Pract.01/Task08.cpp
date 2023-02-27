@@ -1,6 +1,9 @@
 #include <iostream>
 
-using namespace std;
+using std::cin;
+using std::cout;
+using std::endl;
+using std::swap;
 
 const int FIRST = 1;
 const int SECOND = 2;
@@ -50,32 +53,41 @@ void studentInfo(Student& student)
 	cout << "Enter gpa: ";
 	cin >> student.gpa;
 	cout << endl;
-}
-
-const int GROUP_SIZE = 3;
+};
 
 struct Group
 {
-	Student student[GROUP_SIZE];
+	Student* student;
 	double groupGpa;
+	int groupSize;
 };
 
 void createGroup(Group& group)
 {
+	cout << "Enter the number of the students in the group: ";
+	cin >> group.groupSize;
+
+	group.student = new Student[group.groupSize];
+
 	group.groupGpa = 0.0;
-	for (size_t i = 1; i < GROUP_SIZE; i++)
+	for (size_t i = 1; i <= group.groupSize; i++)
 	{
 		cout << "Enter student #" << i << " information: " << endl;
 		studentInfo(group.student[i]);
 		group.groupGpa += group.student[i].gpa;
 	}
-	group.groupGpa /= GROUP_SIZE;
+	group.groupGpa /= group.groupSize;
+}
+
+void deleteGroup(Group& group)
+{
+	delete[] group.student;
 }
 
 int countScholarshipStudents(const Group& group, double minGpa)
 {
 	int scholarshipCount = 0;
-	for (size_t i = 0; i < GROUP_SIZE; i++)
+	for (size_t i = 0; i < group.groupSize; i++)
 	{
 		if (group.student[i].gpa >= minGpa)
 			scholarshipCount++;
@@ -85,7 +97,7 @@ int countScholarshipStudents(const Group& group, double minGpa)
 
 void sortStudentsByGpa(Group& group)
 {
-	int n = GROUP_SIZE;
+	int n = group.groupSize;
 	bool swapped;
 	do
 	{
@@ -102,7 +114,7 @@ void sortStudentsByGpa(Group& group)
 
 void printStudents(Group& group, double minGpa)
 {
-	for (size_t i = 1; i < GROUP_SIZE; i++)
+	for (size_t i = 1; i <= group.groupSize; i++)
 	{
 		if (group.student[i].gpa >= minGpa)
 			cout << group.student[i].name << " " << group.student[i].surname << " " << group.student[i].gpa << endl;
@@ -123,6 +135,7 @@ int main()
 	cout << "Scholarship students (sorted by gpa):" << endl;
 	sortStudentsByGpa(group);
 	printStudents(group, minGpa);
+	deleteGroup(group);
 
 	return 0;
 }

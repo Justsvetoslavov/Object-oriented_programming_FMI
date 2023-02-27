@@ -1,7 +1,9 @@
 #include <iostream>
 #include <cmath>
 
-using namespace std;
+using std::cin;
+using std::cout;
+using std::endl;
 
 struct Point
 {
@@ -25,7 +27,7 @@ double distanceToCenter(const Point& point)
 	return sqrt(point.x * point.x + point.y * point.y);
 }
 
-double distanceTo(Point& first, Point& second)
+double distanceTo(const Point& first, const Point& second)
 {
 	double dx = first.x - second.x;
 	double dy = first.y - second.y;
@@ -34,16 +36,21 @@ double distanceTo(Point& first, Point& second)
 
 int quadrant(const Point& point)
 {
-	if (point.x > 0 && point.y > 0)
+	if (point.x > 0 && point.y > 0){
 		return 1;
-	else if (point.x < 0 && point.y > 0)
+	}
+	else if (point.x < 0 && point.y > 0) {
 		return 2;
-	else if (point.x < 0 && point.y < 0)
+	}
+	else if (point.x < 0 && point.y < 0) {
 		return 3;
-	else if (point.x > 0 && point.y < 0)
+	}
+	else if (point.x > 0 && point.y < 0) {
 		return 4;
-	else
+	}
+	else {
 		return 0;
+	}
 }
 
 char isInsideCircle(const Point& point, double r)

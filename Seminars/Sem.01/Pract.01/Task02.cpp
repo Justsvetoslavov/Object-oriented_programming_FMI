@@ -1,7 +1,7 @@
 #include <iostream>
 
 
-void inputArr(int* arr, const int& SIZE)
+void inputArr(int* arr, const int SIZE)
 {
 	for (int i = 0; i < SIZE; ++i)
 	{
@@ -10,12 +10,12 @@ void inputArr(int* arr, const int& SIZE)
 	}
 }
 
-int countBiggerSymbols(int* arr, const int& SIZE, const char symbol)
+int countBiggerSymbols(const int* arr, const int SIZE, const char symbol)
 { 
 	int counter = 0;
 	for (int i = 0; i < SIZE; ++i)
 	{
-		if (arr[i] > symbol - '0')
+		if (arr[i] > symbol)
 		{
 			counter++;
 		}

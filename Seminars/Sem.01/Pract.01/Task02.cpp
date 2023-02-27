@@ -1,38 +1,42 @@
 #include <iostream>
 
-using std::cin, std::cout, std::endl;
 
-void inputElements(int *arr, const int N) {
-    for (int i = 0; i < N; i++) {
-        cout << "Enter the " << i + 1 << " element: ";
-        cin >> arr[i];
-    }
+void inputArr(int* arr, const int& SIZE)
+{
+	for (int i = 0; i < SIZE; ++i)
+	{
+		std::cout << "Enter element: ";
+		std::cin >> arr[i];
+	}
 }
 
-int countSymbol(const int *arr, const int N, const char symbol) {
-    int count = 0;
-    for (int i = 0; i < N; i++) {
-        if (arr[i] > (int) symbol) {
-            count++;
-        }
-    }
-    return count;
+int countBiggerSymbols(int* arr, const int& SIZE, const char symbol)
+{ 
+	int counter = 0;
+	for (int i = 0; i < SIZE; ++i)
+	{
+		if (arr[i] > symbol - '0')
+		{
+			counter++;
+		}
+	}
+	return counter;
 }
 
-int main() {
-    int N;
-    cout << "Enter the number of elements in the array: ";
-    cin >> N;
+int main()
+{
+	int N = 0;
+	std::cout << "Enter N: ";
+	std:: cin >> N;
 
-    int *arr = new int[N];
-    inputElements(arr, N);
+	int* arr = new int[N];
+	inputArr(arr, N);
 
-    char symbol;
-    cout << "Enter the symbol: ";
-    cin >> symbol;
+	char symbol;
+	std::cout << "Enter symbol: ";
+	std::cin >> symbol;
 
-    cout << "The number of elements greater than the symbol: " << countSymbol(arr, N, symbol) << endl;
-    
-    delete[] arr;
-    return 0;
+	std::cout << "The number of the elements greater than symbol is: " << countBiggerSymbols(arr, N, symbol) << std::endl;
+
+	delete[] arr;
 }

@@ -1,6 +1,8 @@
 #include <iostream>
 
-using namespace std;
+using std::cin; 
+using std::cout;
+using std::endl;
 
 struct ComplexNumber
 {
@@ -28,7 +30,7 @@ void printComplexNumber(const ComplexNumber& num)
         cout << num.real << " + " << num.imaginary << "i" << endl;
     }
     else {
-        cout << num.real << " - " << num.imaginary << "i" << endl;
+        cout << num.real << " " << num.imaginary << "i" << endl;
     }
 }
 

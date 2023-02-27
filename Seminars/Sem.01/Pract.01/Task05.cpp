@@ -1,24 +1,34 @@
-#include <iostream>
+﻿#include<iostream>
+using namespace std;
+//Natalia Nakollofski   1MI8000034    GR.1
 
-using std::cin, std::cout, std::endl;
 
-struct ComplexNumber {
-    double real;
-    double imaginary;
+//Да се създаде структура която представя комплексно число.
+//
+//Създайте функция, която събира две комплексни числа.
+//
+//Създайте подходяща функция за извеждане принтиране на комплексни числа
+
+
+
+
+struct complex {
+	double real;
+	double imaginary;
 };
 
-ComplexNumber additionOfComplexNumbers(const ComplexNumber &lhs, const ComplexNumber &rhs) {
-    return {lhs.real + rhs.real, lhs.imaginary + rhs.imaginary};
+complex sum(const complex& reall, const complex& imaginaryy) {
+	return { reall.real + reall.real,imaginaryy.imaginary + imaginaryy.imaginary };
+}
+void printnumbers(const complex& number) {
+	cout << number.real << "+" << number.imaginary << "i" << endl;
 }
 
-void printComplexNumber(const ComplexNumber &number) {
-    cout << number.real << " + " << number.imaginary << "i" << endl;
-}
 
 int main() {
-    ComplexNumber a = {1.0, 2.0};
-    ComplexNumber b = {3.0, 4.0};
-    ComplexNumber c = additionOfComplexNumbers(a, b);
-    printComplexNumber(c);
-    return 0;
+	complex a = { 1.0,2.0 };
+	complex b = { 3.0,4.0 };
+	complex c = sum(a, b);
+	printnumbers(c);
+
 }

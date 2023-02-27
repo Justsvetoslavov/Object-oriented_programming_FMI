@@ -1,30 +1,41 @@
-#include <iostream>
+﻿#include<iostream>
+using std::cout;
+using std::cin;
+using std::endl;
+//Natalia Nakollofski   1MI8000034    GR.1
 
-using std::cin, std::cout, std::endl;
+//Създайте структура описваща студент.Всеки студент се определя чрез :
+//
+//име(до 30 символа)
+//факултетен номер(цяло неотрицателно число)
+//За всеки от долупосочените примери демонстрирайте кои операции са възможни и кои не.
+//Възможните операции са предефиниране на променливата и промяна на полетата.
 
-const int nameSize = 30;
 
-struct Student {
-    char name[nameSize + 1];
-    unsigned int facultyNumber;
+
+
+struct student {
+	char name[30];
+	int number;
+
 };
 
-void initStudent(Student &student) {
-    cout << "Enter name: ";
-    cin.getline(student.name, 31);
-    cout << "Enter faculty number: ";
-    cin >> student.facultyNumber;
-    cin.ignore();
+void initStudent(student& mystud) {
+	cin >> mystud.name >> mystud.number;
+
+}
+void printStudent(student& mystud) {
+	cout << "student name" << endl;
+	cout << mystud.name;
+	cout << endl;
+	cout << "student number" << endl;
+	cout << mystud.number;
 }
 
-void printStudent(const Student &student) {
-    cout << "Name: " << student.name << endl;
-    cout << "Faculty number: " << student.facultyNumber << endl;
-}
 
 int main() {
-    Student student{};
-    initStudent(student);
-    printStudent(student);
-    return 0;
+	student mystudent;
+	initStudent(mystudent);
+	printStudent(mystudent);
+
 }

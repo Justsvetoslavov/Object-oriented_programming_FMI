@@ -1,59 +1,112 @@
-#include <iostream>
-#include <cmath>
+﻿#include <iostream>
+using std::cin;
+using std::cout;
+using std::endl;
+//Natalia Nakollofski   1MI8000034    GR.1
 
-using std::cin, std::cout, std::endl;
+
+//Да се напише програма, която да моделира точка(структура Point) в декартовата равнина.
+//
+//Да се имплементира следната функционалност :
+//
+//Point да може да се прочита от стандартния вход.
+//Point да може да се отпечатва на стандартния изход в подходящ формат.
+//Да може да се намира разстоянието от центъра на равнината(0.0, 0.0) до дадена точка.
+//Да може да се намира разстояние между две точки.
+//Бонус :
+//
+//По дадена точка, да се определи в кой квадрант е.
+//По дадена окръжност с радиус r и център началото на координатната система, да се изведе дали точка K е в тази окръжност или по нейния контур.
 
 struct Point {
-    int x;
-    int y;
+	int x;
+	int y;
+
 };
 
-void createPoint(Point &p) {
-    cout << "Enter x: ";
-    cin >> p.x;
-    cout << "Enter y: ";
-    cin >> p.y;
+void readPoint(Point& mypoint) {
+	cout << endl;
+	cout << "x coordinate:";
+	cout << mypoint.x;
+	cout << endl;
+	cout << "y coordinate:";
+	cout << mypoint.y;
 }
+double finddistance(Point& mypoint) {
+	double dx = mypoint.x * mypoint.x;
+	double  dy = mypoint.y * mypoint.y;
+	return sqrt(dx + dy);
 
-void printPoint(const Point &p) {
-    cout << "x: " << p.x << " y: " << p.y << endl;
 }
+double distance(Point& mypoint1, Point& mypoint2) {
+	double dx = mypoint1.x - mypoint2.x;
+	double  dy = mypoint2.y - mypoint2.y;
+	return sqrt(dx * dx + dy * dy);
 
-double calculateDistance(const Point &p1, const Point &p2) {
-    return sqrt(pow(p1.x - p2.x, 2) + pow(p1.y - p2.y, 2));
 }
+void quadrant(Point& mypoint) {
 
-int calculateQuadrant(const Point &p) {
-    if (p.x > 0 && p.y > 0) {
-        return 1;
-    } else if (p.x < 0 && p.y > 0) {
-        return 2;
-    } else if (p.x < 0 && p.y < 0) {
-        return 3;
-    } else if (p.x > 0 && p.y < 0) {
-        return 4;
-    }
-    return 0;
+	if (mypoint.x > 0 & mypoint.y > 0) {
+		cout << "FIRST QUADRANT";
+	}
+	else if (mypoint.x < 0 & mypoint.y > 0) {
+		cout << "SECOND QUADRANT";
+	}
+	else if (mypoint.x < 0 & mypoint.y < 0) {
+		cout << "THIRD QUADRANT";
+	}
+	else if (mypoint.x > 0 & mypoint.y < 0) {
+		cout << "FOURTH QUADRANT";
+	}
+
 }
+void isOnCircle(Point& mypoint, const int radius) {
 
-void isInCircle(const double &radius, const Point &p) {
-    double distance = calculateDistance({0, 0}, p);
-    if (distance <= radius) {
-        cout << "Point is in circle" << endl;
-    } else {
-        cout << "Point is not in circle" << endl;
-    }
+	double rad = radius * radius;
+	double dx = mypoint.x * mypoint.x;
+	double  dy = mypoint.y * mypoint.y;
+	double equation = dx + dy;
+	if (equation == rad) {
+		cout << "The point lies on circle counture";
+
+	}
+	else if (equation < rad) {
+		cout << "The point lies inside circle ";
+
+	}
+	else if (equation > rad) {
+		cout << "The point lies outside circle ";
+	}
+
+
+
 }
 
 int main() {
-    Point p1{};
-    createPoint(p1);
-    printPoint(p1);
-    cout << "Quadrant: " << calculateQuadrant(p1) << endl;
-    isInCircle(5, p1);
-    Point p2{};
-    createPoint(p2);
-    printPoint(p2);
-    cout << "Distance between p1 and p2: " << calculateDistance(p1, p2) << endl;
-    return 0;
+	Point mypoint1 = { 3,4 };
+	Point mypoint2 = { 5,4 };
+	cout << "the coordinates of the first point are:";
+	readPoint(mypoint1);
+	cout << endl;
+	cout << "the coordinates of the second point are:";
+	readPoint(mypoint2);
+	cout << "Distance from point 1 to center:";
+	cout << finddistance(mypoint1);
+	cout << endl;
+	cout << "Distance from point 2 to center:";
+	cout << finddistance(mypoint2);
+	cout << endl;
+	cout << "Distance between 2 points:";
+	cout << distance(mypoint1, mypoint2);
+	cout << endl;
+	cout << "The quadrant in which the point lies is:";
+	quadrant(mypoint1);
+	cout << endl;
+	int radius;
+	cout << "Input the radius for the circle:";
+	cin >> radius;
+	isOnCircle(mypoint1, radius);
+
+
 }
+

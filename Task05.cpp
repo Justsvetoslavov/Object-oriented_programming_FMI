@@ -13,13 +13,13 @@ Complex_num sum_complex_num(const Complex_num &a, const Complex_num &b) {
     return res;
 }
 
-void read_complex_num(const Complex_num &num) {
+void print_complex_num(const Complex_num &num) {
     cout << num.r << " + " << num.i << "i\n";
 }
 
 int main() {
     Complex_num n1{3, 5}, n2{4, 3};
-    read_complex_num(n1);
+    print_complex_num(n1);
     Complex_num sum = sum_complex_num(n1, n2);
-    read_complex_num(sum);
+    print_complex_num(sum);
 }

@@ -1,38 +1,42 @@
-#include <iostream>
+﻿#include<iostream>
+using std::cout;
+using std::cin;
+using std::endl;
+//Natalia Nakollofski   1MI8000034    GR.1
 
-using std::cin, std::cout, std::endl;
+//Прочетете цяло число N от стандартния вход, последвано от N на брой цели числа.
+//Прочетете един символ от стандартния вход.Намерете броя на тези цели числа от
+//въведените, които са по - големи от ASCII кода на символа.За целта използвайте динамична памет и функции.
 
-void inputElements(int *arr, const int N) {
-    for (int i = 0; i < N; i++) {
-        cout << "Enter the " << i + 1 << " element: ";
-        cin >> arr[i];
-    }
+
+
+void inputarray(int* arr, const int N) {
+
+	for (int i = 0; i < N; i++) {
+		cin >> arr[i];
+	}
 }
 
-int countSymbol(const int *arr, const int N, const char symbol) {
-    int count = 0;
-    for (int i = 0; i < N; i++) {
-        if (arr[i] > (int) symbol) {
-            count++;
-        }
-    }
-    return count;
+int findnr(const int* arr, const int N, char symbol) {
+	int number = 0;
+	for (int i = 0; i < N; i++) {
+		if (arr[i] > int(symbol)) {
+			number++;
+		}
+
+	}
+	return number;
 }
+
 
 int main() {
-    int N;
-    cout << "Enter the number of elements in the array: ";
-    cin >> N;
-
-    int *arr = new int[N];
-    inputElements(arr, N);
-
-    char symbol;
-    cout << "Enter the symbol: ";
-    cin >> symbol;
-
-    cout << "The number of elements greater than the symbol: " << countSymbol(arr, N, symbol) << endl;
-    
-    delete[] arr;
-    return 0;
+	int N;
+	cin >> N;
+	int* arr = new int[N];
+	inputarray(arr, N);
+	char symbol;
+	cin >> symbol;
+	cout << findnr(arr, N, symbol);
+	delete[]arr;
+	return 0;
 }

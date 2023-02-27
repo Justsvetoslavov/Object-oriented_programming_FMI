@@ -1,28 +1,58 @@
-#include <iostream>
+﻿#include <iostream>
+using std::cin;
+using std::cout;
+using std::endl;
+//Natalia Nakollofski   1MI8000034    GR.1
 
-using std::cin, std::cout, std::endl;
 
-int lowerByPointer(const int *num1, const int *num2) {
-    return *num1 < *num2 ? *num1 : *num2;
+//Реализирайте функции, която по две цели числа връща по - малкото от тях като подавата числата по стойност
+//, като указател и чрез референция(псевдоним).
+//Използвайте ключова дума const и демонстрирайте чрез примери кога е възможна(и кога не) употребата на всяка една от функциите.
+
+int smallerbypointer(int* a, int* b) {
+
+	if (*a < *b) {
+		return *a;
+	}
+	else if (*a == *b) {
+		return -1;
+	}
+	else {
+		return *b;
+	}
+
 }
 
-int lowerByReference(const int &num1, const int &num2) {
-    return lowerByPointer(&num1, &num2);
+int smallnr(int a, int b) {
+	if (a < b) {
+		return a;
+	}
+	else if (a == b) {
+		return -1;
+	}
+	else {
+		return b;
+	}
 }
 
-int lowerByReference(int &num1, int &num2) {
-    return lowerByPointer(&num1, &num2);
+int smallbyreference(int& a, int& b) {
+	if (a < b) {
+		return a;
+	}
+	else if (a == b) {
+		return -1;
+	}
+	else {
+		return b;
+	}
 }
 
 int main() {
-    int num1, num2;
-    const int number3 = 3;
-    cout << "Enter two numbers: ";
-    cin >> num1 >> num2;
-    //Invokes the lowerByReference(const int &, const int &) function because the arguments are constant
-    cout << "The lower by ref number is " << lowerByReference(num1, num2) << endl;
-    //Invokes the lowerByReference(int &, int &) function because the arguments are not constant
-    cout << "The lower by ref number is " << lowerByReference(num1, number3) << endl;
-    cout << "The lower by pointer number is " << lowerByPointer(&num1, &num2) << endl;
-    return 0;
+	int a;
+	int b;
+	cout << "enter numbers" << endl;
+	cin >> a >> b;
+	cout << smallerbypointer(&a, &b) << endl;
+	cout << smallbyreference(a, b) << endl;
+	cout << smallnr(a, b) << endl;
 }

@@ -10,7 +10,7 @@ int lowerNumByReference(const int& num1, const int& num2)
 	return num1 < num2 ? num1 : num2;
 }
 
-int lowerNumByPointer(int* num1, int* num2)
+int lowerNumByPointer(const int* num1, const int* num2)
 {
 	return *num1 < *num2 ? *num1 : *num2;
 }

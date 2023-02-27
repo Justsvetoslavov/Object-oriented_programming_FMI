@@ -9,7 +9,7 @@ struct Point {
     int x, y;
 };
 
-void read_point(const Point &p) {
+void print(const Point &p) {
     cout << "X: " << p.x << endl
          << "Y: " << p.y << endl;
 }
@@ -43,7 +43,7 @@ void quadrant(const Point& p) {
         cout << "On Y-axis\n";
 }
 
-bool in_circle(const Point& p, int r) {
+bool in_circle(const Point& p, const int r) {
     if (p.x * p.x + p.y * p.y <= r * r)
         return true;
     return false;
@@ -52,7 +52,7 @@ bool in_circle(const Point& p, int r) {
 int main() {
     Point a, b;
     write(a);
-    read_point(a);
+    print(a);
     distance_from_zero(a);
     write(b);
     distance_between_points(a, b);

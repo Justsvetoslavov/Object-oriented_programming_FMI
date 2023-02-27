@@ -22,7 +22,7 @@ void fillMatrix(int** matrix, const int rows, const int cols)
 	}
 }
 
-int** transposeMatrix(int** matrix, const int rows, const int cols)
+int** transposeMatrix(const int** matrix, const int rows, const int cols)
 {
 	int** transposedMatrix = initializeMatrix(cols, rows);
 	for (int i = 0; i < rows; ++i)
@@ -35,7 +35,7 @@ int** transposeMatrix(int** matrix, const int rows, const int cols)
 	return transposedMatrix;
 }
 
-void printMatrix(int** matrix, const int rows, const int cols)
+void printMatrix(const int** matrix, const int rows, const int cols)
 {
 	for (int i = 0; i < rows; ++i)
 	{

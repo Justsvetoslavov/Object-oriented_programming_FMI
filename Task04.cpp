@@ -11,48 +11,48 @@ struct Student {
     uint64_t fac_num;
 };
 
-void initStudent(const Student& student) {
+void printStudent(const Student& student) {
     cout << "Name: " << student.name << endl
          << "Fac. number: " << student.fac_num << endl;
 }
 
-void str_trans(char str1[], const char str2[]) {
+void strTrans(char str1[], const char str2[]) {
     int rotator = -1;
     while (str2[++rotator] != '\0' && rotator != NAME_SIZE_MAX)
         str1[rotator] = str2[rotator];
     str1[rotator] = '\0';
 }
 
-void change_info(Student& student, const char name[], int fac_num) {
-    str_trans(student.name, name);
+void initStudent(Student& student, const char name[], const int fac_num) {
+    strTrans(student.name, name);
     student.fac_num = fac_num;
 }
 
 int main() {
     Student st = { "Gosho", 10 };
-    initStudent(st);
+    printStudent(st);
     Student* pSt = &st;
-    initStudent(*pSt);
-    change_info(*pSt, "Test1", 1);
-    initStudent(*pSt);
+    printStudent(*pSt);
+    initStudent(*pSt, "Test1", 1);
+    printStudent(*pSt);
     const Student* pCSt = &st;
-    initStudent(*pCSt);
-//    change_info(*pCSt, "Test2", 2);  can't change
-//    initStudent(*pCSt);
+    printStudent(*pCSt);
+//    initStudent(*pCSt, "Test2", 2);  can't change
+//    printStudent(*pCSt);
     Student* const cPSt = &st;
-    initStudent(*cPSt);
-    change_info(*cPSt, "Test3", 3);
-    initStudent(*cPSt);
+    printStudent(*cPSt);
+    initStudent(*cPSt, "Test3", 3);
+    printStudent(*cPSt);
     const Student* const cpCSt = &st;
-    initStudent(*cpCSt);
-//    change_info(*cpCSt, "Test4", 4);  can't change
-//    initStudent(*cpCSt);
+    printStudent(*cpCSt);
+//    initStudent(*cpCSt, "Test4", 4);  can't change
+//    printStudent(*cpCSt);
     Student& refSt = st;
-    initStudent(refSt);
-    change_info(refSt, "Test5", 5);
-    initStudent(refSt);
+    printStudent(refSt);
+    initStudent(refSt, "Test5", 5);
+    printStudent(refSt);
     const Student& refCSt = st;
-    initStudent(refCSt);
-//    change_info(refCSt, "Test6", 6);  can't change
-//    initStudent(refCSt);
+    printStudent(refCSt);
+//    initStudent(refCSt, "Test6", 6);  can't change
+//    printStudent(refCSt);
 }

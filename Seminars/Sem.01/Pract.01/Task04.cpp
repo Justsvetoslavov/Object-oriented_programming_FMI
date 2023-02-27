@@ -1,30 +1,53 @@
 #include <iostream>
 
-using std::cin, std::cout, std::endl;
+const int NAME_SIZE = 30;
 
-const int nameSize = 30;
-
-struct Student {
-    char name[nameSize + 1];
-    unsigned int facultyNumber;
+struct Student
+{
+	char name[NAME_SIZE + 1];
+	unsigned int fn;
 };
 
-void initStudent(Student &student) {
-    cout << "Enter name: ";
-    cin.getline(student.name, 31);
-    cout << "Enter faculty number: ";
-    cin >> student.facultyNumber;
-    cin.ignore();
+void initSTudent(Student& student)
+{
+	std::cout << "Enter name: ";
+	std::cin.getline(student.name, NAME_SIZE + 1);
+	std::cout << "Enter faculty number: ";
+	std::cin >> student.fn;
+	std::cin.ignore();
 }
 
-void printStudent(const Student &student) {
-    cout << "Name: " << student.name << endl;
-    cout << "Faculty number: " << student.facultyNumber << endl;
+void printStudent(const Student& student) {
+	std::cout << "Name: " << student.name <<std:: endl;
+	std::cout << "Faculty number: " << student.fn << std::endl;
 }
 
-int main() {
-    Student student{};
-    initStudent(student);
-    printStudent(student);
-    return 0;
+int main()
+{
+	Student student{};
+	initSTudent(student);
+	printStudent(student);
+	
+	Student st = { "Gosho", 10 };
+	printStudent(st);
+
+	Student* pSt = &st;
+	printStudent(*pSt);
+
+	const Student* pCSt = &st;
+	printStudent(*pCSt);
+
+	Student* const cPSt = &st;
+	printStudent(*cPSt);
+
+	const Student* const cpCSt = &st;
+	printStudent(*cpCSt);
+
+	Student& refSt = st;
+	printStudent(refSt);
+
+	const Student& refCSt = st;
+	printStudent(refCSt);
+
+	//the function does work with all of the operations above
 }

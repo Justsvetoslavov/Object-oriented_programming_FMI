@@ -1,4 +1,5 @@
-﻿#include <iostream>
+#include <iostream>
+#include<string>
 using std::cin;
 using std::cout;
 using std::endl;
@@ -23,74 +24,92 @@ using std::endl;
 //
 //	Сортиране на филмите по рейтинг.
 
-
+enum Genre {
+	Comedy, Action, Horror, Romantic
+};
 
 struct Movie {
-	char name[500];
-	int  duration;
-	char genre[120];
+	std::string name;
+	int duration;
+	Genre genre;
 	double rating;
 };
 
-
-void topmovie(Movie& mymov1, Movie& mymov2, Movie& mymov3) {
-	cout << "TOP 3 MOVIES :";
-	if (mymov1.rating >= mymov2.rating && mymov1.rating >= mymov3.rating) {
-		
-		cout << "MOVIE NAME:" << mymov1.name << ' ' << "DURATION:" << mymov1.duration << ' '<<"min"<<endl << "GENRE:" << mymov1.genre << endl << "RATING:" << mymov1.rating << endl;
-		
-		if (mymov2.rating >= mymov3.rating) {
-			cout << "MOVIE NAME:" << mymov2.name << ' ' << "DURATION:" << mymov2.duration << '  '<<"min" << endl << "GENRE:" << mymov2.genre << endl << "RATING:" << mymov2.rating << endl;
-			cout << endl;
-			cout << "MOVIE NAME:" << mymov3.name << ' ' << "DURATION:" << mymov3.duration << '  '<<"min"<<endl << "GENRE:" << mymov3.genre << endl << "RATING:" << mymov3.rating << endl;
-		}
-		else {
-			cout << "MOVIE NAME:" << mymov3.name << ' ' << "DURATION:" << mymov3.duration << '  ' << "min" << endl << "GENRE:" << mymov3.genre << endl << "RATING:" << mymov3.rating << endl;
-
-			cout << "MOVIE NAME:" << mymov2.name << ' ' << "DURATION:" << mymov2.duration << '  ' << endl << "GENRE:" << mymov2.genre << endl << "RATING:" << mymov2.rating << endl;
-		}
-	}
-	else if (mymov2.rating >= mymov1.rating && mymov2.rating >= mymov3.rating) {
-
-		cout << "MOVIE NAME:" << mymov2.name << ' ' << "DURATION:" << mymov2.duration << '  '<<"min" << endl << "GENRE:" << mymov2.genre << endl << "RATING:" << mymov2.rating << endl;
-
-		if (mymov1.rating >= mymov3.rating) {
-			cout << "MOVIE NAME:" << mymov1.name << ' ' << "DURATION:" << mymov1.duration << ' ' << "min" << endl << "GENRE:" << mymov1.genre << endl << "RATING:" << mymov1.rating << endl;
-
-			cout << "MOVIE NAME:" << mymov3.name << ' ' << "DURATION:" << mymov3.duration << '  ' << "min" << endl << "GENRE:" << mymov3.genre << endl << "RATING:" << mymov3.rating << endl;
-		}
-		else {
-			cout << "MOVIE NAME:" << mymov3.name << ' ' << "DURATION:" << mymov3.duration << '  ' << "min" << endl << "GENRE:" << mymov3.genre << endl << "RATING:" << mymov3.rating << endl;
-
-			cout << "MOVIE NAME:" << mymov1.name << ' ' << "DURATION:" << mymov1.duration << ' ' << "min" << endl << "GENRE:" << mymov1.genre << endl << "RATING:" << mymov1.rating << endl;
-
-		}
-	}
-	else if (mymov3.rating >= mymov1.rating && mymov3.rating >= mymov2.rating) {
-
-		cout << "MOVIE NAME:" << mymov3.name << ' ' << "DURATION:" << mymov3.duration << '  ' << "min" << endl << "GENRE:" << mymov3.genre << endl << "RATING:" << mymov3.rating << endl;
-
-		if (mymov1.rating >= mymov2.rating) {
-			cout << "MOVIE NAME:" << mymov1.name << ' ' << "DURATION:" << mymov1.duration << ' ' << "min" << endl << "GENRE:" << mymov1.genre << endl << "RATING:" << mymov1.rating << endl;
-			cout << "MOVIE NAME:" << mymov2.name << ' ' << "DURATION:" << mymov2.duration << '  ' <<"min" << endl << "GENRE:" << mymov2.genre << endl << "RATING:" << mymov2.rating << endl;
-		}
-		else {
-
-			cout << "MOVIE NAME:" << mymov2.name << ' ' << "DURATION:" << mymov2.duration << '  '<<"min" << endl << "GENRE:" << mymov2.genre << endl << "RATING:" << mymov2.rating << endl;
-			cout << "MOVIE NAME:" << mymov1.name << ' ' << "DURATION:" << mymov1.duration << ' ' << "min" << endl << "GENRE:" << mymov1.genre << endl << "RATING:" << mymov1.rating << endl;
-
-		}
-
-	}
-
+void createmovies(Movie& movies, std::string name, int duration, Genre genre, double rating) {
+	movies.name = name;
+	movies.duration = duration;
+	movies.genre = genre;
+	movies.rating = rating;
 }
 
+void displaymovies(const Movie mymovie[], const int numMovies) {
+	for (int i = 0; i < numMovies; i++) {
+		cout << "Name:" << mymovie[i].name << endl;
+		cout << "Duration:" << mymovie[i].duration << endl;
+		cout << "Rating:" << mymovie[i].rating << endl;
+		cout << "Genre:";
+		switch (mymovie[i].genre) {
+		case Comedy:
+			cout << "Comedy";
+			break;
+		case Action:
+			cout << "Action";
+			break;
+		case Horror:
+			cout << "Horror";
+			break;
+		case Romantic:
+			cout << "Romantic";
+			break;
+		default:
+			cout << "Unknown";
+		}
+		cout << endl;
+	}
+}
 
+void displayTopMovie(const Movie mymovie[], const int numMovies) {
+	double MaxRating = 0.0;
+	int topMovieINDX = -1;
+	for (int i = 0; i < numMovies; i++) {
+		if (mymovie[i].rating > MaxRating) {
+			MaxRating = mymovie[i].rating;
+			topMovieINDX = i;
+		}
+	}
+	if (topMovieINDX >= 0) {
+		cout << "The top movie is:" << mymovie[topMovieINDX].name << endl;
+		cout << "Rating:" << mymovie[topMovieINDX].rating << endl;
+	}
+	else {
+		cout << "No movie found" << endl;
+	}
+}
+void sortMoviesByrating(Movie movie[], const int numMovies) {
+	for (int i = 0; i < numMovies; i++) {
+		for (int j = i + 1; j < numMovies; j++) {
+			Movie temp = movie[i];
+			movie[i] = movie[j];
+			movie[j] = temp;
+		}
 
+	}
+}
 int main() {
-	Movie mymovie1={"The lost city",120,"Adventure",5.5};
-	Movie mymovie2 = { "Spider-man",184,"Science-fiction",5.0 };
-	Movie mymovie3 = { "Avatar",193,"Science-fiction",6.0 };
-	topmovie(mymovie1, mymovie2, mymovie3);
+
+	const int NUMBER_OF_MOVIES = 3;
+	Movie movies[NUMBER_OF_MOVIES];
+	createmovies(movies[0], "The Shawshank Redemption", 142, Action, 9.3);
+	createmovies(movies[1], "The Godfather", 175, Action, 9.2);
+	createmovies(movies[2], "The Dark Knight", 152, Action, 9.0);
+
+	displaymovies(movies, NUMBER_OF_MOVIES);
+	cout << "endl";
+	displayTopMovie(movies, NUMBER_OF_MOVIES);
+	cout << endl;
+	sortMoviesByrating(movies, NUMBER_OF_MOVIES);
+	cout << "Movies sorted by rating:" << endl;
+	displaymovies(movies, NUMBER_OF_MOVIES);
+	return 0;
 
 }

@@ -4,14 +4,16 @@ using std::cout;
 using std::cin;
 using std::endl;
 
-enum Genre {
+const int MAX_NAME_SIZE = 100;
+
+enum class Genre {
     Comedy,
     Action,
     Horror
 };
 
 struct Movie {
-    char name[100];
+    char name[MAX_NAME_SIZE];
     int time;
     Genre gen;
     double rate;
@@ -23,7 +25,7 @@ void str_trans(char str1[], const char str2[]) {
         str1[rotator] = str2[rotator];
 }
 
-Movie add_movie(const char name[], int time, Genre gen, double rate) {
+Movie add_movie(const char name[], const int time, const Genre gen, const double rate) {
     Movie res{ "", time, gen, rate};
     str_trans(res.name, name);
     return res;
@@ -36,7 +38,7 @@ void swap_movies(Movie &mov1, Movie &mov2) {
     mov2 = agent;
 }
 
-void sort_movies(Movie *movies, int num) {
+void sort_movies(Movie *movies, const int num) {
     int max_pos;
     for (int i = 0; i < num - 1; ++i) {
         max_pos = i;
@@ -50,9 +52,9 @@ void sort_movies(Movie *movies, int num) {
 
 int main() {
     Movie list[3];
-    list[0] = add_movie("Film1", 180, Comedy, 9.2);
-    list[1] = add_movie("Film2", 150, Action, 5.0);
-    list[2] = add_movie("Film3", 110, Horror, 6.7);
+    list[0] = add_movie("Film1", 180, Genre::Comedy, 9.2);
+    list[1] = add_movie("Film2", 150, Genre::Action, 5.0);
+    list[2] = add_movie("Film3", 110, Genre::Horror, 6.7);
     sort_movies(list, 3);
     for (int i = 0; i < 3; ++i) {
         cout << list[i].name << " - " << list[i].rate << endl;

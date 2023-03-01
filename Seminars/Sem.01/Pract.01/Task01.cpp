@@ -1,28 +1,48 @@
+//Gabriela Mladenova
+//SI
+//Group 1
+//FN: 3MI0600225
+
 #include <iostream>
 
-using std::cin, std::cout, std::endl;
-
-int lowerByPointer(const int *num1, const int *num2) {
-    return *num1 < *num2 ? *num1 : *num2;
+int minNumber1(const int& number1,const int& number2)
+{
+    if (number1 < number2)
+    {
+        return number1;
+    }
+    if (number2 < number1)
+    {
+        return number2;
+    }
+    return number1;
 }
-
-int lowerByReference(const int &num1, const int &num2) {
-    return lowerByPointer(&num1, &num2);
+int minNumber2(const int* number1, const int* number2)
+{
+    if (*number1 < *number2)
+    {
+        return *number1;
+    }
+    else if (*number2 < *number1)
+    {
+        return *number2;
+    }
+    return *number1;
 }
+int main()
+{
+    int number1;
+    std::cout << "Enter the first number: ";
+    std::cin >> number1;
+    int number2;
+    std::cout << "Enter the second number: ";
+    std::cin >> number2;
 
-int lowerByReference(int &num1, int &num2) {
-    return lowerByPointer(&num1, &num2);
-}
+    std::cout << "First function/The smaller of the two numbers is: ";
+    std::cout << minNumber1(number1, number2);
+    std::cout << std::endl;
+    std::cout << "Second function/The smaller of the two numbers is: ";
+    std::cout << minNumber2(&number1, &number2);
 
-int main() {
-    int num1, num2;
-    const int number3 = 3;
-    cout << "Enter two numbers: ";
-    cin >> num1 >> num2;
-    //Invokes the lowerByReference(const int &, const int &) function because the arguments are constant
-    cout << "The lower by ref number is " << lowerByReference(num1, num2) << endl;
-    //Invokes the lowerByReference(int &, int &) function because the arguments are not constant
-    cout << "The lower by ref number is " << lowerByReference(num1, number3) << endl;
-    cout << "The lower by pointer number is " << lowerByPointer(&num1, &num2) << endl;
     return 0;
 }

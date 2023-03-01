@@ -38,7 +38,7 @@ int calculateQuadrant(const Point &p) {
 
 void isInCircle(const double &radius, const Point &p) {
     double distance = calculateDistance({0, 0}, p);
-    if (distance <= radius) {
+    if (distance <= radius) { // Is this the way we compare doubles Nikola?
         cout << "Point is in circle" << endl;
     } else {
         cout << "Point is not in circle" << endl;

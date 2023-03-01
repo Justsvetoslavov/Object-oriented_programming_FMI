@@ -8,7 +8,6 @@
 - [Namespaces](https://github.com/Justsvetoslavov/Object-oriented_programming_FMI/tree/master/Seminars/Sem.01#namespaces)
 - [Задачи](https://github.com/Justsvetoslavov/Object-oriented_programming_FMI/tree/master/Seminars/Sem.01#%D0%B7%D0%B0%D0%B4%D0%B0%D1%87%D0%B8)
 
-
 ##  **Преговор. Указатели, референции, динамична памет.**
 <img align="right" width="450" height="600" src="https://study.com/cimages/multimages/16/1724cf83-a8ad-4ad5-aeca-0311114a819c_memory_alloc_cpp.png">
 

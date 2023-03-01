@@ -1,68 +1,79 @@
+//Gabriela Mladenova
+//SI
+//Group 1
+//FN: 3MI0600225
 #include <iostream>
 
-using std::cin, std::cout, std::endl;
-
-int **createMatrix(const int rows, const int cols) {
-    int **matrix = new int *[rows];
-    for (int i = 0; i < rows; i++) {
-        matrix[i] = new int[cols];
-    }
-    return matrix;
-}
-
-void inputMatrix(int **matrix, const int rows, const int cols) {
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < cols; j++) {
-            cout << "Enter the element at position (" << i << ", " << j << "): ";
-            cin >> matrix[i][j];
+void inputMatrix(int** matrix, const int rows, const int cols)
+{
+    for (int i = 0; i < rows; ++i)
+    {
+        for (int j = 0; j < cols; ++j)
+        {
+            std::cin >> matrix[i][j];
         }
     }
 }
-
-int **transposeMatrix(const int *const *matrix, const int rows, const int cols) {
-    int **transposedMatrix = createMatrix(cols, rows);
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < cols; j++) {
+void printMatrix(int** matrix, const int rows, const int cols)
+{
+    for (int i = 0; i < rows; ++i)
+    {
+        for (int j = 0; j < cols; ++j)
+        {
+            std::cout << matrix[i][j];
+        }
+        std::cout << std::endl;
+    }
+}
+int** transposeMatrix(int** matrix, int** transposedMatrix, const int rows, const int cols)
+{
+    for (int i = 0; i < rows; ++i)
+    {
+        for (int j = 0; j < cols; ++j)
+        {
             transposedMatrix[j][i] = matrix[i][j];
         }
     }
     return transposedMatrix;
 }
-
-void printMatrix(const int *const *matrix, const int rows, const int cols) {
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < cols; j++) {
-            cout << matrix[i][j] << " ";
-        }
-        cout << endl;
-    }
-}
-
-void deleteMatrix(const int *const *matrix, const int rows) {
-    for (int i = 0; i < rows; i++) {
+void deleteMatrix(int** matrix, const int rows, const int cols)
+{
+    for (int i = 0; i < rows; ++i)
+    {
         delete[] matrix[i];
     }
     delete[] matrix;
 }
+int main()
+{
+    int rows;
+    std::cout << "Enter the number of the rows: ";
+    std::cin >> rows;
+    int cols;
+    std::cout << "Enter the number of the cols: ";
+    std::cin >> cols;
 
-int main() {
-    int rows, cols;
-    cout << "Enter the number of rows: ";
-    cin >> rows;
-    cout << "Enter the number of columns: ";
-    cin >> cols;
-    
-    int **matrix = createMatrix(rows, cols);
+    int** matrix = new int* [rows];
+    for (int i = 0; i < rows; ++i)
+    {
+        matrix[i] = new int[cols];
+    }
+    std::cout << "Enter the elements of the matrix: ";
     inputMatrix(matrix, rows, cols);
-    
-    cout << "The matrix is:" << endl;
+    std::cout << std::endl << "The original matrix is: " << std::endl;
     printMatrix(matrix, rows, cols);
-    
-    int **transposedMatrix = transposeMatrix(matrix, rows, cols);
-    cout << "The transposed matrix is:" << endl;
+
+    int** transposedMatrix = new int* [cols];
+    for (int i = 0; i < cols; ++i)
+    {
+        transposedMatrix[i] = new int[rows];
+    }
+    transposedMatrix = transposeMatrix(matrix, transposedMatrix, rows, cols);
+    std::cout << std::endl << "The transposed matrix is: " << std::endl;
     printMatrix(transposedMatrix, cols, rows);
-    
-    deleteMatrix(matrix, rows);
-    deleteMatrix(transposedMatrix, cols);
+
+    deleteMatrix(matrix, rows, cols);
+    deleteMatrix(transposedMatrix, cols, rows);
+
     return 0;
 }

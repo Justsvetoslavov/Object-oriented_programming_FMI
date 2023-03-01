@@ -1,8 +1,10 @@
 #include <iostream>
 #include <fstream>
 
+const char PATH[] = "result.txt";
+
 int diff_betw_sum_comp() {
-    std::fstream my_file("result.txt", std::ios::in);
+    std::fstream my_file(PATH, std::ios::in);
     int sum, comp;
     my_file >> sum >> comp;
     my_file.close();
@@ -14,7 +16,7 @@ int diff_betw_sum_comp() {
 int main() {
     int a, b, c;
     std::cin >> a >> b >> c;
-    std::fstream res("result.txt", std::ios::out);
+    std::fstream res(PATH, std::ios::out);
     res << a + b + c << " " << a * b * c;
     res.close();
     std::cout << diff_betw_sum_comp();

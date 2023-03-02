@@ -13,81 +13,81 @@ using std::endl;
 //Напишете функция, която приема група и минимален успех за стипендия, и връща колко студента ще получават стипендия.
 //Създайте функция, която приема група и минимален успех за стипендия и извежда сортирани всички студенти, които ще получават стипендия
 //идния семестър.
-
 const int MAX = 50;
 struct Student {
-	char name[50];
+	char name[MAX];
 	double grade;
 };
 struct Group {
+	Student student[MAX];
 	int numberofstudents;
 	double gpa;
 };
-
-void inputdata(Student mystudent[], Group& mygroup) {
-	cout << "enter nr of students in the group:";
-	cin >> mygroup.numberofstudents;
-	mygroup.gpa = 0;
-	
-	for (int i = 0; i < mygroup.numberofstudents; i++) {
-		cin >> mystudent[i].name >> mystudent[i] .grade;
-		mygroup.gpa += mystudent[i].grade;
-	}
-	mygroup.gpa /= mygroup.numberofstudents;
-
-
+void swap(Student& a, Student& b) {
+	Student temp = a;
+	a = b;
+	b = temp;
 }
-void  readinput(Student mystudent[], Group& mygroup) {
-	for (int i = 0; i < mygroup.numberofstudents; i++) {
-		cout << mystudent[i].name <<' '<< endl << mystudent[i].grade<<' '<<endl;
-		
-	}
-	cout << "GROUP GPA IS:";
-	cout << mygroup.gpa << endl;
-
-}
-void provideScholarship(Student mystud[], Group& mygroup) {
-	double minimumScholarship = 5.5;
-	int num = 0;
-	
-	for (int i = 0; i < mygroup.numberofstudents; i++) {
-		if (mystud[i].grade >= minimumScholarship) {
-			num++;
-		}
-
-	}
-	cout << "Number of student who will gain a scholarship is:" << num << endl;
-
-
-	cout << "STUDETNS WHO WILL GAIN A SCHOLARSHIP BASED ON THEIR GPA ARE:" << endl;
-	for (int i = 0; i < mygroup.numberofstudents; i++) {
-		for(int j=0;j<num;j++){
-		if (mystud[j].grade <= mystud[j+1].grade) {
-			Student temp = mystud[j];
-			mystud[j] = mystud[j + 1];
-			mystud[j + 1] = temp;
-				
+void selectionSort(Group& group) {
+	int n = group.numberofstudents;
+	for (int i = 0; i < n; i++) {
+		int minIndex = i;
+		for (int j = i + 1; j < n; j++) {
+			if (group.student[j].grade < group.student[minIndex].grade) {
+				minIndex = j;
 			}
 		}
-
-	}
-	for (int i = 0; i < mygroup.numberofstudents; i++) {
-		if (mystud[i].grade >= minimumScholarship) {
-			cout << mystud[i].name << ' ' << mystud[i].grade;
+		if (minIndex != i) {
+			swap(group.student[i], group.student[minIndex]);
 		}
 	}
 
+}
+Group creategroup() {
+	Group group;
+	cout << "Enter number of students:" << endl;
+	cin >> group.numberofstudents;
+	double totalGPA = 0;
+	for (int i = 0; i < group.numberofstudents; i++) {
+		cin >> group.student[i].name >> group.student[i].grade;
+		totalGPA+=group.student[i].grade;
+	}
+	group.gpa = totalGPA / group.numberofstudents;
+	return group;
 
 
+}
+int numScholarship(Group& group, double mingpa) {
+	int nrscholar = 0;
+	for (int i = 0; i < group.numberofstudents; i++)
+	{
+		if (group.student[i].grade >= mingpa) {
+			nrscholar++;
+		}
+	}
+	return nrscholar;
+}
+
+
+
+void displayScholarships(Group& group, double mingpa) {
+	cout << "students who will receive a scholarship are:" << endl;
+	for (int i = 0; i < group.numberofstudents; i++) {
+		if (group.student[i].grade >= mingpa) {
+			cout << group.student[i].name << "-GPA:" << group.student[i].grade << endl;
+		}
+	}
 }
 
 
 int main() {
-	cout << "Enter datas for students" << endl;
-	Student mystudent[MAX];
-	Group mygroup;
-	inputdata(mystudent, mygroup);
-	cout << "STUDENTS AND THEIR GRADES ARE:" << endl;
-	readinput(mystudent, mygroup);
-	provideScholarship(mystudent, mygroup);
+	Group group = creategroup();
+	cout << "Group average success:" << group.gpa << endl;
+	double mingpa;
+	cout << "Enter minimum scholarship GPA: ";
+	cin >> mingpa;
+	cout << "Number of students receiving a scholarship: " << numScholarship(group, mingpa) << endl;
+	selectionSort(group);
+	displayScholarships(group, mingpa);
+	return 0;
 }

@@ -8,10 +8,10 @@ const int MAX_TEXT_SIZE = 1000;
 const char PATH[] = "result_message.txt";
 
 struct Info{
-    char title[MAX_TITLE_SIZE + 1];
-    char recipient_name[MAX_NAME_SIZE + 1];
-    char message[MAX_TEXT_SIZE + 1];
-    char sender_name[MAX_NAME_SIZE + 1];
+    char title[MAX_TITLE_SIZE];
+    char recipient_name[MAX_NAME_SIZE];
+    char message[MAX_TEXT_SIZE];
+    char sender_name[MAX_NAME_SIZE];
 };
 
 Info get_info_from_file(const char path[]) {

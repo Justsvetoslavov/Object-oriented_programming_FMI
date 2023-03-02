@@ -1,0 +1,6 @@
+Dear, {title} {recipient_name}.
+
+{message}
+
+Sincerely,
+{sender_name}

@@ -1,93 +1,100 @@
-﻿#include <iostream>
-#include <cmath>
+//Gabriela Mladenova 
+//SI
+//Group 1
+//3MI0600225
+#include <iostream>
 
-struct Point {
-	double x;
-	double y;
+struct Point
+{
+    int x;
+    int y;
 };
-
-struct Circle {
-	double radius;
-	Point center = { 0, 0 };
-};
-
-void inputPoint(Point& p) {
-	std::cin >> p.x >> p.y;
+void inputPoint(Point& point)
+{
+    std::cout << "Enter x: ";
+    std::cin >> point.x;
+    std::cout << "Enter y: ";
+    std::cin >> point.y;
 }
-
-void printPoint(const Point& p) {
-	std::cout << p.x << " " << p.y << "\n";
+double distBetweenTwoPoints(const Point& point1, const Point& point2)
+{
+    int distX = point1.x - point2.x;
+    int distY = point1.y - point2.y;
+    return sqrt(distX * distX + distY * distY);
 }
-
-double getDistanceToOrigin(const Point& p) {
-	return sqrt(p.x * p.x + p.y * p.y);
+void quadrant(const Point& point)
+{
+    if (point.x > 0 && point.y > 0)
+    {
+        std::cout << "first quadrant.";
+    }
+    if (point.x < 0 && point.y > 0)
+    {
+        std::cout << "second quadrant.";
+    }
+    if (point.x < 0 && point.y < 0)
+    {
+        std::cout << "third quadrant.";
+    }
+    if (point.x > 0 && point.y < 0)
+    {
+        std::cout << "fourth quadrant.";
+    }
 }
-
-double getDistanceBetweenPoints(const Point& p1, const Point& p2) {
-	double dx = p1.x - p2.x;
-	double dy = p1.y - p2.y;
-
-	return sqrt(dx * dx + dy * dy);
+void isThePointInTheCircle(const Point& point, const int distance, const int radius)
+{
+    if (distance < radius)
+    {
+        std::cout << "The point is inside the circle.";
+    }
+    if (distance > radius)
+    {
+        std::cout << "The point is outside the circle.";
+    }
+    if (distance == radius)
+    {
+        std::cout << "The point is on the border of the circle.";
+    }
 }
-
-int getQuadrant(const Point& p) {
-	// 1 or 4
-	if (p.x > 0) {
-		//x is +, y is +
-		if (p.y > 0) return 1;
-		//x is +, y is -
-		return 4;
-	}
-	else {
-		//x is -, y is +
-		if (p.y > 0) return 2;
-		//x is -, y is -
-		return 3;
-	}
+void printPoint(const Point& point)
+{
+    std::cout << "(" << point.x << " , " << point.y << ")";
 }
-
-//This function will return -1 if the point is outside the circle,
-//0 if it's on the outline and 1 if it's on the inside of the circle 
-int posRelativeToCircle(const Point& p, const Circle& c) {
-	//The center of the cirlce is the origin
-	double dist = getDistanceToOrigin(p);
-	double epsilon = 0.00001;
-	//Distance to origin is equal to the radius => the point is on the circle outline
-	if (abs(dist - c.radius) < epsilon) {
-		return 0;
-	}
-	else if (dist > c.radius) {
-		return -1;
-	}
-	return 1;
-}
-
 int main()
 {
-	const int NUMBER_OF_POINTS = 5;
-	Circle c = { 10 };
-	Point points[NUMBER_OF_POINTS];
-	for (int i = 0; i < NUMBER_OF_POINTS; i++) {
-		inputPoint(points[i]);
-	}
+    Point point1 = {};
+    Point point2 = {};
+    Point center = { 0, 0 };
+    double radius;
+    std::cout << "Coordinates for point1: " << std::endl;
+    inputPoint(point1);
+    std::cout << "Coordinates for point2: " << std::endl;
+    inputPoint(point2);
+    std::cout << "Enter the radius of the circle: ";
+    std::cin >> radius;
 
-	std::cout << "Distance to origin for each point:\n";
-	for (int i = 0; i < NUMBER_OF_POINTS; i++) {
-		std::cout << getDistanceToOrigin(points[i]) << " ";
-	}
+    double distFromPoint1ToPoint2 = distBetweenTwoPoints(point1, point2);
+    double distFromPoint1ToCenter = distBetweenTwoPoints(point1, center);
+    double distFromPoint2ToCenter = distBetweenTwoPoints(point2, center);
 
-	std::cout << "\nQuadrant for each point:\n";
-	for (int i = 0; i < NUMBER_OF_POINTS; i++) {
-		std::cout << getQuadrant(points[i]) << " ";
-	}
+    std::cout << "The distance betweet point1 and point2 is: " << distFromPoint1ToPoint2 << std::endl;
+    std::cout << "The distance betweet point1 and the center is: " << distFromPoint1ToCenter << std::endl;
+    std::cout << "The distance betweet point2 and the center is: " << distFromPoint2ToCenter << std::endl;
 
-	std::cout << "\nPos relative to circle for each point:\n";
-	for (int i = 0; i < NUMBER_OF_POINTS; i++) {
-		switch (posRelativeToCircle(points[i], c)) {
-		case -1: std::cout << "Outside circle "; break;
-		case 0: std::cout << "On outline "; break;
-		case 1: std::cout << "Inside circle "; break;
-		}
-	}
+    printPoint(point1);
+    std::cout << " is in ";
+    quadrant(point1);
+    std::cout << std::endl;
+    printPoint(point2);
+    std::cout << " is in ";
+    quadrant(point2);
+    std::cout << std::endl;
+
+    std::cout << "First point: ";
+    isThePointInTheCircle(point1, distFromPoint1ToCenter, radius);
+    std::cout << std::endl;
+    std::cout << "Second point: ";
+    isThePointInTheCircle(point2, distFromPoint2ToCenter, radius);
+
+    return 0;
 }
-

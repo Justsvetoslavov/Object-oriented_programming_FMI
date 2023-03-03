@@ -27,11 +27,20 @@ int main() {
 
     int a = 5;
     int b = 7;
+    const int c = 10;
 
     cout << lowerNumber(a, b) << endl;
     cout << lowerNumberReference(a, b) << endl;
     cout << lowerNumberPointer(&a, &b) << endl;
     cout << lowerNumberReferenceConst(a, b) << endl;
+
+    //cout << lowerNumberReference(a, c) << endl;
+    cout << lowerNumberReference(a, b) << endl;
+    //cout << lowerNumberReference(7, 5) << endl;
+
+    cout << lowerNumberReferenceConst(a, c) << endl;
+    cout << lowerNumberReferenceConst(a, b) << endl;
+    cout << lowerNumberReferenceConst(7, 5) << endl;
 
     return 0;
 }

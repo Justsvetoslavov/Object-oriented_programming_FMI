@@ -6,17 +6,20 @@
 #include <iostream>
 
 const int SIZE = 30;
+
 struct Student
 {
     char name[SIZE + 1];
     double grade;
 };
+
 struct Group
 {
     int numberOfStudents;
     Student studentsList[SIZE * 2];
     double averageGrade;
 };
+
 void inputStudentsInfo(Student& student)
 {
     std::cout << "Enter the name of the student: ";
@@ -24,6 +27,7 @@ void inputStudentsInfo(Student& student)
     std::cout << "Enter the grade of the student: ";
     std::cin >> student.grade;
 }
+
 void inputGroup(Group& group)
 {
     double sumOfGrades = 0;
@@ -33,17 +37,18 @@ void inputGroup(Group& group)
 
     for (int i = 0; i < group.numberOfStudents; ++i)
     {
-        Student student;
-        inputStudentsInfo(student);
-        group.studentsList[i] = student;
-        sumOfGrades += student.grade;
-        ++counter;
+
+        inputStudentsInfo(group.studentsList[i]);
+        sumOfGrades += group.studentsList[i].grade;
     }
-    group.averageGrade = sumOfGrades / counter;
+
+    group.averageGrade = sumOfGrades / group.numberOfStudents;
 }
+
 int countOfScholarships(const Group& group, const double minGrade)
 {
     int counter = 0;
+
     for (int i = 0; i < group.numberOfStudents; ++i)
     {
         if (group.studentsList[i].grade >= minGrade)
@@ -51,15 +56,28 @@ int countOfScholarships(const Group& group, const double minGrade)
             ++counter;
         }
     }
+
     return counter;
 }
-void printScholarshipsList(const Group& group, const double minGrade, Student* student)
+
+void swapStudents(Student studentsList[], const int &firstIndex, const int &secondIndex)
 {
-    for (int i = 0; i < countOfScholarships(group, minGrade); ++i)
+    Student temp = studentsList[firstIndex];
+    studentsList[firstIndex] = studentsList[secondIndex];
+    studentsList[secondIndex] = temp;
+}
+
+void printScholarshipsList(const Group& group, const double minGrade, Student student[])
+{
+    for (int i = 0; i < group.numberOfStudents; ++i)
     {
-        std::cout << student[i].name << " " << student[i].grade << std::endl;
+        if (student[i].grade >= minGrade)
+        {
+            std::cout << student[i].name << " " << student[i].grade << std::endl;
+        }
     }
 }
+
 int main()
 {
     Group group;

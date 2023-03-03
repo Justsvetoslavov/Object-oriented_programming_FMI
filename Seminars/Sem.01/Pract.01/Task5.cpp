@@ -17,14 +17,6 @@ struct ComplexNumber {
     }
 };
 
-ComplexNumber* additionOfTwoComplexNumbers(const ComplexNumber& first, const ComplexNumber& second) {
-    ComplexNumber* result = new ComplexNumber;
-    result->realPart = first.realPart + second.realPart;
-    result->imaginaryPart = first.imaginaryPart + second.imaginaryPart;
-
-    return result;
-}
-
 ComplexNumber additionOfTwoComplexNumbers(const ComplexNumber* first, const ComplexNumber* second) {
     ComplexNumber result = {first->realPart + second->realPart, first->imaginaryPart + second->imaginaryPart};
 
@@ -39,12 +31,6 @@ int main() {
     ComplexNumber result = additionOfTwoComplexNumbers(&first, &second);
 
     result.printComplexNumber();
-
-    ComplexNumber* result2 = additionOfTwoComplexNumbers(first, second);
-
-    result2->printComplexNumber();
-
-    delete result2;
 
     first.addComplexNumber(second);
 

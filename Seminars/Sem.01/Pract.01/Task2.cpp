@@ -2,14 +2,14 @@
 using std::cin;
 using std::cout;
 
-void inputNumbers(int* arr, const int size) {
+void inputNumbers(int* arr, int size) {
     for (int i = 0; i < size; i++) {
         cout << "Enter a number: ";
         cin >> arr[i];
     }
 }
 
-int findCount(const int* arr, const int size, int symbolASCIICode) {
+int findCount(const int* arr, int size, int symbolASCIICode) {
     int count = 0;
     for (int i = 0; i < size; i++) {
         if (arr[i] > symbolASCIICode) {

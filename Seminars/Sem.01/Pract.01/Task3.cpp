@@ -3,9 +3,8 @@ using std::cin;
 using std::cout;
 using std::endl;
 
-void inputMatrix(int** matrix, const int rows, const int columns) {
+void inputMatrix(int** matrix, int rows, int columns) {
     for (int i = 0; i < rows; i++) {
-        matrix[i] = new int[columns];
         for (int j = 0; j < columns; j++) {
             cout << "Enter a number: ";
             cin >> matrix[i][j];
@@ -13,20 +12,15 @@ void inputMatrix(int** matrix, const int rows, const int columns) {
     }
 }
 
-int** transposeMatrix(int** matrix, const int rows, const int columns) {
-    int** transposedMatrix = new int*[columns];
-
+void transposeMatrix(int** matrix, int** transposedMatrix, int rows, int columns) {
     for (int i = 0; i < columns; i++) {
-        transposedMatrix[i] = new int[rows];
         for (int j = 0; j < rows; j++) {
             transposedMatrix[i][j] = matrix[j][i];
         }
     }
-
-    return transposedMatrix;
 }
 
-void printMatrix(int** matrix, const int rows, const int columns) {
+void printMatrix(int** matrix, int rows, int columns) {
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < columns; j++) {
             cout << matrix[i][j] << " ";
@@ -54,9 +48,21 @@ int main() {
 
     int** matrix = new int*[n];
 
+    for (int i = 0; i < n; i++) {
+        matrix[i] = new int[m];
+    }
+
     inputMatrix(matrix, n, m);
 
-    int** transposedMatrix = transposeMatrix(matrix, n, m);
+    int** transposedMatrix = new int*[m];
+
+    for (int i = 0; i < m; i++) {
+        transposedMatrix[i] = new int[n];
+    }
+
+    transposeMatrix(matrix, transposedMatrix, n, m);
+
+
 
     cout << "Original matrix: " << endl;
     printMatrix(matrix, n, m);
@@ -65,7 +71,7 @@ int main() {
     printMatrix(transposedMatrix, m, n);
 
     deleteMatrix(matrix, n);
-    deleteMatrix(matrix, m);
+    deleteMatrix(transposedMatrix, m);
 
     return 0;
 }

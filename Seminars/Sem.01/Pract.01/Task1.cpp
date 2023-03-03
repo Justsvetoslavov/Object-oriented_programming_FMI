@@ -7,7 +7,15 @@ int lowerNumber(int a, int b) {
     return a > b ? b : a;
 }
 
-int lowerNumberReference(const int& a, const int& b) {
+int lowerNumberReferenceConst(const int& a, const int& b) {
+    //a = 5;
+    //b = -5;
+    return a > b ? b : a;
+}
+
+int lowerNumberReference(int& a, int& b) {
+    a = 10;
+    b = 11;
     return a > b ? b : a;
 }
 
@@ -23,6 +31,7 @@ int main() {
     cout << lowerNumber(a, b) << endl;
     cout << lowerNumberReference(a, b) << endl;
     cout << lowerNumberPointer(&a, &b) << endl;
+    cout << lowerNumberReferenceConst(a, b) << endl;
 
     return 0;
 }

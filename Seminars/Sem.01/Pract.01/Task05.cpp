@@ -9,6 +9,7 @@ struct complexNumber
     int Re;
     int Im;
 };
+
 void inputComplexNumber(complexNumber& number)
 {
     std::cout << "Enter the real part of the number: ";
@@ -16,17 +17,20 @@ void inputComplexNumber(complexNumber& number)
     std::cout << "Enter the imaginary part of the number: ";
     std::cin >> number.Im;
 }
-complexNumber sumOfComplexNumbers(const complexNumber number1, const complexNumber number2)
+
+complexNumber sumOfComplexNumbers(const complexNumber& number1, const complexNumber& number2)
 {
     complexNumber result;
     result.Re = number1.Re + number2.Re;
     result.Im = number1.Im + number2.Im;
     return result;
 }
+
 void printComplexNumber(const complexNumber& number)
 {
     std::cout << number.Re << " + " << number.Im << "i";
 }
+
 int main()
 {
     complexNumber number1 = {};

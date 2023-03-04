@@ -50,10 +50,10 @@ void quadrant(const Point& point)
     }
 }
 
+const double epsilon = 0.0000000001;
+
 void isThePointInTheCircle(const Point& point, const double distance, const double radius)
 {
-    const double epsilon = 0.0000000001;
-
     if (distance < radius)
     {
         std::cout << "The point is inside the circle.";

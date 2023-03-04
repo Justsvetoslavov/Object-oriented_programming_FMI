@@ -23,8 +23,8 @@ struct Student
 
 struct Group
 {
-	Student* students;
 	double averageGrade;
+	Student* students;
 	int numberOfStudents;
 	char major[MAX_NAME_SIZE];
 };
@@ -50,7 +50,6 @@ void initStudent(Student& student)
 void calculateAverageGrade(Group& group)
 {
 	double sum = 0;
-
 	for (size_t i = 0; i < group.numberOfStudents; i++)
 	{
 		sum += group.students[i].grade;

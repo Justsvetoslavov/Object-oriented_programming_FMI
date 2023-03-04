@@ -7,19 +7,22 @@ const char* VALUES_FILE = "../values.txt";
 const char* PLACEHOLDER_FILE = "../placeholder.txt";
 const char* RESULTS_FILE = "../results.txt";
 
-void getValuesFromFile(ifstream &valuesFile, char values[][1024]) {
-    char type[1024];
+const int max_line_length = 1024;
+const int values_count = 4;
+
+void getValuesFromFile(ifstream &valuesFile, char values[][max_line_length]) {
+    char type[max_line_length];
     while (!valuesFile.eof()) {
         valuesFile >> type;
         valuesFile.ignore(1, ' ');
         if (strcmp(type, "title") == 0) {
-            valuesFile.getline(values[0], 1024);
+            valuesFile.getline(values[0], max_line_length);
         } else if (strcmp(type, "recipient_name") == 0) {
-            valuesFile.getline(values[1], 1024);
+            valuesFile.getline(values[1], max_line_length);
         } else if (strcmp(type, "message") == 0) {
-            valuesFile.getline(values[2], 1024);
+            valuesFile.getline(values[2], max_line_length);
         } else if (strcmp(type, "sender_name") == 0) {
-            valuesFile.getline(values[3], 1024);
+            valuesFile.getline(values[3], max_line_length);
         } else {
             cout << "Unknown type: " << type << endl;
             cout << "Please check the file" << endl;
@@ -51,10 +54,10 @@ void replaceWordInString(char *line, const char *word, const char *value) {
     }
 }
 
-void writeToFile(ifstream &placeholderFile, ofstream &resultsFile, const char values[][1024]) {
-    char line[1024];
+void writeToFile(ifstream &placeholderFile, ofstream &resultsFile, const char values[][max_line_length]) {
+    char line[max_line_length];
     while (!placeholderFile.eof()) {
-        placeholderFile.getline(line, 1024);
+        placeholderFile.getline(line, max_line_length);
         replaceWordInString(line, "{title}", values[0]);
         replaceWordInString(line, "{recipient_name}", values[1]);
         replaceWordInString(line, "{message}", values[2]);
@@ -64,7 +67,7 @@ void writeToFile(ifstream &placeholderFile, ofstream &resultsFile, const char va
 }
 
 int main() {
-    char values[4][1024];
+    char values[values_count][max_line_length];
     ifstream valuesFile(VALUES_FILE);
     if (!valuesFile.is_open()) {
         cout << "Values is not open" << endl;

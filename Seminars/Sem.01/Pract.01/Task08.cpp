@@ -1,163 +1,98 @@
 #include <iostream>
-#include <cmath>
 
-using std::cin;
-using std::cout;
-using std::endl;
+const int MAX_SIZE_NAME = 30;
+const int MAX_GROUP_SIZE = 30;
 
-const int MAX_NAME_SIZE = 31;
-const double EPSYLON = 0.0000001;
-
-// return true if second is bigger, else false
-bool compareDoubles(const double firstNum, const double secondNum)
-{
-	return (secondNum - firstNum) > EPSYLON;
-}
-
-// 8
 struct Student
 {
+	char name[MAX_SIZE_NAME + 1];
+	unsigned int fn;
 	double grade;
-	char name[MAX_NAME_SIZE];
 };
 
-struct Group
+struct StudentGroup
 {
+	size_t amountOfStudents;
 	double averageGrade;
-	Student* students;
-	int numberOfStudents;
-	char major[MAX_NAME_SIZE];
+	Student groupArr[MAX_GROUP_SIZE];
 };
 
-void mySwap(Student& firstStudent, Student& secondStudent)
-{
-	Student temp = firstStudent;
-	firstStudent = secondStudent;
-	secondStudent = temp;
-}
-
-void initStudent(Student& student)
-{
-	cout << "Student grade: ";
-	cin >> student.grade;
-	cout << endl;
-	cin.ignore();
-	cout << "Student name: ";
-	cin >> student.name;
-	cout << endl;
-}
-
-void calculateAverageGrade(Group& group)
+double FindSum(const Student* arr, int numberOfStudents)
 {
 	double sum = 0;
-	for (size_t i = 0; i < group.numberOfStudents; i++)
-	{
-		sum += group.students[i].grade;
+	for (size_t i = 0; i < numberOfStudents; i++) {
+		sum += arr[i].grade;
 	}
 
-	double averageGrade = sum / group.numberOfStudents;
-	group.averageGrade = averageGrade;
-
+	return sum;
 }
 
-void initGroup(const int numberOfStudents, Group& group)
+void InitGroupOfStudents(StudentGroup& group)
 {
-	cin.ignore();
-	cout << "Group major: ";
-	cin >> group.major;
-	cout << endl;
-
-	group.numberOfStudents = numberOfStudents;
-	group.students = new Student[numberOfStudents];
-
-	for (size_t i = 0; i < numberOfStudents; i++)
-	{
-		initStudent(group.students[i]);
+	for (size_t i = 0; i < group.amountOfStudents; i++) {
+		std::cin >> group.groupArr[i].fn;
+		std::cin >> group.groupArr[i].name;
+		std::cin.ignore();
+		std::cin >> group.groupArr[i].grade;
 	}
 
-	calculateAverageGrade(group);
+	group.averageGrade = FindSum(group.groupArr, group.amountOfStudents) / group.amountOfStudents;
 }
 
-int getCountOfStudentsReceivingScolarship(const double minimumGrade, const Group& group)
-{
-	int count = 0;
+size_T NumberOfStudentsTakingScholarship(const StudentGroup& group, const double minGrade) {
+	size_t studentCounter = 0;
 
-	for (size_t i = 0; i < group.numberOfStudents; i++)
-	{
-		if (compareDoubles(minimumGrade, group.students[i].grade))
-		{
-			count++;
+	for (size_t i = 0; i < group.amountOfStudents; i++) {
+		if (group.groupArr[i].grade >= minGrade) {
+			studentCounter++;
 		}
 	}
 
-	return count;
+	return studentCounter;
 }
 
-Student* GetStudentsReceivingScolarship(const double minimumGrade, const Group& group)
-{
-	int index = 0;
-	int count = getCountOfStudentsReceivingScolarship(minimumGrade, group);
-	Student* studentsReceivingScolarship = new Student[count];
-
-	for (size_t i = 0; i < group.numberOfStudents; i++)
-	{
-		if (compareDoubles(minimumGrade, group.students[i].grade))
-		{
-			studentsReceivingScolarship[index++] = group.students[i];
-		}
-	}
-
-	return studentsReceivingScolarship;
+void Swap(Student& a, Student& b) {
+	Student temp = a;
+	a = b;
+	b = temp;
 }
 
-void sortStudentsByGrade(Student* studentsReceivingScolarship, const int count)
-{
-	for (size_t i = 0; i < count - 1; i++)
-	{
-		size_t indexOfMaxElement = i;
-		for (size_t j = 0; j < count - i - 1; j++)
-		{
-			if (compareDoubles(studentsReceivingScolarship[indexOfMaxElement].grade, studentsReceivingScolarship[j].grade))
-			{
-				indexOfMaxElement = j;
+void SortStudentsByGrade(Student* students, const int size) {
+	for (size_t i = 0; i < size - 1; i++) {
+		size_t minIndex = i;
+		for (size_t j = i + 1; j < size; j++) {
+			if (students[j].grade < students[minIndex].grade) {
+				minIndex = j;
 			}
 		}
 
-		mySwap(studentsReceivingScolarship[i], studentsReceivingScolarship[indexOfMaxElement]);
+		if (minIndex != i) {
+			Swap(students[minIndex], students[i]);
+		}
 	}
+
 }
 
-void printStudentsReceivingScolarshipSortedByGrade(const double minimumGrade, const Group& group)
+void PrintStudent(const Student& student) {
+	std::cout << "Faculty number: " << student.FN << ", Name: " << student.name <<
+		", Grade: " << student.grade << std::endl;
+}
+
+void StudentsTakingScholarship(StudentGroup& group, const double minGrade)
 {
-	Student* studentsReceivingScolarship = GetStudentsReceivingScolarship(minimumGrade, group);
-	int count = getCountOfStudentsReceivingScolarship(minimumGrade, group);
-
-	sortStudentsByGrade(studentsReceivingScolarship, count);
-
-	for (size_t i = 0; i < count; i++)
-	{
-		cout << i + 1 << ". ";
-		cout << "Student grade: ";
-		cout << studentsReceivingScolarship[i].grade;
-		cout << endl;
-		cout << "Student name: ";
-		cout << studentsReceivingScolarship[i].name;
-		cout << endl;
+	size_T numberOfStudents = NumberOfStudentsTakingScholarship(group, minGrade);
+	SortStudentsByGrade(group.groupArr, group.amountOfStudents);
+	
+	for (size_t i = group.amountOfStudents - 1; i >= group.amountOfStudents - numberOfStudents; i--){
+		PrintStudent(group.groupArr[i]);
 	}
-
-	delete[] studentsReceivingScolarship;
 }
 
 int main()
 {
-	int numberOfStudents;
-	cout << "Number of students: ";
-	cin >> numberOfStudents;
-	Group group;
-	initGroup(numberOfStudents, group);
-
-	printStudentsReceivingScolarshipSortedByGrade(4.5, group);
-
-	delete[] group.students;
-	group.numberOfStudents = 0;
+	StudentGroup group;
+	std::cin >> group.amountOfStudents;
+	
+	initGroupOfStudents(group);
+	studentsTakingScholarship(group, 5);
 }

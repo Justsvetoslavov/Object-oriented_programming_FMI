@@ -1,11 +1,6 @@
 #include <iostream>
 
-using std::cin;
-using std::cout;
-using std::endl;
-
-const int MAX_NAME_SIZE = 31;
-const double EPSYLON = 0.0000001;
+const int MAX_NAME_SIZE = 30;
 
 enum class Genre
 {
@@ -20,103 +15,103 @@ struct Movie
 	double rating;
 	Genre genre;
 	int duration;
-	char name[MAX_NAME_SIZE];
+	char name[MAX_NAME_SIZE + 1];
 };
 
-void mySwap(Movie& firstMovie, Movie& secondMovie)
+void Swap(Movie& lhs, Movie& rhs)
 {
-	Movie& temp = firstMovie;
-	firstMovie = secondMovie;
-	secondMovie = temp;
+	Movie temp = lhs;
+	lhs = rhs;
+	rhs = temp;
 }
 
-void initMovie(Movie& movie)
+void StrCopy(char* dest, const char* source)
 {
-	cin >> movie.rating >> movie.duration;
-	cin.ignore();
-	cin >> movie.name;
-	int genre = 0;
-	cin >> genre;
-	movie.genre = (Genre)genre;
+	size_t index = 0;
+	while (source[index] != '\0') {
+		dest[index] = source[index];
+		index++;
+	}
+  
+	arr1[index] = '\0';
 }
 
-void printMovies(const Movie* moviesArr, const int count)
+void InitMovie(Movie& movie, const char* name, const double rating, const int duration, const Genre genre)
 {
-	for (size_t i = 0; i < count; i++)
-	{
-		Movie movie = moviesArr[i];
-		cout << i + 1 << "." << endl;
-		cout << "Movie name: ";
-		cout << movie.name;
-		cout << endl;
-		cout << "Duration: " << movie.duration << endl;
-		cout << "Rating: " << movie.rating << endl;
-		cout << "Genre: ";
-		switch (movie.genre)
-		{
-		case Genre::Comedy:cout << "Comedy"; break;
-		case Genre::Action:cout << "Action"; break;
-		case Genre::Horror:cout << "Horror"; break;
-		case Genre::Romantic:cout << "Romantic"; break;
+	StrCopy(movie.name, name);
+	movie.rating = rating;
+	movie.duration = duration;
+	movie.genre = genre;
+}
+
+void PrintMovies(const Movie* moviesArr, const int count)
+{
+	for (size_t i = 0; i < count; i++) {
+		std::cout << "Movie name: " << moviesArr[i].name << std::endl;
+		std::cout << "Duration: " << moviesArr[i].duration << std::endl;
+		std::cout << "Rating: " << moviesArr[i].rating << std::endl;
+		std::cout << "Genre: ";
+		switch (moviesArr[i].genre) {
+			case Genre::Comedy: std::cout << "Comedy"; break;
+			case Genre::Action: std::cout << "Action"; break;
+			case Genre::Horror: std::cout << "Horror"; break;
+			case Genre::Romantic: std::cout << "Romantic"; break;
 		}
-		cout << endl;
+		std::cout << std::endl;
 	}
 }
 
-// return true if second is bigger, else false
-bool compareDoubles(const double firstNum, const double secondNum)
+void SortMoviesByRating(Movie* movies, const int count)
 {
-	return (secondNum - firstNum) > EPSYLON;
-}
-
-void sortMoviesByRating(Movie* movies, const int count)
-{
-	for (size_t i = 0; i < count - 1; ++i)
-	{
+	for (size_t i = 0; i < count - 1; ++i) {
 		size_t indexOfMaxElement = i;
-		for (size_t j = i + 1; j < count; ++j)
-		{
-			if (compareDoubles(movies[indexOfMaxElement].rating, movies[j].rating))
-			{
+		for (size_t j = i + 1; j < count; ++j) {
+			if (movies[indexOfMaxElement].rating < movies[j].rating) {
 				indexOfMaxElement = j;
 			}
 		}
-
-		mySwap(movies[i], movies[indexOfMaxElement]);
+		
+		if(indexOfMaxElement != i) {
+			Swap(movies[i], movies[indexOfMaxElement]);
+		}
 	}
+  
 }
 
 void PrintNameOfBestRatedMovie(const Movie* movies, const int count)
 {
 	int indexOfBest = 0;
 
-	for (size_t i = 1; i < count; i++)
-	{
-		if (compareDoubles(movies[indexOfBest].rating, movies[i].rating))
-		{
+	for (size_t i = 1; i < count; i++) {
+		if (movies[indexOfBest].rating < movies[i].rating) {
 			indexOfBest = i;
 		}
 	}
 
-	cout << movies[indexOfBest].name << endl;
+	std::cout << movies[indexOfBest].name << std::endl;
 }
 
 int main()
 {
-	Movie firstMovie;
-	Movie secondMovie;
-	Movie thirdMovie;
-	initMovie(firstMovie);
-	initMovie(secondMovie);
-	initMovie(thirdMovie);
+	int numberOfMovies;
+	std::cin >> numberOfMovies;
 
-	Movie movies[3] = { firstMovie, secondMovie, thirdMovie };
+	Movie* movies = new Movie[numberOfMovies];
 
-	printMovies(movies, 3);
+	for (size_t i = 0; i < numberOfMovies; i++) {
+		char name[MAX_NAME_SIZE + 1];
+		std::cin >> name;
+		std::cin.ignore();
+		double rating;
+		int duration, type;
+		std::cin >> rating >> duration >> type;
+		Genre genre = (Genre)type; // TODO: validation / switch case
+		InitMovie(movies[i], name, rating, duration, genre);
+	}
 
-	PrintNameOfBestRatedMovie(movies, 3);
-
-	sortMoviesByRating(movies, 3);
-
-	printMovies(movies, 3);
+	PrintNameOfBestRatedMovie(movies, numberOfMovies);
+	SortMoviesByRating(movies, numberOfMovies);
+	PrintMovies(movies, numberOfMovies);
+  
+  	delete[] movies;
 }

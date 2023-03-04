@@ -73,9 +73,7 @@ void initGroup(const int numberOfStudents, Group& group)
 
 	for (size_t i = 0; i < numberOfStudents; i++)
 	{
-		Student student;
-		initStudent(student);
-		group.students[i] = student;
+		initStudent(group.students[i]);
 	}
 
 	calculateAverageGrade(group);

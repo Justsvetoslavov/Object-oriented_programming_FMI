@@ -31,7 +31,7 @@ struct Group
 
 void mySwap(Student& firstStudent, Student& secondStudent)
 {
-	Student& temp = firstStudent;
+	Student temp = firstStudent;
 	firstStudent = secondStudent;
 	secondStudent = temp;
 }

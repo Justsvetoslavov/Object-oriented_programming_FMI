@@ -1,15 +1,19 @@
 #include <iostream>
 
-const char genreComedy[] = "Comedy";
-const char genreAction[] = "Action";
-const char genreHorror[] = "Horror";
-const char genreRomantic[] = "Romantic";
+const unsigned int SIZE_NAME = 30;
+enum Genre 
+{
+    Comedy = 1,
+    Action,
+    Horror,
+    Romantic
+};
 
 struct Movie
 {
-    char name[31];
+    char name[SIZE_NAME + 1];
     unsigned short duration;
-    const char* genre;
+    Genre genre;
     float rating;
 };
 
@@ -43,48 +47,58 @@ int main()
 
 void createMovie(Movie &m)
 {
-    std::cin.getline(m.name, 31);
+    std::cin.getline(m.name, SIZE_NAME + 1);
     std::cin >> m.duration;
-    char helper;
+    unsigned int helper;
     do
     {
-     std::cin >> helper;
-     switch (helper)
-     {
-     case 'C':
-         m.genre = new char[sizeof(genreComedy)];
-         m.genre = genreComedy;
-         helper = '0';
-         break;
-     case 'A':
-         m.genre = new char[sizeof(genreAction)];
-         m.genre = genreAction;
-         helper = '0';
-         break;
-     case 'H':
-         m.genre = new char[sizeof(genreHorror)];
-         m.genre = genreHorror;
-         helper = '0';
-         break;
-     case 'R':
-         m.genre = new char[sizeof(genreRomantic)];
-         m.genre = genreRomantic;
-         helper = '0';
-         break;            
-     default:
-         std::cout << "There is not such genre \n";
-         break;
-    }
-    } while (helper != '0');
+        std::cin >> helper;
+        switch (helper)
+        {
+        case 1:
+            m.genre = Comedy;
+            break;
+        case 2:
+            m.genre = Action;
+            helper = 1;
+            break;
+        case 3:
+            m.genre = Horror;
+            helper = 1;
+            break;
+        case 4:
+            m.genre = Romantic;
+            helper = 1;
+            break;
+        default:
+            std::cout << "Invalid genre! \n";
+            break;
+        }
+     
+    } while (helper != 1);
     std::cin >> m.rating;
 }
 
 void printMovies(const Movie& m)
 {
     std::cout << "The title is: " << m.name << '\n'
-         << "Its duration is " << m.duration << " minutes" << '\n'
-         << "The genre is " << m.genre << '\n'
-         << "And its rating is " << m.rating << '\n';
+    << "The duraation is: " << m.duration <<'\n';
+    switch (m.genre)
+    {
+    case 1:
+            std::cout << "The genre is: Comedy \n";
+            break;
+    case 2:
+            std::cout << "The genre is: Action \n";
+            break;
+    case 3:
+            std::cout << "The genre is: Horror \n";
+            break;
+    case 4:
+            std::cout << "The genre is: Romantic \n";
+            break;
+    }
+    std::cout << "The rating is: " << m.rating << '\n';
 }
 
 void swap(Movie& m1, Movie& m2)

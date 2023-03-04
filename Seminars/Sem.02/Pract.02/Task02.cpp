@@ -3,6 +3,7 @@
 
 using std::cin, std::cout, std::endl, std::ofstream, std::ifstream;
 
+const char *FILE_NAME = "results.txt";
 
 int lengthOfFile(ifstream &file) {
     int length = 0;
@@ -16,7 +17,7 @@ int lengthOfFile(ifstream &file) {
 
 
 int main() {
-    ifstream file("results.txt");
+    ifstream file(FILE_NAME);
     if (!file.is_open()) {
         cout << "File is not open" << endl;
         return -1;

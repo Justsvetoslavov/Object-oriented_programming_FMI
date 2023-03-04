@@ -2,15 +2,16 @@
 //SI
 //Group 1
 //3MI0600225
+
 #include <iostream>
 
-struct complexNumber
+struct ComplexNumber
 {
     int Re;
     int Im;
 };
 
-void inputComplexNumber(complexNumber& number)
+void inputComplexNumber(ComplexNumber& number)
 {
     std::cout << "Enter the real part of the number: ";
     std::cin >> number.Re;
@@ -18,24 +19,24 @@ void inputComplexNumber(complexNumber& number)
     std::cin >> number.Im;
 }
 
-complexNumber sumOfComplexNumbers(const complexNumber& number1, const complexNumber& number2)
+complexNumber sumOfComplexNumbers(const ComplexNumber& number1, const ComplexNumber& number2)
 {
-    complexNumber result;
+    ComplexNumber result;
     result.Re = number1.Re + number2.Re;
     result.Im = number1.Im + number2.Im;
     return result;
 }
 
-void printComplexNumber(const complexNumber& number)
+void printComplexNumber(const ComplexNumber& number)
 {
     std::cout << number.Re << " + " << number.Im << "i";
 }
 
 int main()
 {
-    complexNumber number1 = {};
-    complexNumber number2 = {};
-    complexNumber resultOfSum = {};
+    ComplexNumber number1 = {};
+    ComplexNumber number2 = {};
+    ComplexNumber resultOfSum = {};
     inputComplexNumber(number1);
     inputComplexNumber(number2);
 

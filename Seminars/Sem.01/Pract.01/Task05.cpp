@@ -1,29 +1,38 @@
+// ConsoleApplication5.cpp : This file contains the 'main' function. Program execution begins and ends there.
+//
+
+
+// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
 #include <iostream>
-
-struct ComplexNumber
-{
-	double real;
-	double imaginary;
+using namespace std;
+struct complexNumber {
+	int rPart;
+	int iPart;
 };
+void combinedComplexNumbers(const complexNumber& p1, const complexNumber& p2) {
+	int combinedRPART = p1.rPart + p2.rPart;
+	int combinedIPART = p1.iPart + p2.iPart;
 
-ComplexNumber AddComplexNumbers(const ComplexNumber& lhs, const ComplexNumber& rhs)
-{
-	return {
-        lhs.real + rhs.real,
-        lhs.imaginary + rhs.imaginary
-    };
+	cout << "Z1 + Z2 = " << combinedRPART << " + " << combinedIPART << "i";
 }
-
-void PrintComplexNumber(const ComplexNumber& complex)
-{
-	std::cout << complex.real << " " << complex.imaginary << "\n";
-}
-
 int main()
 {
-	ComplexNumber cn1 = { 3, 4 };
-	ComplexNumber cn2 = { -10, 12 };
-	ComplexNumber sum = AddComplexNumbers(cn1, cn2);
-
-	PrintComplexNumber(sum);
+	complexNumber p1, p2;
+	cout << "Enter the real part of the complexNumber:";
+	cin >> p1.rPart;
+	cout << "Now the other part: ";
+	cin >> p1.iPart;
+	cout << "Enter the real part for the second complexNumber: ";
+	cin >> p2.rPart;
+	cout << "Now the other part: ";
+	cin >> p2.iPart;
+	combinedComplexNumbers(p1, p2);
 }
+
+// Tips for Getting Started: 
+//   1. Use the Solution Explorer window to add/manage files
+//   2. Use the Team Explorer window to connect to source control
+//   3. Use the Output window to see build output and other messages
+//   4. Use the Error List window to view errors
+//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
+//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file

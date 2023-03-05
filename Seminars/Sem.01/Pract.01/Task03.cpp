@@ -1,67 +1,64 @@
-#include <iostream>
+// ConsoleApplication4.cpp : This file contains the 'main' function. Program execution begins and ends there.
+//
 
-int** InitializeMatrix(const int rows, const int cols)
-{
-	int** matrix = new int*[rows];
-	for (size_t i = 0; i < rows; i++) {
+#include <iostream>
+using namespace std;
+int** createMatrix(int rows, int cols) {
+	int** matrix = new int* [rows];
+	for (int i = 0; i < rows; i++) {
 		matrix[i] = new int[cols];
 	}
-
 	return matrix;
 }
-
-void FillMatrix(int** matrix, const int rows, const int cols)
-{
-	for (size_t i = 0; i < rows; i++) {
-		for (size_t j = 0; j < cols; j++) {
-			std::cin >> matrix[i][j];
+void fillMatrix(int** matrix, int rows, int cols) {
+	for (int i = 0; i < rows; i++) {
+		for (int j = 0; j < cols; j++) {
+			cin >> matrix[i][j];
 		}
 	}
 }
-
-int** TransposeMatrix(const int** matrix, const int rows, const int cols)
-{
-	int** transposedMatrix = InitializeMatrix(cols, rows);
-	for (size_t i = 0; i < rows; i++) {
-		for (size_t j = 0; j < cols; j++) {
-			transposedMatrix[j][i] =  matrix[i][j];
-		}
-	}
-    
-	return transposedMatrix;
-}
-
-void PrintMatrix(const int** matrix, const int rows, const int cols)
-{
-	for (size_t i = 0; i < rows; i++) {
-		for (size_t j = 0; j < cols; j++) {
-			std::cout << matrix[i][j] << " ";
-		}
-		std::cout << std::endl;
-	}
-}
-
-void DeleteMatrix(int** matrix, const int rows)
-{
-	for (size_t i = 0; i < rows; i++) {
+void deleteMatrix(int** matrix, int rows, int cols) {
+	for (int i = 0; i < rows; i++) {
 		delete[] matrix[i];
 	}
-
 	delete[] matrix;
 }
-
+int** transMatrix(int** matrix, int rows, int cols) {
+	int** matrix2 = createMatrix(cols, rows);
+	for (int i = 0; i < rows; i++) {
+		for (int j = 0; j < cols; j++) {
+			matrix2[j][i] = matrix[i][j];
+		}
+	}
+	return matrix2;
+}
 int main()
 {
 	int rows, cols;
-	std::cin >> rows >> cols;
+	cin >> rows >> cols;
+	int** matrix = createMatrix(rows, cols);
+	fillMatrix(matrix, rows, cols);
+	matrix = transMatrix(matrix, rows, cols);
+	rows = rows - cols;
+	cols = cols + rows;
+	rows = cols - rows;
+	for (int i = 0; i < rows; i++) {
+		for (int j = 0; j < cols; j++) {
+			cout << matrix[i][j];
+		}
+		cout << endl;
+	}
+	deleteMatrix(matrix, rows, cols);
 
-	int** matrix = InitializeMatrix(rows, cols);
-	FillMatrix(matrix, rows, cols);
-	PrintMatrix(matrix, rows, cols);
-
-	int** transposedMatrix = TransposeMatrix(matrix, rows, cols);
-	PrintMatrix(transposedMatrix, cols, rows);
-
-	DeleteMatrix(matrix, rows);
-	DeleteMatrix(transposedMatrix, cols);
 }
+
+// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
+// Debug program: F5 or Debug > Start Debugging menu
+
+// Tips for Getting Started: 
+//   1. Use the Solution Explorer window to add/manage files
+//   2. Use the Team Explorer window to connect to source control
+//   3. Use the Output window to see build output and other messages
+//   4. Use the Error List window to view errors
+//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
+//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file

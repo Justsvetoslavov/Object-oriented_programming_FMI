@@ -1,26 +1,58 @@
+// ConsoleApplication35.cpp : This file contains the 'main' function. Program execution begins and ends there.
+//
 #include <iostream>
-
-int LowerNumberByCopy(const int num1, const int num2)
-{
-	return num1 < num2 ? num1 : num2;
+using namespace std;
+int bigSmall(int a, int b) {
+    if (a > b) {
+        return a;
+    }
+    else {
+        return b;
+    }
 }
 
-int LowerNumberByReference(const int& num1, const int& num2) 
+int smallBig(int& a, int& b) {
+    if (a > b) {
+        return a;
+    }
+    else {
+        return b;
+    }
+}
+int idk(int a, int& c) {
+    if (a > c) {
+        return c;
+    }
+    else {
+        return c;
+    }
+}
+int kdi(int a, const int c) {
+    if (a > c) {
+        return a;
+    }
+    else {
+        return c;
+    }
+}
+int main()
 {
-	return num1 < num2 ? num1 : num2;
+    int a, b;
+    cin >> a >> b;
+    const int c = 5;
+    cout << bigSmall(a, b) << endl;
+    cout << smallBig(a, b) << endl;
+    //cout << idk(b, c)<<endl;
+    cout << kdi(a, c);
 }
 
-int LowerNumberByPointer(const int* num1, const int* num2) 
-{
-	return *num1 < *num2 ? *num1 : *num2;
-}
+// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
+// Debug program: F5 or Debug > Start Debugging menu
 
-int main() 
-{
-	int num1, num2;
-	std::cin >> num1 >> num2;
-
-	std::cout << LowerNumberByCopy(num1, num2) << std::endl;
-	std::cout << LowerNumberByReference(num1, num2) << std::endl;
-	std::cout << LowerNumberByPointer(&num1, &num2) << std::endl;
-}
+// Tips for Getting Started: 
+//   1. Use the Solution Explorer window to add/manage files
+//   2. Use the Team Explorer window to connect to source control
+//   3. Use the Output window to see build output and other messages
+//   4. Use the Error List window to view errors
+//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
+//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file

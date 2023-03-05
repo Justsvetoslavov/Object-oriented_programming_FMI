@@ -1,63 +1,34 @@
-﻿#include <iostream>
+// ConsoleApplication4.cpp : This file contains the 'main' function. Program execution begins and ends there.
+//
 
-const short MAX_NAME_SIZE = 30;
-
-struct Student
-{
-    char name[MAX_NAME_SIZE + 1];
-    unsigned int fn;
+#include <iostream>
+using std::cin;
+using std::cout;
+struct Student {
+	char name[30];
+	char Fnumber[10];
 };
-
-void InitStudent(Student& student, const char* name, unsigned int fn)
-{
-    strcpy_s(student.name, MAX_NAME_SIZE, name);
-    student.fn = fn;
+void printDate(const Student& p) {
+	cout << "Name: " << p.name << " Fakultet number: " << p.Fnumber;
 }
-
-void PrintStudent(const Student& student)
-{
-    std::cout << student.name << " " << student.fn << "\n";
-}
-
 int main()
 {
-    Student st = { "Joro", 10 };
-    PrintStudent(st);
-    st = {"Ivan", 20 };
-    PrintStudent(st);
-    InitStudent(st, "New Name", 82);
-    PrintStudent(st);
-    std::cout << "\n\n";
+	Student a;
+	cin.getline(a.name, 30);
+	cin.ignore(0, '\n');
+	cin.getline(a.Fnumber, 10);
+	cin.ignore(0, '\n');
+	printDate(a);
 
-    Student* pSt = &st;
-    *pSt = { "Valeri", 30 };
-    PrintStudent(*pSt);
-    InitStudent(*pSt, "PST New Name", 100);
-    PrintStudent(*pSt);
-    std::cout << "\n\n";
-
-    const Student* pCSt = &st;
-    //*pCSt = { "Valeri", 30 };
-    //initStudent(*pCSt, "PST New Name", 100);
-
-    Student* const cPSt = &st;
-    *cPSt = { "Ivaylo", 1000 };
-    PrintStudent(*cPSt);
-    InitStudent(*cPSt, "CPST New Name", 100);
-    PrintStudent(*cPSt);
-    std::cout << "\n\n";
-
-    const Student* const cpCSt = &st;
-    //*cpCSt = { "Valeri", 30 };
-    //initStudent(*cpCSt, "PST New Name", 100);
-
-    Student& refSt = st;
-    refSt = {"Valentin", 82};
-    PrintStudent(refSt);
-    InitStudent(refSt, "REFST New Name", 100);
-    PrintStudent(refSt);
-
-    const Student& refCSt = st;
-    //refCSt = { "Valentin", 82 };
-    //initStudent(refCSt, "PST New Name", 100);
 }
+
+// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
+// Debug program: F5 or Debug > Start Debugging menu
+
+// Tips for Getting Started: 
+//   1. Use the Solution Explorer window to add/manage files
+//   2. Use the Team Explorer window to connect to source control
+//   3. Use the Output window to see build output and other messages
+//   4. Use the Error List window to view errors
+//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
+//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file

@@ -1,98 +1,78 @@
+// ConsoleApplication1.cpp : This file contains the 'main' function. Program execution begins and ends there.
+//
+
 #include <iostream>
-
-const int MAX_SIZE_NAME = 30;
-const int MAX_GROUP_SIZE = 30;
-
-struct Student
-{
-	char name[MAX_SIZE_NAME + 1];
-	unsigned int fn;
-	double grade;
+using std::cout;
+using std::cin;
+using std::endl;
+struct Students {
+	char first_name[20];
+	char second_name[20];
+	char third_name[20];
+	double finalGrade;
 };
-
-struct StudentGroup
-{
-	size_t amountOfStudents;
-	double averageGrade;
-	Student groupArr[MAX_GROUP_SIZE];
-};
-
-double FindSum(const Student* arr, int numberOfStudents)
-{
+double finaleGrade(double* grades,int numberOfGrades) {
 	double sum = 0;
-	for (size_t i = 0; i < numberOfStudents; i++) {
-		sum += arr[i].grade;
+	for (int i = 0; i < numberOfGrades; i++) {
+		sum += grades[i];
 	}
-
+	sum /= numberOfGrades;
 	return sum;
 }
-
-void InitGroupOfStudents(StudentGroup& group)
-{
-	for (size_t i = 0; i < group.amountOfStudents; i++) {
-		std::cin >> group.groupArr[i].fn;
-		std::cin >> group.groupArr[i].name;
-		std::cin.ignore();
-		std::cin >> group.groupArr[i].grade;
+void studentCreator(Students*& student,const int numberOfStudents,const int numberOfGrades,double* grades) {
+	for (int i = 0; i < numberOfStudents; i++) {
+		cout << "First name: ";
+		cin >> student[i].first_name;
+		cout << "Second name: ";
+		cin >> student[i].second_name;
+		cout << "Third name: ";
+		cin >> student[i].third_name;
+		cout << "Grades: ";
+		for (int j = 0; j < numberOfGrades; j++) {
+			cin >> grades[j];
+		}
+		student[i].finalGrade = finaleGrade(grades, numberOfGrades);
 	}
-
-	group.averageGrade = FindSum(group.groupArr, group.amountOfStudents) / group.amountOfStudents;
 }
-
-size_T NumberOfStudentsTakingScholarship(const StudentGroup& group, const double minGrade) {
-	size_t studentCounter = 0;
-
-	for (size_t i = 0; i < group.amountOfStudents; i++) {
-		if (group.groupArr[i].grade >= minGrade) {
-			studentCounter++;
+int moneyEarners(Students* student, int numberOfStudents, double minimalGrade, int count = 0) {
+	for (int i = 0; i < numberOfStudents; i++) {
+		if (student[i].finalGrade >= minimalGrade) {
+			count++;
 		}
 	}
-
-	return studentCounter;
+	return count;
 }
-
-void Swap(Student& a, Student& b) {
-	Student temp = a;
-	a = b;
-	b = temp;
-}
-
-void SortStudentsByGrade(Student* students, const int size) {
-	for (size_t i = 0; i < size - 1; i++) {
-		size_t minIndex = i;
-		for (size_t j = i + 1; j < size; j++) {
-			if (students[j].grade < students[minIndex].grade) {
-				minIndex = j;
-			}
-		}
-
-		if (minIndex != i) {
-			Swap(students[minIndex], students[i]);
+void studentsWithMoney(Students* student, int numberOfStudents, float minimalGrade) {
+	for (int i = 0; i < numberOfStudents; i++) {
+		if (student[i].finalGrade >= minimalGrade) {
+			cout << "Name: " << student[i].first_name <<" " << student[i].second_name <<" " << student[i].second_name << " Grade: " << student[i].finalGrade << endl;
 		}
 	}
-
 }
-
-void PrintStudent(const Student& student) {
-	std::cout << "Faculty number: " << student.FN << ", Name: " << student.name <<
-		", Grade: " << student.grade << std::endl;
-}
-
-void StudentsTakingScholarship(StudentGroup& group, const double minGrade)
-{
-	size_T numberOfStudents = NumberOfStudentsTakingScholarship(group, minGrade);
-	SortStudentsByGrade(group.groupArr, group.amountOfStudents);
-	
-	for (size_t i = group.amountOfStudents - 1; i >= group.amountOfStudents - numberOfStudents; i--){
-		PrintStudent(group.groupArr[i]);
-	}
-}
-
 int main()
 {
-	StudentGroup group;
-	std::cin >> group.amountOfStudents;
-	
-	initGroupOfStudents(group);
-	studentsTakingScholarship(group, 5);
+	Students* student = new Students[30];
+	int numberOfStudents, numberOfGrades;
+	float minimalGrade;
+	cout << "Enter the number of students in the group: ";
+	cin >> numberOfStudents;
+	cout << "Enter the number of grades each student should have: ";
+	cin >> numberOfGrades;
+	double* arr = new double[numberOfGrades];
+	cout << "Minimal grade for scholarship: ";
+	cin >> minimalGrade;
+	studentCreator(student, numberOfStudents, numberOfGrades,arr);
+	cout << "The number of students that will earn scholarship is " << moneyEarners(student, numberOfStudents, minimalGrade)<<endl;
+	studentsWithMoney(student, numberOfStudents, minimalGrade);
 }
+
+// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
+// Debug program: F5 or Debug > Start Debugging menu
+
+// Tips for Getting Started: 
+//   1. Use the Solution Explorer window to add/manage files
+//   2. Use the Team Explorer window to connect to source control
+//   3. Use the Output window to see build output and other messages
+//   4. Use the Error List window to view errors
+//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
+//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file

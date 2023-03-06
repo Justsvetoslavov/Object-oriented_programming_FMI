@@ -11,7 +11,7 @@ const int MAX_SIZE = 1000000;
 
 int main()
 {
-    ofstream printFile("file.txt");
+    ofstream printFile("file_Task06.txt");
     ifstream myFile("Task06.cpp");
     if (!myFile.is_open())
     {

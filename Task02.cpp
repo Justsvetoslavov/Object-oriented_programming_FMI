@@ -26,7 +26,7 @@ int lengthOfFile(ifstream& myFile)
 
 int main()
 {
-    ifstream myFile("file.txt");
+    ifstream myFile("file_Task02.txt");
     if (!myFile.is_open())
     {
         cout << "Error";

@@ -184,7 +184,7 @@ int main()
 |clear()| Изчиства състоянието на потока (Вече good() ще върне истина).|
 | eof() | Достигнат е края на файла. |
 
- <img style="width: 700px;" src="Images/stream-flags.png" />  
+ <img style="width: 700px;" src="images/stream-flags.png" />  
 
  ##  Задачи
  

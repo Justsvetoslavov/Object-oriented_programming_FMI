@@ -5,6 +5,8 @@ const char PATH[] = "result.txt";
 
 int diff_betw_sum_comp() {
     std::fstream my_file(PATH, std::ios::in);
+    if (!my_file.is_open())
+        return -1;
     int sum, comp;
     my_file >> sum >> comp;
     my_file.close();

@@ -2,85 +2,81 @@
 #include <fstream>
 #include <cassert>
 
-const int MAX_TITLE_SIZE = 50;
-const int MAX_NAME_SIZE = 60;
-const int MAX_TEXT_SIZE = 1000;
-const char PATH[] = "result_message.txt";
+const int MAX_SIZE_STR = 1024;
+const char PATH_WORDS[] = "words.txt";
+const char PATH_RESULT[] = "result.txt";
+const char PATH_PATTERN[] = "pattern.txt";
 
-struct Info{
-    char title[MAX_TITLE_SIZE];
-    char recipient_name[MAX_NAME_SIZE];
-    char message[MAX_TEXT_SIZE];
-    char sender_name[MAX_NAME_SIZE];
+struct PlaceHolder {
+    char key[MAX_SIZE_STR];
+    char text[MAX_SIZE_STR];
 };
 
-Info get_info_from_file(const char path[]) {
-    std::fstream file(path, std::ios::in);
-    assert(file.is_open());
-    Info res{};
-    char rotator;
-    int line = 0;
-    while (file >> std::noskipws >> rotator) {
-        if (rotator == ' ') {
-            switch (line) {
-                case 0:
-                    file.getline(res.title, MAX_TITLE_SIZE);
-                    break;
-                case 1:
-                    file.getline(res.recipient_name, MAX_NAME_SIZE);
-                    break;
-                case 2:
-                    file.getline(res.message, MAX_TEXT_SIZE);
-                    break;
-                case 3:
-                    file.getline(res.sender_name, MAX_NAME_SIZE);
-                    break;
-                default:
-                    break;
-            }
-            line++;
-        }
+PlaceHolder getPlaceHolder(std::fstream &file) {
+    PlaceHolder placeHolder;
+    file.getline(placeHolder.key, MAX_SIZE_STR, ' ');
+    file.getline(placeHolder.text, MAX_SIZE_STR);
+    return placeHolder;
+}
+
+int sizePlaceHolders(std::fstream &file) {
+    char buff[MAX_SIZE_STR * 2];
+    int res = 0;
+    size_t curr_pos = file.tellg();
+    file.seekg(std::ios::beg);
+    while (!file.eof()) {
+        file.getline(buff, MAX_SIZE_STR * 2);
+        res++;
     }
-    file.close();
+    file.seekg(curr_pos);
+    file.clear();
     return res;
 }
 
-void put_words(const char path[], const Info& info) {
-    std::fstream file(path, std::ios::in);
-    assert(file.is_open());
-    std::fstream new_file(PATH, std::ios::out);
-    char rotator;
-    int time = 0;
-    while (file >> std::noskipws >> rotator) {
-        if (rotator == '{') {
-            switch (time) {
-                case 0:
-                    new_file << info.title;
-                    break;
-                case 1:
-                    new_file << info.recipient_name;
-                    break;
-                case 2:
-                    new_file << info.message;
-                    break;
-                case 3:
-                    new_file << info.sender_name;
-                    break;
-                default:
-                    break;
-            }
-            time++;
-            while (file >> rotator)
-                if (rotator == '}')
-                    break;
+PlaceHolder* getArrayPlaceHolder(std::fstream &file, const int size) {
+    PlaceHolder* arr = new PlaceHolder[size];
+    int pos = 0;
+    while (!file.eof()) {
+        arr[pos++] = getPlaceHolder(file);
+    }
+    file.seekg(std::ios::beg);
+    file.clear();
+    return arr;
+}
+
+bool strEqueal(const char text1[], const char text2[]) {
+    int i = 0;
+    while (text1[i] || text2[i]) {
+        if (text1[i] != text2[i])
+            return false;
+        i++;
+    }
+    return true;
+}
+
+void put_words(std::fstream &file, const PlaceHolder arr[], const int size_arr) {
+    std::fstream nFile(PATH_RESULT, std::ios::out);
+    char reader;
+    char buff[MAX_SIZE_STR];
+    while (file.get(reader)) {
+        if (reader == '{') {
+            file.getline(buff, MAX_SIZE_STR, '}');
+            for (int i = 0; i < size_arr; ++i)
+                if (strEqueal(buff, arr[i].key))
+                    nFile << arr[i].text;
             continue;
         }
-        new_file << rotator;
+        nFile << reader;
     }
-    file.close();
-    new_file.close();
+    nFile.close();
 }
 
 int main() {
-    put_words("example1.1.txt", get_info_from_file("example1.txt"));
+    std::fstream file(PATH_WORDS, std::ios::in);
+    int size = sizePlaceHolders(file);
+    PlaceHolder *placeHolders = getArrayPlaceHolder(file, size);
+    file.close();
+    file.open(PATH_PATTERN, std::ios::in);
+    put_words(file, placeHolders, size);
+    file.close();
 }

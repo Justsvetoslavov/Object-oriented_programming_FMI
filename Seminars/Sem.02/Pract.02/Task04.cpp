@@ -17,9 +17,9 @@ void initPair(Pair& pair) {
 	std::cin >> pair.a >> pair.b;
 }
 
-Pair* createPair() {
-	Pair* myPair = new Pair();
-	initPair(*myPair);
+Pair createPair() {
+	Pair myPair;
+	initPair(myPair);
 	return myPair;
 }
 
@@ -105,7 +105,8 @@ int main()
 	myRelation.size = RELATION_SIZE;
 
 	for (int i = 0; i < RELATION_SIZE; i++) {
-		initPair(myRelation.pairs[i]);
+		myRelation.pairs[i] = createPair();
+		//initPair(myRelation.pairs[i]);
 	}
 
 	printRealtion(myRelation);
@@ -114,4 +115,6 @@ int main()
 	Relation fileRelation;
 	readRelationFromFile("relation.txt", fileRelation);
 	printRealtion(fileRelation);
+
+	 
 }

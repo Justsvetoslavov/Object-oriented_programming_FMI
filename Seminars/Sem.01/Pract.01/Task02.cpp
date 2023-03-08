@@ -1,39 +1,34 @@
 #include <iostream>
-
-void InputArr(int* arr, const int size)
-{
-	for (size_t i = 0; i < size; i++) {
-		std::cin >> arr[i];
-	}
-}
-
-int CountBiggerSymbols(const int* arr, const int size, const char symbol) 
-{ 
-	int counter = 0;
-	for (size_t i = 0; i < size; i++) {
-		if (arr[i] > symbol) {
-			counter++;
-		}
-	}
-
-	return counter;
-}
+using std:: cin;
+using std:: cout;
 
 int main()
 {
-    int N;
-    cout << "Enter the number of elements in the array: ";
+    unsigned int N;
+    cout << "Number of numbers: ";
     cin >> N;
-
-    int *arr = new int[N];
-    InputElements(arr, N);
+    int* arr = new int [N];
+    cout << "Numbers: ";
+    
+    for(int i = 0; i<N; i++)
+    {
+        cin >> arr[i];
+    }
 
     char symbol;
-    cout << "Enter the symbol: ";
+    cout << "Symbol: ";
     cin >> symbol;
+    int br = 0;
 
-    cout << "The number of elements greater than the symbol: " << CountSymbol(arr, N, symbol) << endl;
-    
+    for(int i = 0; i< N; i++)
+    {
+        if(symbol<arr[i])
+        {
+            br++;
+        }
+    }
+
     delete[] arr;
-    return 0;
+
+    cout << "Numbers with bigger ASCII code: " << br << '\n';
 }

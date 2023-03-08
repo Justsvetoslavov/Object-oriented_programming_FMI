@@ -93,7 +93,7 @@ bool saveData(System &system){
 
 }
 
-void printUser(const User user){
+void printUser(const User &user){
 
     std::cout<<"Name = "<<user.name<<" ";
     std::cout<<"Email = "<<user.email<<" ";
@@ -101,7 +101,7 @@ void printUser(const User user){
 
 }
 
-void printSystem(const System system){
+void printSystem(const System &system){
 
     for(int i = 0; i < system.size;i++){
         printUser(system.userList[i]);
@@ -115,10 +115,10 @@ bool compareStr(const char left[],const char right[]){
         if(left[i] != right[i])
             return false;
     }
-    
+
     if(left[i] == '\0' and right[i] == '\0')return true;
     else return false;
-    
+
 }
 bool loginUser(const User &user,System &system){
 

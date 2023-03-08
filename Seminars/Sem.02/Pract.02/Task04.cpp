@@ -27,11 +27,11 @@ Pair createPair(){
     return pair;
 }
 
-void printPair(Pair pair){
+void printPair(const Pair &pair){
     std::cout<<pair.x<<" "<<pair.y<<"\n";
 }
 
-Pair initPair(Pair pair,size_t x, size_t y){
+Pair initPair(Pair &pair,size_t x, size_t y){
 
     pair.x = x;
     pair.y = y;
@@ -40,7 +40,7 @@ Pair initPair(Pair pair,size_t x, size_t y){
 
 }
 
-bool addPairToRelation(Relation &relation,Pair pair){
+bool addPairToRelation(Relation &relation,const Pair &pair){
 
     if(relation.max_size == relation.size + 1) return false;
 
@@ -63,7 +63,7 @@ Pair readPairFromFile(std::ifstream& file){
     else return pair;
 }
 
-bool writePairToFile(std::ofstream& file,Pair pair){
+bool writePairToFile(std::ofstream& file,const Pair &pair){
 
     if(file.is_open()){
         file<<std::endl<<pair.x<<" "<<pair.y;
@@ -72,7 +72,7 @@ bool writePairToFile(std::ofstream& file,Pair pair){
     else return false;
 }
 
-bool writeRelationToFile(std::ofstream &file,Relation relation){
+bool writeRelationToFile(std::ofstream &file,const Relation &relation){
 
     if(!file.is_open())return false;
 
@@ -104,7 +104,8 @@ int main(){
     Relation relation;
 
     for(int i = 0 ; i < 32;i++){
-        addPairToRelation(relation,initPair(createPair(),i,i+1));
+        Pair pair = createPair();
+        addPairToRelation(relation,initPair(pair,i,i+1));
     }
 
     std::ofstream relationOUT(RELATION_PATH,std::ios::out);
@@ -123,6 +124,9 @@ int main(){
 
     }
 
+
+    delete[] relation1.pairs;
+    delete[] relation.pairs;
     relationIN.close();
 
 }

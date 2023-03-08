@@ -7,11 +7,11 @@ int lengthOfFile(const char path[]) {
     assert(read_file.is_open());
     int length = 0;
     char rotator;
-    while(read_file >> std::noskipws >> rotator)
+    while(read_file.get(rotator))
         length++;
     return length;
 }
 
 int main() {
-    std::cout << lengthOfFile("result.txt");
+    std::cout << lengthOfFile("test.txt");
 }

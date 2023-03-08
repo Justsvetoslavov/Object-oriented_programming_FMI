@@ -13,7 +13,7 @@ void printFile(const char fileName[]) {
 
     while (!file.eof()) {
         char buff[BUFF_SIZE];
-        file.getline(buff, 1024);
+        file.getline(buff, BUFF_SIZE);
         std::cout << buff << "\n";
     }
 

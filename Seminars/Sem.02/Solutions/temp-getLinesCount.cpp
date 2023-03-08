@@ -3,7 +3,8 @@
 #include "constants.h"
 
 // TODO: refactor
-size_t getLinesCount(std::ifstream& in) {
+size_t getLinesCount(std::ifstream& in)
+{
 	size_t counter = 0;
 	while (!in.eof()) {
 		char buffer[BUFFER_SIZE];

@@ -2,7 +2,8 @@
 #include <fstream>
 #include "constants.h"
 
-int test() {
+int test()
+{
 	std::ifstream file(FILE_NAME);
 	//file.good();  // all operations went good
 	//file.clear(); // clears all failures, sets good to true
@@ -13,7 +14,8 @@ int test() {
 	return 0;
 }
 
-int failExample() {
+int failExample()
+{
 	int a;
 	std::cin >> a;
 	std::cout << std::cin.fail() << std::endl; // true

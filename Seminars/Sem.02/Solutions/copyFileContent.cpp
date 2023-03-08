@@ -2,13 +2,14 @@
 #include <fstream>
 #include "constants.h"
 
-void copyFileContent(const char from[], const char to[]) {
+bool copyFileContent(const char* from, const char* to)
+{
 	std::ifstream in(from);
 	std::ofstream out(to);
 
 	if (!in.is_open() || !out.is_open()) {
 		std::cout << INVALID_FILE_ERR_MSG;
-		return;
+		return false;
 	}
 
 	while (!in.eof()) {
@@ -19,4 +20,5 @@ void copyFileContent(const char from[], const char to[]) {
 
 	in.close();
 	out.close();
+	retun true;
 }

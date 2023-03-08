@@ -10,11 +10,15 @@ const char PATH[] =
 int main(){
 
     std::ifstream file(PATH, std::ios::in);
-    char temp[128];
-    while ( file.getline(temp, sizeof temp) )
-    {
-        std::cout<<temp<<std::endl;
-    }
+    const int TEMP_SIZE = 128;
+    char temp[TEMP_SIZE];
+    if(file.is_open()){
+        
+        while (file.getline(temp, sizeof temp)) {
+            std::cout << temp << std::endl;
+        }
+        
+    } else return -1;
 
     file.close();
 

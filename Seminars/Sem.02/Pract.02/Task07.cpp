@@ -11,7 +11,6 @@ int const MAX_SIZE = 128;
 
 struct User{
 
-
     char name[MAX_SIZE] = "Default";
     char email[MAX_SIZE] = "Default@emai.struct";
     char password[MAX_SIZE];
@@ -26,7 +25,7 @@ struct System{
 
 };
 
-bool addUserToSystem(const User user,System &system){
+bool addUserToSystem(const User &user,System &system){
 
     if(system.size+1 == system.max_size)return false;
 
@@ -36,7 +35,7 @@ bool addUserToSystem(const User user,System &system){
 
 }
 
-User createUser(char name[],char email[],char password[]){
+User createUser(const char name[],const char email[],const char password[]){
 
     User user;
 
@@ -87,7 +86,10 @@ bool saveData(System &system){
 
     }
 
+    delete[] system.userList;
     file.close();
+
+    return true;
 
 }
 
@@ -106,14 +108,19 @@ void printSystem(const System system){
     }
 
 }
-bool compareStr(char left[],char right[]){
+bool compareStr(const char left[],const char right[]){
 
-    for(int i = 0;left[i]!='\0' or right[i]!='\0';i++){
-        if(left[i] != right[i])return false;
+    int i = 0;
+    for(;left[i]!='\0' or right[i]!='\0';i++){
+        if(left[i] != right[i])
+            return false;
     }
-    return true;
+    
+    if(left[i] == '\0' and right[i] == '\0')return true;
+    else return false;
+    
 }
-bool loginUser(User user,System &system){
+bool loginUser(const User &user,System &system){
 
     for(int i=0;i< system.size;i++){
 

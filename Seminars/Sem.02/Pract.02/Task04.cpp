@@ -91,8 +91,8 @@ Relation readRelationFromFile(std::ifstream &file){
 
     if(!file.is_open())return relation;
 
-    for(int i = 0; !file.eof();i++){
-        addPairToRelation(relation,readPairFromFile(file));
+   while (!file.eof()){
+        addPairToRelation(relation, readPairFromFile(file));
     }
 
     return relation;

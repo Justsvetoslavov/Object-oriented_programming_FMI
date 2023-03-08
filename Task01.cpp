@@ -18,7 +18,7 @@ int main()
 {
     int a, b, c;
     cin >> a >> b >> c;
-    ofstream writeFile("result.txt");
+    ofstream writeFile("result_Task01.txt");
     if (!writeFile.is_open())
     {
         cout << "Error";

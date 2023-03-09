@@ -17,9 +17,10 @@ size_t lengthOfFile(const char NAME[])
         return 0;
     }
 
+    size_t posInBeginning = file.tellg();
     file.seekg(0, std::ios::end);
-
     size_t currentPosition = file.tellg();
+    file.seekg(posInBeginning);
 
     file.close();
 

@@ -40,7 +40,7 @@ Relation initRelation()
     return newRelation;
 }
 
-void addPairToRelation(Relation& newRelation, Pair& newPair)
+void addPairToRelation(Relation& newRelation, const Pair& newPair)
 {
     if (newRelation.numberOfPairs < MAXELEMENTS)
     {
@@ -53,7 +53,7 @@ void addPairToRelation(Relation& newRelation, Pair& newPair)
     }
 }
 
-void writePairToFile(Relation &newRelation)
+void writeRelationToFile(Relation &newRelation)
 {
     std::ofstream writeToFile(FILENAME, std::ios::app);
     if (!writeToFile.is_open())
@@ -71,7 +71,7 @@ void writePairToFile(Relation &newRelation)
     writeToFile.close();
 }
 
-Relation readPairFromFile()
+Relation readRelationFromFile()
 {
     Relation newRelation = initRelation();
 
@@ -110,9 +110,9 @@ int main()
     addPairToRelation(newRelation, pair3);
     addPairToRelation(newRelation, pair4);
 
-    writePairToFile(newRelation);
+    writeRelationToFile(newRelation);
 
-    Relation readPairs = readPairFromFile();
+    Relation readPairs = readRelationFromFile();
 
     for (int i = 1; i <= newRelation.numberOfPairs; ++i)
     {

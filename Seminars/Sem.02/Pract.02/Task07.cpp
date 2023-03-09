@@ -8,7 +8,7 @@
 
 const int SIZE = 128;
 const int USERS = 100;
-const char FILENAME1[] = "usersList.txt";
+const char FILENAME[] = "usersList.txt";
 
 struct User
 {
@@ -25,7 +25,7 @@ struct System
 
 void inputUsers(System &newSystem)
 {
-    std::ofstream writeInFile(FILENAME1, std::ios::app);
+    std::ofstream writeInFile(FILENAME, std::ios::app);
     if (!writeInFile.is_open())
     {
         std::cout << "ERROR! The file could not be opened!";
@@ -46,55 +46,49 @@ void inputUsers(System &newSystem)
 
 void printUsersList(System &newSystem)
 {
-    std::ifstream readFromFile(FILENAME1);
+    std::ifstream readFromFile(FILENAME);
     if (!readFromFile.is_open())
     {
         std::cout << "ERROR! The file could not be opened!";
         return;
     }
 
-    int i;
-    for (i = 0; i < USERS; ++i)
+    int count = 0;
+    for (int i = 0; i < USERS; ++i)
     {
         readFromFile >> newSystem.systemOfUsers[i].name
             >> newSystem.systemOfUsers[i].email
             >> newSystem.systemOfUsers[i].password;
+
+        ++count;
     }
-    newSystem.countOfStudentsInSystem = i;
+    newSystem.countOfStudentsInSystem = count;
 
     readFromFile.close();
 }
 
 void makeRegistration(System& newSystem)
 {
-    int i = 0;
     std::cout << "Enter your name: ";
-    std::cin >> newSystem.systemOfUsers[i].name;
-    ++i;
+    std::cin >> newSystem.systemOfUsers[0].name;
 
     std::cout << "Enter your email: ";
-    std::cin >> newSystem.systemOfUsers[i].email;
-    ++i;
+    std::cin >> newSystem.systemOfUsers[1].email;
 
     std::cout << "Enter your password: ";
-    std::cin >> newSystem.systemOfUsers[i].password;
-    i = 0;
+    std::cin >> newSystem.systemOfUsers[2].password;
 
     inputUsers(newSystem);
 
     std::cout << "You are successfully registered!" << std::endl;
 }
 
-int strCompare(char str1[], char str2[])
+int strCompare(const char str1[], const char str2[])
 {
     int i;
     for (i = 0; str1[i] && str2[i]; ++i)
     {
-        if (str1[i] == str2[i])
-        {
-            continue;
-        }
-        else
+        if (str1[i] != str2[i])
         {
             break;
         }
@@ -108,7 +102,7 @@ int strCompare(char str1[], char str2[])
     return 0;
 }
 
-void logInTheSystem(System& newSystem)
+void logInTheSystem(const System& newSystem)
 {
     char name[SIZE + 1];
     char email[SIZE + 1];

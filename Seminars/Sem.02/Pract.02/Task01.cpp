@@ -8,7 +8,7 @@
 
 const char FILENAME[] = "result.txt";
 
-int readFromFile(const char NAME[], int &substract)
+int readFromFile(const char NAME[], int substract)
 {
     int sum;
     int multiplication;

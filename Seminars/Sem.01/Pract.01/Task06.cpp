@@ -1,77 +1,96 @@
 #include <iostream>
 #include <cmath>
+using std:: cout;
+using std:: cin;
 
-const double EPSILON = 0.0001;
+
+const int FIRSTQUADRANT = 1;
+const int SECONDQUADRANT = 2;
+const int THIRDQUADRANT = 3;
+const int FOURTHQUADRANT = 4;
 
 struct Point
 {
-    double x = 0;
-    double y = 0;
+    double x; 
+    double y;
 };
 
-Point InitPoint(Point& point)
+void initNewPoint(Point& point)
 {
-    std::cin >> point.x >> point.y;
+    cout << "x = ";
+    cin >> point.x;
+    cout << "y = ";
+    cin >> point.y; 
 }
 
-void PrintPoint(const Point& point)
+void printPoint(const Point& point)
 {
-    std::cout << "(" << point.x << ", " << point.y << ")" << std::endl;
+    cout << "(" << point.x << ", " << point.y << ")\n";
 }
 
-double GetDistFromCenter(const Point& point)
+double distanceCentre(const Point& point)
 {
-    return sqrt(point.x * point.x + point.y * point.y);
+    return sqrt(pow(point.x, 2) + pow(point.y, 2));
 }
 
-double GetDistBetweenPoints(const Point &f, const Point &s)
+double distanceBetweenTwoPoints(const Point& firstPoint, const Point& secondPoint)
 {
-    //   ______________________________________________
-    // \/ (x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)
-    // https://en.wikipedia.org/wiki/Euclidean_distance
-    double dx = f.x - s.x;
-    double dy = f.y - s.y;
-    return sqrt(dx * dx + dy * dy);
+    return sqrt(pow(firstPoint.x -secondPoint.x, 2) + pow(firstPoint.y - secondPoint.y, 2));
 }
 
-unsigned short GetQuadrant(const Point& point)
+int Quadrant(const Point& point)
 {
-    if (point.x > 0 && point.y > 0) {
-        return 1;
-    } else if (point.x < 0 && point.y > 0) {
-        return 2;
-    } else if (point.x < 0 && point.y < 0) {
-        return 3;
-    } else if (point.x > 0 && point.y < 0) {
-        return 4;
+    double x = point.x;
+    double y = point.y;
+
+    if(x == 0 || y == 0)
+    {
+        return 0;
     }
-    
-    return 0;
-}
+    else if(x>0)
+    {
+        if(y>0)
+        {
+            return FIRSTQUADRANT;
+        }
+        else
+        {
+            return FOURTHQUADRANT;
+        }
 
-bool IsPointInCircle(const double radius, const Point& point)
-{
-    bool pointIsInCircle = false;
-    double distFromCenter = getDistFromCenter(point);
-
-    if (abs(distFromCenter - radius) < EPSILON) {
-        std::cout << "Point lies on the circle";
-    } else {
-        if (distFromCenter > radius) {
-            std::cout << "Point lies outside the circle\n";
-            pointIsInCircle = true;
-        } else {
-            std::cout << "Point lies inside the circle\n";
+    }
+    else
+    {
+        if(y>0)
+        {
+            return SECONDQUADRANT;
+        }
+        else
+        {
+            return THIRDQUADRANT;
         }
     }
-
-    return pointIsInCircle;
 }
 
-int main() {
-    Point point;
-    InitPoint(point);
-    PrintPoint(point);
+bool isInTheCyrcleOrOnIt(const double& r, const Point& point)
+{
+    if(distanceCentre(point) < r || distanceCentre(point) == r)
+    {
+        return true;
+    }
+    
+    return false;
+}
 
-    IsPointInCircle(5, point);
+int main()
+{
+    Point point;
+    initNewPoint(point);
+    printPoint(point);
+    cout << "Distance from the centre (0.0, 0.0): " << distanceCentre(point) <<'\n';
+    const Point secondPoint = {4.6, 3.7};
+    cout << "Distance between the two points (Yours and (4.6, 3.7)): " << distanceBetweenTwoPoints(point, secondPoint) << '\n';
+    double r = 7.3;
+    cout << "Is the point in/on the cyrcle with radios 7.3 (1 - yes, 0 - no): " << isInTheCyrcleOrOnIt(r, point) << '\n';
+    cout << "The point is in " << Quadrant(point) << " quadrant \n";
 }

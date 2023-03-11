@@ -2,7 +2,7 @@
 #include <fstream>
 #include "constants.h"
 
-bool printSourceCode(const char* fileName)
+bool PrintSourceCode(const char* fileName)
 {
 	std::ifstream in(fileName);
 

@@ -2,7 +2,7 @@
 #include <fstream>
 #include "constants.h"
 
-void ifstreamPositioning()
+void IfstreamPositioning()
 {
 	std::ifstream in(FILE_NAME);
 	char c;
@@ -14,7 +14,7 @@ void ifstreamPositioning()
 	std::cout << c << std::endl;
 }
 
-void ofstreamPositioning()
+void OfstreamPositioning()
 {
 	std::ofstream out(FILE_NAME, std::ios::_Nocreate);
 	out.seekp(-5, std::ios::end);

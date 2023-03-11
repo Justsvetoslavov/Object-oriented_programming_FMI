@@ -1,6 +1,8 @@
 #include <iostream>
+#include <cstring>
 
-void stableCountingSort(char* arr, size_t length) {
+void StableCountingSort(char* arr, size_t length)
+{
 	size_t arrLength = strlen(arr);
 	char* copy = new char[arrLength];
 	// copy the original
@@ -32,8 +34,9 @@ void stableCountingSort(char* arr, size_t length) {
 	delete[] copy;
 }
 
-int main() {
+int main()
+{
 	char arr[] = "ababababababa";
-	stableCountingSort(arr, 13);
+	StableCountingSort(arr, 13);
 	std::cout << arr;
 }

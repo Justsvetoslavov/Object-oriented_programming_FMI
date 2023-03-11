@@ -52,7 +52,7 @@ void GetAndPutbackExamples()
 	}
 }
 
-void readExample()
+void ReadExample()
 {
 	char c;
 	std::cin.putback('a').putback('b');

@@ -2,7 +2,7 @@
 #include <fstream>
 #include "constants.h"
 
-int modes()
+int Modes()
 {
 	std::fstream file(FILE_NAME, std::ios_base::ate | std::ios_base::out | std::ios_base::_Nocreate);
 	// std::ios_base::in - read mode - base ifstream mode

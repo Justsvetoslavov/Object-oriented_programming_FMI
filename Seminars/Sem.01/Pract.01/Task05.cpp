@@ -1,29 +1,31 @@
 #include <iostream>
+using std:: cout;
+using std:: cin;
 
-struct ComplexNumber
+struct complexNum
 {
-	double real;
-	double imaginary;
+    int realPart;
+    int imPart;
 };
 
-ComplexNumber AddComplexNumbers(const ComplexNumber& lhs, const ComplexNumber& rhs)
+complexNum sum (const complexNum& firstN, const complexNum& secondN)
 {
-	return {
-        lhs.real + rhs.real,
-        lhs.imaginary + rhs.imaginary
-    };
+    complexNum sum;
+    sum.realPart = firstN.realPart + secondN.realPart;
+    sum.imPart = firstN.imPart + secondN.imPart;
+
+    return sum;
 }
 
-void PrintComplexNumber(const ComplexNumber& complex)
+void printComplexNum(const complexNum& num)
 {
-	std::cout << complex.real << " " << complex.imaginary << "\n";
+    cout << num.realPart << " + " << num.imPart << "i" << '\n';
 }
 
 int main()
 {
-	ComplexNumber cn1 = { 3, 4 };
-	ComplexNumber cn2 = { -10, 12 };
-	ComplexNumber sum = AddComplexNumbers(cn1, cn2);
-
-	PrintComplexNumber(sum);
+    const complexNum FIRSTNUM = {4, 9};
+    const complexNum SECONDNUM = {3, 2};
+    
+    printComplexNum(sum(FIRSTNUM, SECONDNUM));
 }

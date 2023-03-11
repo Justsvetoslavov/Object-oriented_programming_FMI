@@ -1,63 +1,72 @@
-﻿#include <iostream>
+#include <iostream>
+using std:: cout;
+using std:: cin;
 
-const short MAX_NAME_SIZE = 30;
+const int MAX_LENGHT = 30;
 
 struct Student
 {
-    char name[MAX_NAME_SIZE + 1];
-    unsigned int fn;
+    char studName[MAX_LENGHT];
+    unsigned int facultyNum;
 };
 
-void InitStudent(Student& student, const char* name, unsigned int fn)
+bool isCorrectLenght(const char* studName)
 {
-    strcpy_s(student.name, MAX_NAME_SIZE, name);
-    student.fn = fn;
+    int i = 0;
+    while(studName[i] + '\0')
+    {
+        i++;
+    }
+
+    if(i<=MAX_LENGHT)
+    {
+        return true;
+    }
+
+    return false;
 }
 
-void PrintStudent(const Student& student)
+void saveName(const char* name, char* stdName)
 {
-    std::cout << student.name << " " << student.fn << "\n";
+    int br = 0;
+
+    while(name[br] != '\0')
+    {
+        stdName[br] = name[br];
+        br++;
+    }
+
+    stdName[br] = '\0';
+
+}
+
+void initStuden(Student& st, const char* name, const unsigned int& facultyNum)
+{
+    if(isCorrectLenght(name))
+    {
+        st.facultyNum = facultyNum;
+        saveName(name, st.studName);
+    }
+}
+
+void printStud(Student& std)
+{
+    char* studName = std.studName;
+    cout << "Name: " << studName << "; Faculty number: " << std.facultyNum << '\n';
 }
 
 int main()
 {
-    Student st = { "Joro", 10 };
-    PrintStudent(st);
-    st = {"Ivan", 20 };
-    PrintStudent(st);
-    InitStudent(st, "New Name", 82);
-    PrintStudent(st);
-    std::cout << "\n\n";
+    Student st = { "Gosho", 10 }; // predefied - can; properties - can be changed
+    Student *pSt = &st; // predefied - can; properties - can be changed
+    const Student* pCSt = &st; // predefied - can; properties - cannot be changed
+    Student* const cPSt = &st; // predefied - cannot; properties - can be changed
+    const Student* const cpCSt = &st; // predefied - cannot; properties - cannot be changed
+    Student& refSt = st; // predefied - can; properties - can be changed
+    const Student& refCSt = st; // predefied - cannnot; properties - cannot be changed
 
-    Student* pSt = &st;
-    *pSt = { "Valeri", 30 };
-    PrintStudent(*pSt);
-    InitStudent(*pSt, "PST New Name", 100);
-    PrintStudent(*pSt);
-    std::cout << "\n\n";
+    Student myStudent;
+    initStuden(myStudent, "Ivan Petrov", 28);
+    printStud(myStudent);
 
-    const Student* pCSt = &st;
-    //*pCSt = { "Valeri", 30 };
-    //initStudent(*pCSt, "PST New Name", 100);
-
-    Student* const cPSt = &st;
-    *cPSt = { "Ivaylo", 1000 };
-    PrintStudent(*cPSt);
-    InitStudent(*cPSt, "CPST New Name", 100);
-    PrintStudent(*cPSt);
-    std::cout << "\n\n";
-
-    const Student* const cpCSt = &st;
-    //*cpCSt = { "Valeri", 30 };
-    //initStudent(*cpCSt, "PST New Name", 100);
-
-    Student& refSt = st;
-    refSt = {"Valentin", 82};
-    PrintStudent(refSt);
-    InitStudent(refSt, "REFST New Name", 100);
-    PrintStudent(refSt);
-
-    const Student& refCSt = st;
-    //refCSt = { "Valentin", 82 };
-    //initStudent(refCSt, "PST New Name", 100);
 }

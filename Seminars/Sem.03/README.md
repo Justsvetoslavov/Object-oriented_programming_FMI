@@ -25,7 +25,7 @@ int main()
 
 	if (!f.is_open()) {
 		cout << "Error while opening file!" << endl;
-		return -1;
+		return 1;
 	}
 	f << 33; //appends at the end of the file
 
@@ -77,7 +77,7 @@ using namespace std;
 
 int main()
 {
-	ofstream f("file.dat");
+	ofstream f("file.dat", ios::binary);
 
 	int a = 155555;
 
@@ -97,7 +97,7 @@ using namespace std;
 
 int main()
 {
-	ifstream f("file.dat");
+	ifstream f("file.dat", ios::binary);
 
 	int a;
 
@@ -137,7 +137,7 @@ int main()
 		ofstream file("testObj.bat", ios::binary);
 
 		if (!file.is_open()) {
-			return -1;
+			return 1;
 		}
 
 		file.write((char*)&t, sizeof(t));
@@ -422,7 +422,7 @@ int main()
 
 	ReadFromFile(arr, count, file);
 
-	for (int i = 0; i < count; i++) {
+	for (size_t i = 0; i < count; i++) {
 		std::cout << "Name: " << arr[i].name << ", age: " << arr[i].age << ", fn: " << arr[i].fn << std::endl;
 	}
 

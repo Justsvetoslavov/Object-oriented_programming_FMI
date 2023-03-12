@@ -82,7 +82,7 @@ void PrintPair(const Pair& pair)
 	std::cout << "a = " << pair.a << ", b = " << pair.b << std::endl;
 }
 
-void printRealtion(const Relation& relation) {
+void PrintRealtion(const Relation& relation) {
 	std::cout << "Pairs:" << std::endl;
 	for (size_t i = 0; i < relation.size; i++) {
 		PrintPair(relation.pairs[i]);

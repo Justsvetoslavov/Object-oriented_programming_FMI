@@ -78,5 +78,4 @@ int main() {
         cout << "(" << r2.pairs[i].first << ", " << r2.pairs[i].second << ")" << endl;
     }
     return 0;
-
 }

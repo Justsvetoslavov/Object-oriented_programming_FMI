@@ -1,27 +1,26 @@
 ﻿#include <iostream>
-#include<fstream>
-using std::cin;
-using std::cout;
-using std::endl;
+#include <fstream>
 
-void printCode(const char* name) {
-	std::ifstream file(name);
-	if (!file.is_open()) {
-		cout << "Error";
-		return;
-	}
-	while (!file.eof()) {
-		char buff [1024];
-		file.getline(buff, 1024);
-		cout << buff << endl;
+const int BUFF_SIZE = 1024;
 
-	}
+void printFile(const char fileName[]) {
+    std::ifstream file(fileName);
 
-	file.close();
+    if (!file.is_open()) {
+        std::cout << "Error\n";
+        return;
+    }
 
+    while (!file.eof()) {
+        char buff[BUFF_SIZE];
+        file.getline(buff, BUFF_SIZE);
+        std::cout << buff << "\n";
+    }
+
+    file.close();
 }
 
-int main() {
-	printCode("Task 06.cpp");
-
+int main()
+{
+    printFile("Task06.cpp");
 }

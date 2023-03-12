@@ -1,53 +1,41 @@
 #include <iostream>
 #include <fstream>
 
-const char* FILE_NAME = "result.txt";
+const char FILE_NAME[] = "results.txt";
 
-void writeNumbersToFile(const char* fileName, const int numbersCount)
+bool WriteSumAndProductToFile(int num1, int num2, int num3)
 {
-	std::ofstream myFile(fileName);
-	int prod = 1;
-	int num;
+    std::ofstream file(FILE_NAME);
 
-	if (myFile.is_open())
-	{
-		for (size_t i = 0; i < numbersCount; i++)
-		{
-			std::cin >> num;
-			prod *= num;
-			myFile << num << " ";
-		}
+    if (!file.is_open()) {
+        return false;
+    }
 
-		myFile << prod;
-	}
-
-	myFile.close();
+    file << num1 + num2 + num3 << " " << num1 * num2 * num3 << "\n";
+    file.close();
+	return true;
 }
 
-int getDiffBetweenSumAndProd(const char* fileName, const int numbersCount)
+bool ReadSumAndProductFromFile()
 {
-	int sum = 0;
-	int prod = 0;
-	std::ifstream myFile(fileName);
+    std::ifstream file(FILE_NAME);
+    if (!file.is_open()) {
+        return false;
+    }
 
-	if (myFile.is_open())
-	{
-		int num;
-		for (size_t i = 0; i < numbersCount; i++)
-		{
-			myFile >> num;
-			sum += num;
-		}
-
-		myFile >> prod;
-	}
-
-	return (sum - prod);
+    int sum, product;
+    file >> sum >> product;
+    std::cout << sum - product << std::endl;
+    
+    file.close();
+	return true;
 }
 
 int main()
 {
-	writeNumbersToFile(FILE_NAME, 3);
+    int num1, num2, num3;
+    std::cin >> num1 >> num2 >> num3;
 
-	std::cout << getDiffBetweenSumAndProd(FILE_NAME, 3);
+    WriteSumAndProductToFile(num1, num2, num3);
+    ReadSumAndProductFromFile();
 }

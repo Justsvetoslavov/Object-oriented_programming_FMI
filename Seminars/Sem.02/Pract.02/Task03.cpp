@@ -1,129 +1,210 @@
 #include <iostream>
 #include <fstream>
 
-const char* PROPERTIES_FILE_NAME = "properties.txt";
-const char* TEMPLATE_FILE_NAME = "template.txt";
-const char* RESULT_FILE_NAME = "result.txt";
-const int PROPERTY_NAME_MAX_LENGTH = 31;
-const int PROPERTY_VALUE_MAX_LENGTH = 100;
+const int MAX_STRING_LENGTH = 100;
+const char ERROR_MESSAGE[] = "Error";
+const char PLACEHOLDER_FILE_NAME[] = "placeholder.txt";
+const char TEMPLATE_FILE_NAME[] = "template.txt";
+const char RESULT_FILE_NAME[] = "result.txt";
 
-void writePropertyInFile(std::ofstream& result, const char* propValue)
+struct Placeholder
 {
-	while (propValue[0] != '\0')
-	{
-		result << propValue[0];
-		propValue++;
-	}
+    char key[MAX_STRING_LENGTH];
+    char value[MAX_STRING_LENGTH];
+};
+
+bool PreparePlaceholders()
+{
+    std::ofstream out(PLACEHOLDER_FILE_NAME);
+    if (!out.is_open()) {
+        return false;
+    }
+
+    out << "title Veliki" << std::endl;
+    out << "recipient_name Pop Armeniya" << std::endl;
+    out << "message Iskam da se oplacha!!!" << std::endl;
+    out << "sender_name FMI-student" << std::endl;
+
+    out.close();
+	return true;
 }
 
-// returns how many symbols were read
-int setProperyName(std::ifstream& templateFile, char* propName)
+bool PrepareTemplate()
 {
-	int templateFilePrevPos = templateFile.tellg();
+    std::ofstream out(TEMPLATE_FILE_NAME);
+    if (!out.is_open()) {
+        return false;
+    }
 
-	char curr;
-	templateFile >> curr;
-	int indexesRead = 1;
-	while (curr != '}')
-	{
-		propName[0] = curr;
-		propName++;
-		templateFile >> curr;
-		indexesRead++;
-	}
-	propName[0] = '\0';
+    out << "Dear, {title} {recipient_name}." << std::endl;
+    out << "{message}" << std::endl << std::endl;
+    out << "Sincerely," << std::endl;
+    out << "{sender_name}" << std::endl;
 
-	templateFile.seekg(templateFilePrevPos);
-	return indexesRead;
+    out.close();
+	return true;
 }
 
-int getIndexOfPropertyValueInFile(std::ifstream& propFile, const char* propName)
+size_t StrLen(const char* arr)
 {
-	int propFilePrevPos = propFile.tellg();
-	propFile.seekg(0, std::ios::beg);
+    size_t count = 0;
+    while (arr[count] != '\0') {
+        count++;
+    }
 
-	int result = 0;
-	int propNameIndex = 0;
-	char currCh;
-
-	while (propName[propNameIndex] != '\0')
-	{
-		propFile >> currCh;
-		if (currCh == propName[propNameIndex])
-		{
-			propNameIndex++;
-		}
-		else
-		{
-			propNameIndex = 0;
-		}
-	}
-
-	propFile.seekg(1, std::ios::cur);
-	result = propFile.tellg();
-
-	propFile.seekg(propFilePrevPos);
-	return result;
+    return count;
 }
 
-void setPropertyValue(std::ifstream& propFile, const char* propName, char* propValue)
+bool StrCmp(const char* str1, const char* str2)
 {
-	int propFilePrevPos = propFile.tellg();
+    size_t str1Length = StrLen(str1);
+    size_t str2Length = StrLen(str2);
+    if (str1Length != str2Length) {
+        return false;
+    }
 
-	int indexOfPropertyValueInFile = getIndexOfPropertyValueInFile(propFile, propName);
-	propFile.seekg(indexOfPropertyValueInFile);
+    for (size_t i = 0; i < str1Length; i++) {
+        if (str1[i] != str2[i]) {
+            return false;
+        }
+    }
 
-	propFile.getline(propValue, PROPERTY_VALUE_MAX_LENGTH);
-
-	propFile.seekg(propFilePrevPos);
+    return true;
 }
 
-void fulfillTemplate(std::ifstream& propFile, std::ifstream& templateFile, std::ofstream& result)
+size_t GetCharOccurrences(std::ifstream& in, char ch)
 {
-	if (propFile.is_open() && templateFile.is_open() && result.is_open())
-	{
-		int propFilePrevPos = propFile.tellg();
-		int templateFilePrevPos = propFile.tellg();
+    size_t initialPosition = in.tellg();
+    in.seekg(0, std::ios::beg);
 
-		char currTemplateCh;
+    size_t occurrences = 0;
+    char current;
 
-		while (!templateFile.eof())
-		{
-			templateFile >> currTemplateCh;
+    while (true) {
+        in.get(current);
 
-			if (currTemplateCh == '{')
-			{
-				char* propertyName = new char[PROPERTY_NAME_MAX_LENGTH];
-				char* propertyValue = new char[PROPERTY_VALUE_MAX_LENGTH];
+        if (in.eof()) {
+            break;
+        }
 
-				int indexesRead = setProperyName(templateFile, propertyName);
-				templateFile.seekg(indexesRead, std::ios::cur);
-				setPropertyValue(propFile, propertyName, propertyValue);
-				writePropertyInFile(result, propertyValue);
+        if (current == ch) {
+            occurrences++;
+        }
+    }
 
-				delete[] propertyName;
-				delete[] propertyValue;
-			}
-			else
-			{
-				result << currTemplateCh;
-			}
-		}
+    in.clear();
+    in.seekg(initialPosition, std::ios::beg);
 
-		propFile.seekg(propFilePrevPos);
-		templateFile.seekg(templateFilePrevPos);
-	}
+    return occurrences;
 }
 
-int main()
+size_t GetLinesCount(const char fileName[])
 {
-	std::ifstream propFile(PROPERTIES_FILE_NAME);
-	std::ifstream templateFile(TEMPLATE_FILE_NAME);
-	std::ofstream myFile(RESULT_FILE_NAME);
+    std::ifstream in(fileName);
 
-	fulfillTemplate(propFile, templateFile, myFile);
+    if (!in.is_open()) {
+        std::cout << ERROR_MESSAGE;
+        return 0;
+    }
 
-	propFile.close();
-	templateFile.close();
-	myFile.close();
+    size_t result = GetCharOccurrences(in, '\n') + 1;
+    in.close();
+
+    return result;
+}
+
+void GetPlaceholdersFromFile(
+    Placeholder* placeholders,
+    std::ifstream& in,
+    const size_t placeholdersCount)
+{
+    for (size_t i = 0; i < placeholdersCount; i++) {
+        // up to the ' ' to read the name
+        in.getline(placeholders[i].key, MAX_STRING_LENGTH, ' ');
+        // up to the end of the line to read the value
+        in.getline(placeholders[i].value, MAX_STRING_LENGTH, '\n');
+    }
+}
+
+void WriteReplacementFromPlaceholder(
+    const char* name,
+    std::ofstream& out,
+    const Placeholder* placeholders,
+    const size_t placeholdersCount)
+{
+    for (size_t i = 0; i < placeholdersCount; i++) {
+        if (StrCmp(placeholders[i].key, name)) {
+            out << placeholders[i].value;
+        }
+    }
+}
+
+bool ReadPlaceholders(Placeholder*& placeholders, size_t& placeholdersCount)
+{
+    placeholdersCount = GetLinesCount(PLACEHOLDER_FILE_NAME);
+    std::ifstream in(PLACEHOLDER_FILE_NAME);
+    if (!in.is_open()) {
+        std::cout << ERROR_MESSAGE;
+        return false;
+    }
+
+    placeholders = new Placeholder[placeholdersCount];
+    GetPlaceholdersFromFile(
+        placeholders,
+        in,
+        placeholdersCount
+    );
+
+    in.close();
+	return true;
+}
+
+bool ReplacePlaceholders()
+{
+    std::ifstream in(TEMPLATE_FILE_NAME);
+    std::ofstream out(RESULT_FILE_NAME);
+    if (!in.is_open() || !out.is_open()) {
+        std::cout << ERROR_MESSAGE;
+        return false;
+    }
+
+    Placeholder* placeholders = nullptr;
+    size_t placeholdersCount = 0;
+    TeadPlaceholders(placeholders, placeholdersCount);
+
+    char current;
+    while (true) {
+        in.get(current);
+        if (in.eof()) {
+            break;
+        }
+
+        if (current == '{') {
+            char name[MAX_STRING_LENGTH];
+            in.getline(name, MAX_STRING_LENGTH, '}');
+
+            WriteReplacementFromPlaceholder(
+                name,
+                out,
+                placeholders,
+                placeholdersCount
+            );
+
+            continue;
+        }
+
+        out << current;
+    }
+
+    in.close();
+    out.close();
+    delete[] placeholders;
+	return true;
+}
+
+int main() {
+    PreparePlaceholders();
+    PrepareTemplate();
+
+    ReplacePlaceholders();
 }

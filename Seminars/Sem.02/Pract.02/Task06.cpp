@@ -1,26 +1,22 @@
 ﻿#include <iostream>
 #include <fstream>
 
-const int BUFF_SIZE = 1024;
+const int BUFFER_SIZE = 1024;
 
-void printFile(const char fileName[]) {
-    std::ifstream file(fileName);
-
-    if (!file.is_open()) {
-        std::cout << "Error\n";
-        return;
-    }
-
-    while (!file.eof()) {
-        char buff[BUFF_SIZE];
-        file.getline(buff, BUFF_SIZE);
-        std::cout << buff << "\n";
-    }
-
-    file.close();
-}
-
-int main()
+bool PrintSourceCode(const char fileName[])
 {
-    printFile("Task06.cpp");
+	std::ifstream in(fileName);
+
+	if (!in.is_open()) {
+		return false;
+	}
+
+	while (!in.eof()) {
+		char buffer[BUFFER_SIZE];
+		in.getline(buffer, BUFFER_SIZE);
+		std::cout << buffer << std::endl;
+	}
+
+	in.close();
+    return true;
 }

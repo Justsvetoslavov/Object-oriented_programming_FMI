@@ -1,35 +1,14 @@
 #include <iostream>
 #include <fstream>
 
-using std::cout, std::ifstream;
+using std::cout, std::ifstream, std::ios;
 
-const int BUFF_SIZE = 1024;
 const char FILE_NAME[] = "result.txt";
 
-int length(const char* str) {
-    int counter = 0;
-    for (int i = 0; str[i]; i++) {
-        counter++;
-    }
-
-    return counter;
-}
-
 int lengthOfFile(ifstream& file) {
-    int counter = 0;
-    while (!file.eof()) {
-        char buff[BUFF_SIZE];
-        file.getline(buff, BUFF_SIZE);
+    file.seekg(0, ios::end);
 
-        if (file.eof()) {
-            counter += length(buff);
-            continue;
-        }
-
-        counter += BUFF_SIZE - 1;
-    }
-
-    return counter;
+    return file.tellg();
 }
 
 int main() {

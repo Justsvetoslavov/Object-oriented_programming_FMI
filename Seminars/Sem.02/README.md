@@ -1,5 +1,5 @@
 
-##  Потоци и Файловe. Текстови файлове.
+##  Потоци и Файлове. Текстови файлове.
 
 ### Видове потоци ###
 Поток (stream) - последователност от байтове данни влизащи в и излизащи от програмата.
@@ -17,12 +17,12 @@
   * Освобождава потока;    
   
 Видове потоци:
- - Потоци за вход ([istream](https://cplusplus.com/reference/istream/istream/)).
- - Потоци за изход ([ostream](https://cplusplus.com/reference/ostream/)).
+ - Потоци за вход ([istream](https://en.cppreference.com/w/cpp/io/basic_istream)).
+ - Потоци за изход ([ostream](https://en.cppreference.com/w/cpp/io/basic_ostream)).
  
 ![enter image description here](images/hierarchy.png)
 
-#####  Пример за работа с вход от конзолата. cin (обект от тип istream).
+#####  Пример за работа с вход от конзолата. [cin](https://en.cppreference.com/w/cpp/io/cin) (обект от тип istream).
  ```c++
 #include <iostream>
 
@@ -34,7 +34,7 @@ int main()
  ```
  Четем от стандартния вход.
 
-#####  Пример за работа с поток за изход. cout (обект от тип ostream).
+#####  Пример за работа с поток за изход. [cout](https://en.cppreference.com/w/cpp/io/cout) (обект от тип ostream).
  ```c++
 #include <iostream>
 
@@ -58,7 +58,7 @@ const char FILE_NAME[] = "myFile.txt";
 
 int main()
 {
-	std::ifstream file(FILE_NAME);
+	std::ifstream file(FILE_NAME); // create input file stream associated with myFile.txt
 
 	if (!file.is_open()) {
 		std::cout << "Error!" << std::endl;
@@ -109,7 +109,7 @@ const char FILE_NAME[] = "myFile.txt";
 
 int main()
 {
-	std::ofstream file(FILE_NAME);
+	std::ofstream file(FILE_NAME);  // create output file stream associated with myFile.txt
 
 	if (!file.is_open()) {
 		std::cout << "Error!" << std::endl;
@@ -119,7 +119,7 @@ int main()
 	int a = 3;
 	int b = 10;
 
-	file << a << " " << b << " " << a + b << std::endl;
+	file << a << " " << b << " " << a + b << std::endl; // write into the output file stream
 	
 	if(!file.eof()) { //check if the file has ended
 		std::cout << "The file contains more data after the two integers!" << std::endl;
@@ -129,16 +129,35 @@ int main()
 }
  ```
 
- - ifstream или istream - get указател, който реферира елемента, който ще се прочете при следващата входна операция. 
+ - (istream) [get](https://en.cppreference.com/w/cpp/io/basic_istream/get) - функция, която чете следващия character в потока. 
+ - (ostream) [put](https://en.cppreference.com/w/cpp/io/basic_ostream/put) - функция, която поставя на следваща позиция character в потока.
+ - ifstream или istream - съдържа get указател, който реферира елемента, който ще се прочете при следващата входна операция.
+ - ofstream или ostream - съдържа put указател, който реферира мястото, където ще се запише следващият елемент.
+ - put и get не са [форматирани](https://www.geeksforgeeks.org/unformatted-input-output-operations-in-cpp/) за разлика от operator<< и operator>>, тоест не пропускат whitespaces и др.
 
- - ofstream или ostream - put указател, който реферира мястото, където ще се запише следващият елемент.
+### Позициониране във файл
 
-### Режими на работа
+ - tellg() - Връща позицития на текущия символ в **потока за четене**
+ - tellp() - Връща позицития на текущия символ в **потока за писане**
+ - seekg(offset, direction) - Премества get-указателят на позцития на **потока за четене**.
+ - seekg(streampos idx) - Премества get-указателят на позция idx на **потока за четене**.
+ - seekp(offset, direction) - Премества put-указателят на позцития на **потока за писане**.
+ - seekp(streampos idx) - Премества put-указателят на позция idx на **потока за писане**.
+
+-**offset** : целочислена стойност. Отместването от direction.
+ 
+ -**direction** : Може да заема следите стойностти:
+
+1. ios::beg - началото на файла.
+2. ios::cur - текущата позиция във файла.
+3. ios::end - края на файла.
+
+### [Режими на работа](https://en.cppreference.com/w/cpp/io/ios_base/openmode)
 
  ```c++
 	ifstream str("file.txt", <режим на работа>).
  ```
-Режимът на работа е цяло число. 
+Режимът на работа е цяло число. Ако искаме да зададем повече от един ги изреждаме с двоично или('|').
 
 | ios         | Ефект:                                                                                                                           |    |
 |-------------|----------------------------------------------------------------------------------------------------------------------------------|----|
@@ -148,12 +167,24 @@ int main()
 | ios::app    | Отваря за вмъкване и установява указателя put в края на файла                                                                    | 8  |
 | ios::trunc  | Ако файлът съществува, съдържанието се изтрива.                                                                                  | 16 |
 | ios::binary | Превключва режима от текстов в двоичен                                                                                           | 32 |
+|ios::nocreate | Отваря за вмъкване, само ако файлът с указаното име съществува.|
+|ios::noreplace | Отваря за вмъкване само ако файлът с указаното име не съществува.|
  
 
  ```c++
 	ofstream file("file.txt", ios::out | ios::app).
  ```
+ 
+### [Флагове на състоянията на потока](https://en.cppreference.com/w/cpp/io/ios_base/iostate)
+| Флаг:| Значение:                                                                      | 
+|--------|------------------------------------------------------------------------------|
+|bad()   | Има загуба на информация. Някоя операция за четене и писане не е изпълнена. |
+|fail() |Последната входно/изходна операция е невалидна.|
+|good() | Всички операции са изпълнени успешно.|
+|clear()| Изчиства състоянието на потока (Вече good() ще върне истина).|
+| eof() | Достигнат е края на файла. |
 
+ <img style="width: 700px;" src="images/stream-flags.png" />  
 
  ##  Задачи
  

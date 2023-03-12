@@ -1,120 +1,81 @@
-﻿#include <iostream>
-#include <fstream>
+#include <iostream>
+#include<fstream>
+using std::cin;
+using std::cout;
+using std::endl;
 
+const int MAX = 25;
 struct Pair {
-	int a;
-	int b;
+    int first;
+    int second;
 };
 
-const int MAX_PAIRS_COUNT = 25;
 
 struct Relation {
-	Pair pairs[MAX_PAIRS_COUNT];
-	unsigned int size;
+    Pair pairs[MAX];
+    int size;
 };
 
-void initPair(Pair& pair) {
-	std::cin >> pair.a >> pair.b;
+Pair CreatePair(int first, int sec) {
+    Pair p;
+    p.first = first;
+    p.second = sec;
+    return p;
 }
-
-Pair createPair() {
-	Pair myPair;
-	initPair(myPair);
-	return myPair;
+Relation createRelation() {
+    Relation r;
+    r.size = 0;
+    return r;
 }
-
-//In the file, each pair will be on one line
-//The values a and b will be seperated by a space
-void readPairFromFile(std::ifstream& src, Pair& pair) {
-	src >> pair.a;
-	//Skip whitespace
-	src.get();
-	src >> pair.b;
+void addPairToRelation(Relation& r, Pair p) {
+    if (r.size < MAX) {
+        r.pairs[r.size] = p;
+        r.size++;
+    }
+    else {
+        cout << "Error: Relation is already at maximum size." << endl;
+    }
 }
+void writeRelationToFile(Relation& r) {
+    std::ofstream file("relation.txt");
+    if (!file.is_open()) {
+        cout << "error";
+        return;
+    }
+    for (int i = 0; i < r.size; i++) {
+        file << r.pairs[i].first << "," << r.pairs[i].second << endl;
 
-void writePairToFile(std::ofstream& dest, const Pair& pair) {
-	dest << pair.a;
-	dest << " ";
-	dest << pair.b;
-	dest << std::endl;
+    }
+    file.close();
+
 }
+Relation readRelationFromFile() {
+    Relation r = createRelation();
+    std::ifstream file("relation.txt");
+    if (!file.is_open()) {
+        cout << "error";
+        return r;
+    }
+    int first, second;
+    while (file >> first >> second) {
+        Pair p = CreatePair(first, second);
+        addPairToRelation(r, p);
+       
+    }
+    file.close();
 
-void addPairToRelation(Relation& relation, const Pair& pair) {
-	if (relation.size >= MAX_PAIRS_COUNT) {
-		std::cout << "Max number of pairs reached\n";
-		return;
-	}
+    return r;
 
-	relation.pairs[relation.size] = pair;
-	relation.size++;
 }
-
-void writeRelationToFile(const char fileName[], const Relation& relation) {
-	std::ofstream file(fileName);
-
-	if (!file.is_open()) {
-		std::cout << "Error\n";
-		return;
-	}
-
-	//Add the relation size on the first row
-	file << relation.size << std::endl;
-
-	for (int i = 0; i < relation.size; i++) {
-		writePairToFile(file, relation.pairs[i]);
-	}
-
-	file.close();
-}
-
-void readRelationFromFile(const char fileName[], Relation& relation) {
-	std::ifstream file(fileName);
-	
-	if (!file.is_open()) {
-		std::cout << "Error\n";
-		return;
-	}
-
-	int size;
-	file >> size;
-	file.get();
-	relation.size = size;
-
-	for (int i = 0; i < size; i++) {
-		readPairFromFile(file, relation.pairs[i]);
-	}
-
-	file.close();
-}
-
-void printPair(const Pair& pair) {
-	std::cout << "a = " << pair.a << ", b = " << pair.b << "\n";
-}
-
-void printRealtion(const Relation& relation) {
-	std::cout << "Pairs:\n";
-	for (int i = 0; i < relation.size; i++) {
-		printPair(relation.pairs[i]);
-	}
-}
-
-int main()
-{
-	const int RELATION_SIZE = 10;
-	Relation myRelation;
-	myRelation.size = RELATION_SIZE;
-
-	for (int i = 0; i < RELATION_SIZE; i++) {
-		myRelation.pairs[i] = createPair();
-		//initPair(myRelation.pairs[i]);
-	}
-
-	printRealtion(myRelation);
-	writeRelationToFile("relation.txt", myRelation);
-
-	Relation fileRelation;
-	readRelationFromFile("relation.txt", fileRelation);
-	printRealtion(fileRelation);
-
-	 
+int main() {
+    Relation r = createRelation();
+    addPairToRelation(r, CreatePair(5, 10));
+    addPairToRelation(r, CreatePair(22, 33));
+    addPairToRelation(r, CreatePair(35 ,45));
+    writeRelationToFile(r);
+    Relation r2 = readRelationFromFile();
+    for (int i = 0; i < r2.size; i++) {
+        cout << "(" << r2.pairs[i].first << ", " << r2.pairs[i].second << ")" << endl;
+    }
+    return 0;
 }

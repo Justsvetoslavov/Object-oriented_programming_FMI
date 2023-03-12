@@ -24,4 +24,3 @@ int main()
 {
     printFile("Task06.cpp");
 }
-

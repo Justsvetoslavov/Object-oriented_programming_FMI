@@ -1,108 +1,88 @@
 #include <iostream>
 #include <fstream>
 
-const int MAX_PAIRS_COUNT = 25;
-const char FILE_NAME[] = "relation.txt";
-const char ERROR_MESSAGE[] = "Error";
+using std::cin, std::cout, std::endl, std::ofstream, std::ifstream, std::fstream;
 
-struct Pair
-{
-	int a, b;
+const char *RELATIONS_FILE = "relations.txt";
+const int max_relation_size = 25;
+
+struct Pair {
+    unsigned int x;
+    unsigned int y;
 };
 
-struct Relation
-{
-	Pair pairs[MAX_PAIRS_COUNT];
-	unsigned int size = 0;
+struct Relation {
+    Pair pairs[max_relation_size];
+    unsigned int size;
 };
 
-void InitPair(Pair& pair)
-{
-	std::cin >> pair.a >> pair.b;
+void writeRelationToFile(const Relation &relation, fstream &file) {
+    for (int i = 0; i < relation.size; i++) {
+        file << relation.pairs[i].x << " " << relation.pairs[i].y << endl;
+    }
 }
 
-void ReadPairFromFile(std::ifstream& src, Pair& pair)
-{
-	src >> pair.a >> pair.b;
+void readRelationFromFile(Relation &relation, fstream &file) {
+    int x, y;
+    while (file >> x >> y) {
+        cout << x << " " << y << endl;
+        relation.pairs[relation.size].x = x;
+        relation.pairs[relation.size].y = y;
+        relation.size++;
+    }
 }
 
-void WritePairToFile(std::ofstream& dest, const Pair& pair)
-{
-	dest << pair.a << " " << pair.b << std::endl;
+void createPair(Pair &pair, unsigned int x, unsigned int y) {
+    pair.x = x;
+    pair.y = y;
 }
 
-bool AddPairToRelation(Relation& relation, const Pair& pair)
-{
-	if (relation.size >= MAX_PAIRS_COUNT) {
-		std::cout << "Max number of pairs reached\n";
-		return false;
-	}
-
-	relation.pairs[relation.size++] = pair;
-    return true;
+void addPairToRelation(Relation &relation, const Pair &pair) {
+    if (relation.size < max_relation_size) {
+        relation.pairs[relation.size] = pair;
+        relation.size++;
+    }
 }
 
-void WriteRelationToFile(const char fileName[], const Relation& relation)
-{
-	std::ofstream file(fileName);
-	if (!file.is_open()) {
-		std::cout << ERROR_MESSAGE << std::endl;
-		return false;
-	}
-
-	//Add the relation size on the first row
-	file << relation.size << std::endl;
-	for (size_t i = 0; i < relation.size; i++) {
-		WritePairToFile(file, relation.pairs[i]);
-	}
-
-	file.close();
-    return true;
+void readPairFromFile(Pair &pair, fstream &file) {
+    int x, y;
+    file >> x >> y;
+    createPair(pair, x, y);
 }
 
-bool ReadRelationFromFile(const char fileName[], Relation& relation)
-{
-	std::ifstream file(fileName);
-	if (!file.is_open()) {
-		std::cout << ERROR_MESSAGE << std::endl;
-		return false;
-	}
-
-	file >> relation.size;
-	for (size_t i = 0; i < relation.size; i++) {
-		ReadPairFromFile(file, relation.pairs[i]);
-	}
-
-	file.close();
-    return true;
+void writePairToFile(const Pair &pair, fstream &file) {
+    file << pair.x << " " << pair.y << endl;
 }
 
-void PrintPair(const Pair& pair)
-{
-	std::cout << "a = " << pair.a << ", b = " << pair.b << std::endl;
+void printRelation(const Relation &relation) {
+    cout << "Relation:" << endl;
+    for (int i = 0; i < relation.size; i++) {
+        cout << relation.pairs[i].x << " " << relation.pairs[i].y << endl;
+    }
 }
 
-void PrintRealtion(const Relation& relation) {
-	std::cout << "Pairs:" << std::endl;
-	for (size_t i = 0; i < relation.size; i++) {
-		PrintPair(relation.pairs[i]);
-	}
-}
+int main() {
+    fstream relationsFile(RELATIONS_FILE);
+    if (!relationsFile.is_open()) {
+        cout << "Could not open file " << RELATIONS_FILE << endl;
+        return -1;
+    }
 
-int main()
-{
-	const int RELATION_SIZE = 10;
-	Relation myRelation;
-	myRelation.size = RELATION_SIZE;
+    Relation relation{};
+    Pair pair{};
+    createPair(pair, 1, 2);
+    addPairToRelation(relation, pair);
+    createPair(pair, 3, 4);
+    addPairToRelation(relation, pair);
 
-	for (size_t i = 0; i < RELATION_SIZE; i++) {
-		InitPair(myRelation.pairs[i]);
-	}
+    writeRelationToFile(relation, relationsFile);
 
-	PrintRealtion(myRelation);
-	WriteRelationToFile(FILE_NAME, myRelation);
+    readPairFromFile(pair, relationsFile);
+    writePairToFile(pair, relationsFile);
 
-	Relation fileRelation;
-	ReadRelationFromFile(FILE_NAME, fileRelation);
-	PrintRealtion(fileRelation);
+    readRelationFromFile(relation, relationsFile);
+    printRelation(relation);
+
+    relationsFile.close();
+    return 0;
 }

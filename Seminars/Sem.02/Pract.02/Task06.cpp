@@ -1,22 +1,29 @@
-﻿#include <iostream>
+#include <iostream>
 #include <fstream>
 
-const int BUFFER_SIZE = 1024;
+using std::cin, std::cout, std::endl, std::ofstream, std::ifstream;
 
-bool PrintSourceCode(const char fileName[])
-{
-	std::ifstream in(fileName);
+const char *FILE_NAME = "main.cpp";
 
-	if (!in.is_open()) {
-		return false;
-	}
+void printSourceCode(ifstream &file) {
+    std::streampos size;
+    size = file.tellg();
+    char *sourceCode = new char[size];
+    file.seekg(0, std::ios::beg);
+    file.read(sourceCode, size);
 
-	while (!in.eof()) {
-		char buffer[BUFFER_SIZE];
-		in.getline(buffer, BUFFER_SIZE);
-		std::cout << buffer << std::endl;
-	}
+    cout << sourceCode;
+    delete[] sourceCode;
+}
 
-	in.close();
-    return true;
+int main() {
+    ifstream file(FILE_NAME, std::ios::ate);
+    if (!file.is_open()) {
+        cout << "File is not open" << endl;
+        return -1;
+    }
+
+    printSourceCode(file);
+    file.close();
+    return 0;
 }

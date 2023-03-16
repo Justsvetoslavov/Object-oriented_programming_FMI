@@ -1,30 +1,63 @@
-#include <iostream>
+﻿#include <iostream>
 
-using std::cin, std::cout, std::endl;
+const short MAX_NAME_SIZE = 30;
 
-const int nameSize = 30;
-
-struct Student {
-    char name[nameSize + 1];
-    unsigned int facultyNumber;
+struct Student
+{
+    char name[MAX_NAME_SIZE + 1];
+    unsigned int fn;
 };
 
-void initStudent(Student &student) {
-    cout << "Enter name: ";
-    cin.getline(student.name, 31);
-    cout << "Enter faculty number: ";
-    cin >> student.facultyNumber;
-    cin.ignore();
+void InitStudent(Student& student, const char* name, unsigned int fn)
+{
+    strcpy_s(student.name, MAX_NAME_SIZE, name);
+    student.fn = fn;
 }
 
-void printStudent(const Student &student) {
-    cout << "Name: " << student.name << endl;
-    cout << "Faculty number: " << student.facultyNumber << endl;
+void PrintStudent(const Student& student)
+{
+    std::cout << student.name << " " << student.fn << "\n";
 }
 
-int main() {
-    Student student{};
-    initStudent(student);
-    printStudent(student);
-    return 0;
+int main()
+{
+    Student st = { "Joro", 10 };
+    PrintStudent(st);
+    st = {"Ivan", 20 };
+    PrintStudent(st);
+    InitStudent(st, "New Name", 82);
+    PrintStudent(st);
+    std::cout << "\n\n";
+
+    Student* pSt = &st;
+    *pSt = { "Valeri", 30 };
+    PrintStudent(*pSt);
+    InitStudent(*pSt, "PST New Name", 100);
+    PrintStudent(*pSt);
+    std::cout << "\n\n";
+
+    const Student* pCSt = &st;
+    //*pCSt = { "Valeri", 30 };
+    //initStudent(*pCSt, "PST New Name", 100);
+
+    Student* const cPSt = &st;
+    *cPSt = { "Ivaylo", 1000 };
+    PrintStudent(*cPSt);
+    InitStudent(*cPSt, "CPST New Name", 100);
+    PrintStudent(*cPSt);
+    std::cout << "\n\n";
+
+    const Student* const cpCSt = &st;
+    //*cpCSt = { "Valeri", 30 };
+    //initStudent(*cpCSt, "PST New Name", 100);
+
+    Student& refSt = st;
+    refSt = {"Valentin", 82};
+    PrintStudent(refSt);
+    InitStudent(refSt, "REFST New Name", 100);
+    PrintStudent(refSt);
+
+    const Student& refCSt = st;
+    //refCSt = { "Valentin", 82 };
+    //initStudent(refCSt, "PST New Name", 100);
 }

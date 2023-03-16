@@ -1,3 +1,8 @@
+# Ignore IDE folders
+.idea/*
+.vs/*
+.vscode/*
+
 # Prerequisites
 *.d
 

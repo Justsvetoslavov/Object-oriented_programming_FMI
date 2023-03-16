@@ -1,59 +1,77 @@
 #include <iostream>
 #include <cmath>
 
-using std::cin, std::cout, std::endl;
+const double EPSILON = 0.0001;
 
-struct Point {
-    int x;
-    int y;
+struct Point
+{
+    double x = 0;
+    double y = 0;
 };
 
-void createPoint(Point &p) {
-    cout << "Enter x: ";
-    cin >> p.x;
-    cout << "Enter y: ";
-    cin >> p.y;
+Point InitPoint(Point& point)
+{
+    std::cin >> point.x >> point.y;
 }
 
-void printPoint(const Point &p) {
-    cout << "x: " << p.x << " y: " << p.y << endl;
+void PrintPoint(const Point& point)
+{
+    std::cout << "(" << point.x << ", " << point.y << ")" << std::endl;
 }
 
-double calculateDistance(const Point &p1, const Point &p2) {
-    return sqrt(pow(p1.x - p2.x, 2) + pow(p1.y - p2.y, 2));
+double GetDistFromCenter(const Point& point)
+{
+    return sqrt(point.x * point.x + point.y * point.y);
 }
 
-int calculateQuadrant(const Point &p) {
-    if (p.x > 0 && p.y > 0) {
+double GetDistBetweenPoints(const Point &f, const Point &s)
+{
+    //   ______________________________________________
+    // \/ (x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)
+    // https://en.wikipedia.org/wiki/Euclidean_distance
+    double dx = f.x - s.x;
+    double dy = f.y - s.y;
+    return sqrt(dx * dx + dy * dy);
+}
+
+unsigned short GetQuadrant(const Point& point)
+{
+    if (point.x > 0 && point.y > 0) {
         return 1;
-    } else if (p.x < 0 && p.y > 0) {
+    } else if (point.x < 0 && point.y > 0) {
         return 2;
-    } else if (p.x < 0 && p.y < 0) {
+    } else if (point.x < 0 && point.y < 0) {
         return 3;
-    } else if (p.x > 0 && p.y < 0) {
+    } else if (point.x > 0 && point.y < 0) {
         return 4;
     }
+    
     return 0;
 }
 
-void isInCircle(const double &radius, const Point &p) {
-    double distance = calculateDistance({0, 0}, p);
-    if (distance <= radius) { // Is this the way we compare doubles Nikola?
-        cout << "Point is in circle" << endl;
+bool IsPointInCircle(const double radius, const Point& point)
+{
+    bool pointIsInCircle = false;
+    double distFromCenter = getDistFromCenter(point);
+
+    if (abs(distFromCenter - radius) < EPSILON) {
+        std::cout << "Point lies on the circle";
     } else {
-        cout << "Point is not in circle" << endl;
+        if (distFromCenter > radius) {
+            std::cout << "Point lies outside the circle\n";
+            pointIsInCircle = true;
+        } else {
+            std::cout << "Point lies inside the circle\n";
+        }
     }
+
+    return pointIsInCircle;
 }
 
 int main() {
-    Point p1{};
-    createPoint(p1);
-    printPoint(p1);
-    cout << "Quadrant: " << calculateQuadrant(p1) << endl;
-    isInCircle(5, p1);
-    Point p2{};
-    createPoint(p2);
-    printPoint(p2);
-    cout << "Distance between p1 and p2: " << calculateDistance(p1, p2) << endl;
-    return 0;
+    Point point;
+    InitPoint(point);
+    PrintPoint(point);
+
+    IsPointInCircle(5, point);
 }

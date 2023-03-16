@@ -66,7 +66,6 @@ struct System {
     }
 };
 
-
 int login(const char *email, const char *password, System &system) {
     for (int i = 0; i < system.users_count; ++i) {
         if (!strcmp(system.users[i].email, email) &&

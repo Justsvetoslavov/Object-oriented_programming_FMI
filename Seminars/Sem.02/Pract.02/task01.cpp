@@ -1,19 +1,41 @@
 #include <iostream>
 #include <fstream>
 
-int main(){
-    int num1=0,num2=0,num3=0;
-    std::cin>>num1>>num2>>num3;
+const char FILE_NAME[] = "results.txt";
 
-    int sum=0,product =0;
-    sum = num1+num2+num3;
-    product = num1*num2*num3;
+bool WriteSumAndProductToFile(int num1, int num2, int num3)
+{
+    std::ofstream file(FILE_NAME);
 
+    if (!file.is_open()) {
+        return false;
+    }
 
-    std::ifstream file("results.txt",std::ios::app);
-
-    file>>sum>>product;
-
+    file << num1 + num2 + num3 << " " << num1 * num2 * num3 << "\n";
     file.close();
-    return 0;
+	return true;
+}
+
+bool ReadSumAndProductFromFile()
+{
+    std::ifstream file(FILE_NAME);
+    if (!file.is_open()) {
+        return false;
+    }
+
+    int sum, product;
+    file >> sum >> product;
+    std::cout << sum - product << std::endl;
+    
+    file.close();
+	return true;
+}
+
+int main()
+{
+    int num1, num2, num3;
+    std::cin >> num1 >> num2 >> num3;
+
+    WriteSumAndProductToFile(num1, num2, num3);
+    ReadSumAndProductFromFile();
 }

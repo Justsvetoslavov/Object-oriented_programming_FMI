@@ -50,13 +50,19 @@ void readFromFile(System& mysystem) {
 }
 
 void registerAnUser(System& mysystem) {
-
+	
+	if(mysystem.num == MAX_USERS) {
+		std::cout<<"Error\n";
+		return;
+	}
+	
+	mysystem.num++;
 	cout << "Enter Name:" << endl;
-	cin >> mysystem.users[0].name;
+	cin >> mysystem.users[mysystem.num].name;
 	cout << "Enter Email:" << endl;
-	cin >> mysystem.users[1].email;
+	cin >> mysystem.users[mysystem.num].email;
 	cout << "Enter Password" << endl;
-	cin >> mysystem.users[2].password;
+	cin >> mysystem.users[mysystem.num].password;
 	writeToFile(mysystem);
 	cout << "Registration successful!" << endl;
 

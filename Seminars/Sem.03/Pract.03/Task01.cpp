@@ -3,7 +3,7 @@
 
 using std::cin, std::cout, std::endl, std::ofstream, std::ifstream;
 
-const char *FILE_NAME = "/students.csv";
+const char *FILE_NAME = "students.csv";
 
 const int max_length = 16;
 const int max_users = 1024;

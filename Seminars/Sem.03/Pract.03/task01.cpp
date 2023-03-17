@@ -78,11 +78,11 @@ void readStudent(Student st){
 
 }
 void writeStudent(std::ofstream &ofs,Student st){
-    ofs<<st.getName();
-    ofs<<st.getFamilyName();
-    ofs<<st.getFacultyNum();
-    ofs<<st.getAverage();
-    ofs<<st.getHair();
+    ofs<<st.getName()<<',';
+    ofs<<st.getFamilyName()<<',';
+    ofs<<st.getFacultyNum()<<',';
+    ofs<<st.getAverage()<<',';
+    ofs<<st.getHair()<<std::endl;
 }
 
 void writeInFile(Student*arr,int length){

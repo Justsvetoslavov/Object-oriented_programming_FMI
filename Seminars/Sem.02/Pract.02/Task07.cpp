@@ -23,11 +23,12 @@ struct System
 void registerUser(User& user);
 bool validName(const char* name);
 bool validEmail(const char* email);
+bool validPassword(const char* password);
 void writeUserToFile(const User& user);
 void readUserFromFile();
 bool userInSystem(System s, const unsigned short registeredUsers);
 bool myStrCompare(const char* arr1, const char* arr2);
-unsigned int myStrLen(const char*& arr);
+unsigned int myStrLen(const char* arr);
 void loadUsersFromFile(System& s);
 
 
@@ -38,29 +39,28 @@ int main()
     char command[COMMAND_SIZE + 1];
     do
     {
-        std::cout << "Enter command \n";
+        std::cout << "Enter command \n Register, Login or End \n";
         std::cin.getline(command, COMMAND_SIZE + 1);
-        if(myStrCompare(command, "register"))
+
+        switch (command[0])
         {
+        case 'R':
             registerUser(s.users[registeredUsers]);
             writeUserToFile(s.users[registeredUsers]);
             registeredUsers += 1;
-            continue;;
-        }
-        else if(myStrCompare(command, "login"))
-        {
+            break;
+        case 'L':
             if(userInSystem(s, registeredUsers))
                 std::cout << "Login successful \n";
             else
                 std::cout << "There is not such a user \n";
             continue;
-        }
-        else
-        {
+            break;    
+        default:
             std::cout << "Invalid command \n";
-            continue;
+            break;
         }
-    } while (!myStrCompare(command, "end"));
+    } while (!myStrCompare(command, "End"));
     
     readUserFromFile();
 
@@ -86,7 +86,12 @@ void registerUser(User& user)
     } while (!validEmail(user.email));
     
     std::cout << "Enter password: " << '\n'; 
-    std::cin.getline(user.password, MAX_SIZE + 1);
+    do
+    {
+        std::cin.getline(user.password, MAX_SIZE + 1);
+        if(!validPassword(user.password))
+            std::cout << "Invalid password! It has to be at least 8 symbols. \n And has at least one lower letter, upper letter, number and a special symbol. \n";
+    } while (!validPassword(user.password));
 }
 
 bool validName(const char* name)
@@ -105,21 +110,47 @@ bool validEmail(const char* email)
 {
     int count = 0;
     int index = 0;
+    const char* com = "com";
     while(email[index] != '\0')
     {
         if(email[index] == '@')
             count += 1;
         index += 1;
     }
+    for(int i = index - 3, j = 0; i < index; i++, j++)
+    {
+        if(email[i] != com[j])
+            return false;
+    }
     return count != 0;
+}
+
+bool validPassword(const char* password)
+{
+    int countLowerLetters = 0, countUpperLetters = 0, countNumbers = 0, countSpecialSymbols = 0, index = 0;
+    while(password[index] != '\0')
+    {
+        if('a' <= password[index] && password[index] <= 'z')
+            countLowerLetters += 1;
+        else if('A' <= password[index] && password[index] <= 'Z')
+            countUpperLetters += 1;
+        else if('0' <= password[index] && password[index] <= '9')
+            countNumbers += 1;
+        else
+            countSpecialSymbols += 1;
+
+        index += 1;
+    }
+    return countLowerLetters > 0 && countUpperLetters > 0 && countNumbers > 0 && countSpecialSymbols > 0 && index + 1 >= 8;
 }
 
 void writeUserToFile(const User& user)
 {
-    std::fstream file(SYSTEM_FILE_NAME);
+    std::fstream file(SYSTEM_FILE_NAME, std::ios::app);
     file << "Name: " << user.name << '\n'
     << "Email: " << user.email << '\n'
     << "Password: " << user.password <<'\n';
+    file.flush();
 
     file.close();
 }
@@ -139,8 +170,8 @@ void readUserFromFile()
 
 bool userInSystem(System s, const unsigned short registeredUsers)
 {
-    char email[MAX_SIZE];
-    char password[MAX_SIZE];
+    char email[MAX_SIZE + 1];
+    char password[MAX_SIZE + 1];
     
     std::cout << "Enter email: " << '\n'; 
     do
@@ -167,7 +198,7 @@ bool myStrCompare(const char* arr1, const char* arr2)
     if(myStrLen(arr1) != myStrLen(arr2))
         return false;
     int index = 0;
-    while(arr1[index] != '\0' || arr2[index] != '\0')
+    while(arr1[index] != '\0')
     {
         if(arr1[index] != arr2[index])
             return false;
@@ -176,7 +207,7 @@ bool myStrCompare(const char* arr1, const char* arr2)
     return true;
 }
 
-unsigned int myStrLen(const char*& arr)
+unsigned int myStrLen(const char* arr)
 {
     unsigned int count = 0;
     while(arr[count] != '\0')
@@ -188,7 +219,7 @@ unsigned int myStrLen(const char*& arr)
 
 void loadUsersFromFile(System& s)
 {
-    std::fstream file(SYSTEM_FILE_NAME);
+    std::ifstream file(SYSTEM_FILE_NAME);
     char follower[MAX_SIZE + 1];
     while(!file.eof())
     {

@@ -1,102 +1,198 @@
 #include <iostream>
 #include <fstream>
+#include <string>
 
-using std::cin, std::cout, std::endl, std::ofstream, std::ifstream;
+using std::cin;
+using std::cout;
+using std::endl;
+using std::ifstream;
+using std::ofstream;
+using std::string;
 
-const char *FILE_NAME = "students.csv";
+const int MAX_SIZE = 16;
+const int MAX_STUDENT = 1024;
+const char* FILE_NAME = "Students.csv";
 
-const int max_length = 16;
-const int max_users = 1024;
-const int max_digits = 5;
-
-enum hairColor {
-    BLONDE,
-    BROWN,
-    BLACK,
-    RED,
-    WHITE,
-};
-
-const static char *hairColorNames[] = {
-        "BLONDE",
-        "BROWN",
-        "BLACK",
-        "RED",
-        "WHITE",
+enum HairColor {
+    brown,
+    black,
+    blond,
+    red,
+    white
 };
 
 struct Student {
-    char name[max_length + 1];
-    char surname[max_length + 1];
-    char facultyNumber[max_digits + 1];
+    char name[MAX_SIZE];
+    char surname[MAX_SIZE];
+    int fn;
     double averageGrade;
-    hairColor hair;
+    HairColor hairColor;
 };
+
+void InitStudent(Student& student)
+{
+    cin.ignore();
+    cin.clear();
+
+    cout << "Enter name: ";
+    cin.getline(student.name, MAX_SIZE);
+
+    cout << "Enter surname: ";
+    cin.getline(student.surname, MAX_SIZE);
+
+    cout << "Enter fc: ";
+    do {
+        cin >> student.fn;
+    } while (student.fn < 10000 && student.fn < 9999);
+
+    cout << "Enter average grade: ";
+    cin >> student.averageGrade;
+
+    int hairColor;
+    cout << "Enter hair color(0 - brouwn, 1 - black, 2 - blond, 3 - red, 4 - white): ";
+    cin >> hairColor;
+    student.hairColor = (HairColor)hairColor;
+}
+
+void WriteStudentToFile(ofstream& file, Student& student)
+{
+    if (!file.is_open())
+    {
+        cout << "Error";
+        return;
+    }
+
+    file << "Name: " << student.name << ", " << endl;
+
+    file << "Surname: " << student.surname << ", " << endl;
+
+    file << "FN: " << student.fn << ", " << endl;
+
+    file << "Average grade: " << student.averageGrade << ", " << endl;
+
+    file << "Hair color: ";
+    switch (student.hairColor)
+    {
+    case HairColor::brown:file << "brown"; break;
+    case HairColor::black:file << "black"; break;
+    case HairColor::blond:file << "blond"; break;
+    case HairColor::red:file << "red"; break;
+    case HairColor::white:file << "white"; break;
+    }
+}
+
+static const char* enum_string[] = { "brown",
+    "black",
+    "blond",
+    "red",
+    "white" };
+
+string convertToenum(int val)
+{
+    string MyStr(enum_string[val]);
+    return MyStr;
+}
+
+void ReadSudentFromFile(ifstream& file, Student& student)
+{
+    if (!file.is_open())
+    {
+        cout << "Error";
+        return;
+    }
+
+    file.getline(student.name, MAX_SIZE, ',');
+
+    file.getline(student.surname, MAX_SIZE, ',');
+
+    file >> student.fn;
+
+    string hairColorStr;
+    file >> hairColorStr;
+    for (int i = 0; i < sizeof(enum_string) / sizeof(enum_string[0]); i++)
+    {
+        if (hairColorStr == enum_string[i])
+        {
+            student.hairColor = static_cast<HairColor>(i);
+            break;
+        }
+    }
+}
 
 struct System {
-    Student students[max_users];
-    int studentsCount;
-
-    void addStudent(const Student &student) {
-        if (studentsCount >= max_users) {
-            cout << "Max users reached!" << endl;
-            return;
-        }
-        students[studentsCount] = student;
-        studentsCount++;
-    }
+    Student students[MAX_STUDENT];
+    unsigned int count = 0;
 };
 
-bool writeStudentsToFile(const char *filename, System &system) {
-    ofstream file(filename, std::ios::app);
-    if (!file.is_open()) {
-        cout << "File could not be opened!" << endl;
-        return false;
+void AddStudentToSystem(System& system, Student student)
+{
+    if (system.count <= MAX_STUDENT)
+    {
+        system.students[system.count] = student;
+        system.count++;
     }
-    for (int i = 0; i < system.studentsCount; i++) {
-        file << system.students[i].name << "," << system.students[i].surname
-             << "," << system.students[i].facultyNumber << "," << system.students[i].averageGrade
-             << "," << hairColorNames[system.students[i].hair] << endl;
-    }
-    file.close();
-    return true;
 }
 
-bool readStudentsFromFile(const char *filename, System &system) {
-    ifstream file(filename);
-    if (!file.is_open()) {
-        cout << "File could not be opened!" << endl;
-        return false;
+void WriteSystemToFile(ofstream& file, System& system)
+{
+    if (!file.is_open())
+    {
+        cout << "Error";
+        return;
     }
-    char buffer[1024];
-    system.studentsCount = 0;
-    while (!file.eof() && system.studentsCount < max_users && file.getline(buffer, 1024)) {
-        Student student{};
-        strcpy(student.name, strtok(buffer, ","));
-        strcpy(student.surname, strtok(NULL, ","));
-        strcpy(student.facultyNumber, strtok(NULL, ","));
-        student.averageGrade = atof(strtok(NULL, ","));
-        student.hair = (hairColor) atoi(strtok(NULL, ","));
-        system.addStudent(student);
+
+    for (size_t i = 0; i < system.count; i++)
+    {
+        WriteStudentToFile(file, system.students[i]);
+        file << endl;
     }
-    file.close();
-    return true;
 }
 
-int main() {
-    System system{};
-    system.studentsCount = 0;
-
-    system.addStudent({"Ivan", "Ivanov", "12345", 5.5, BLONDE});
-    system.addStudent({"Pesho", "Peshev", "12346", 5.6, BROWN});
-
-    writeStudentsToFile(FILE_NAME, system);
-    readStudentsFromFile(FILE_NAME, system);
-
-    for (int i = 0; i < system.studentsCount; i++) {
-        cout << system.students[i].name << " " << system.students[i].surname << " "
-             << system.students[i].facultyNumber << " " << system.students[i].averageGrade << " "
-             << hairColorNames[system.students[i].hair] << endl;
+void ReadSystemFromFile(ifstream& file, System& system)
+{
+    if (!file.is_open())
+    {
+        cout << "Error";
+        return;
     }
-    return 0;
+
+    for (size_t i = 0; i < system.count; i++)
+    {
+        ReadSudentFromFile(file, system.students[i]);
+        
+    }
 }
+
+void CreateSystem(System& system, Student& student, ofstream& writeFile, ifstream& readFile, size_t i)
+{
+    cout << "Enter student " << i + 1 << ": " << endl;
+    InitStudent(student);
+    AddStudentToSystem(system, student);
+    WriteSystemToFile(writeFile, system);
+    ReadSystemFromFile(readFile, system);
+    cout << endl;
+}
+
+int main()
+{
+    Student student;
+    System system;
+    ofstream writeFile(FILE_NAME, std::ios::app);
+    ifstream readFile(FILE_NAME);
+
+    cout << "Enter the number of students: ";
+    int studentsCount;
+
+    do {
+        cin >> studentsCount;
+    } while (studentsCount < 1 && studentsCount > 1024);
+
+    for (size_t i = 0; i < studentsCount; i++)
+    {
+        CreateSystem(system, student, writeFile, readFile, i);
+    }
+
+    writeFile.close();
+    readFile.close();
+}
+

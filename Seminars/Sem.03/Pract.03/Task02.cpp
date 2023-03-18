@@ -1,179 +1,162 @@
-#include <iostream>
+﻿#include <iostream>
 #include <fstream>
 
-using std::cin, std::cout, std::endl, std::ofstream, std::ifstream;
+using std::cin;
+using std::cout;
+using std::endl;
+using std::ifstream;
+using std::ofstream;
 
-const char *FILE_NAME = "jobOffers.dat";
-const int max_length = 25;
+const int MAX_SIZE = 25;
+const int MAX_JOBADS = 1024;
+const char fileName[] = "file.dat";
 
-struct jobOffer {
-    char companyName[max_length + 1];
-    size_t teamSize;
-    size_t vacationDays;
-    long long salary;
+enum Command {
+    add, checkSAL, checkCOMP
 };
 
-void printJobOffer(const jobOffer &job) {
-    cout << "Company name: " << job.companyName << endl;
-    cout << "Team size: " << job.teamSize << endl;
-    cout << "Vacation days: " << job.vacationDays << endl;
-    cout << "Salary: " << job.salary << endl;
-    cout << "-----------------------------------" << endl;
+struct JobAd {
+    char companyName[MAX_SIZE];
+    int teamSize;
+    int paidHolidayDays;
+    long long projectCompletionBonus;
+};
+
+void InitJobAd(JobAd& jobAd)
+{
+    cin.ignore();
+    cout << "Enter company name: ";
+    cin.getline(jobAd.companyName, MAX_SIZE);
+    cout << "Enter team size: ";
+    cin >> jobAd.teamSize;
+    cout << "Enter paid holiday days: ";
+    cin >> jobAd.paidHolidayDays;
+    cout << "Enter project completion bonus: ";
+    cin >> jobAd.projectCompletionBonus;
 }
 
-bool writeJobOffersToFile(const char *&filename, const jobOffer *const &jobs, const int &N) {
-    ofstream file(filename, std::ios::binary | std::ios::app);
-    if (!file.is_open()) {
-        cout << "File could not be opened!" << endl;
-        return false;
-    }
-    for (int i = 0; i < N; ++i) {
-        file << jobs[i].companyName << " " << jobs[i].teamSize << " " << jobs[i].vacationDays << " " << jobs[i].salary
-             << endl;
+void WriteJobAdToFile(const char* fileName, JobAd& jobAd, const int& N)
+{
+    ofstream file(fileName, std::ios::binary | std::ios::app);
+    if (!file.is_open())
+    {
+        cout << "Error";
+        return;
     }
 
-    cout << "Job offers successfully written to file!" << endl;
-
-    file.close();
-    return true;
+    file.write(jobAd.companyName, sizeof(char) * MAX_SIZE);
+    file.write((const char*)&jobAd.teamSize, sizeof(int));
+    file.write((const char*)&jobAd.paidHolidayDays, sizeof(int));
+    file.write((const char*)&jobAd.projectCompletionBonus, sizeof(long long));
 }
 
+void CreateJobsOffers(const char* fileName, JobAd& jobAd, const int& n)
+{
+    JobAd* jobs = new JobAd[n];
 
-void readJobsFromTerminal(bool multiple = false) {
-    int N = 1;
-    if (multiple) {
-        cout << "Enter number of jobs: ";
-        cin >> N;
-    }
-    jobOffer *jobs = new jobOffer[N];
-    for (int i = 0; i < N; ++i) {
-        cout << "Enter company name: ";
-        cin >> jobs[i].companyName;
-        cout << "Enter team size: ";
-        cin >> jobs[i].teamSize;
-        cout << "Enter vacation days: ";
-        cin >> jobs[i].vacationDays;
-        cout << "Enter salary: ";
-        cin >> jobs[i].salary;
-        cout << endl;
+    for (size_t i = 0; i < n; i++)
+    {
+        InitJobAd(jobAd);
+        jobs[i] = jobAd;
+        WriteJobAdToFile(fileName, jobs[i], n);
     }
 
-    writeJobOffersToFile(FILE_NAME, jobs, N);
     delete[] jobs;
 }
 
-void filterOffers(const char *filename, long long minSalary) {
-    ifstream file(filename, std::ios::binary);
+void PrintJobOffer(JobAd jobAd)
+{
+    cout << "Company name: " << jobAd.companyName << endl;
+    cout << "Team size: " << jobAd.teamSize << endl;
+    cout << "Paid holiday days: " << jobAd.paidHolidayDays << endl;
+    cout << "Project completion bonus: " << jobAd.projectCompletionBonus << endl;
+    cout << endl;
+}
+
+void FilterOffers(const char* filename, long long minSalary, JobAd& jobAd) {
+    ifstream file(filename, std::ios::in | std::ios::binary);
+
     if (!file.is_open()) {
-        cout << "File could not be opened!" << endl;
+        cout << "Error" << endl;
         return;
     }
-    jobOffer job{};
-    while (file >> job.companyName >> job.teamSize >> job.vacationDays >> job.salary) {
-        if (job.salary >= minSalary) {
-            printJobOffer(job);
+
+    while (file.read(jobAd.companyName, sizeof(char) * MAX_SIZE) &&
+        file.read((char*)&jobAd.teamSize, sizeof(int)) &&
+        file.read((char*)&jobAd.paidHolidayDays, sizeof(int)) &&
+        file.read((char*)&jobAd.projectCompletionBonus, sizeof(long long))) {
+        if (jobAd.projectCompletionBonus >= minSalary) {
+            PrintJobOffer(jobAd);
         }
     }
 
     file.close();
 }
 
-bool existsOffer(const char *filename, const char *companyName) {
-    ifstream file(filename, std::ios::binary);
-    if (!file.is_open()) {
-        cout << "File could not be opened!" << endl;
+bool existOffer(const char* filePath, const char* name, JobAd& jobAd)
+{
+    ifstream file(filePath, std::ios::in | std::ios::binary);
+
+    if (!file.is_open())
+    {
+        cout << "Error";
         return false;
     }
-    jobOffer job{};
-    int counter = 0;
-    while (file >> job.companyName >> job.teamSize >> job.vacationDays >> job.salary) {
-        if (strcmp(job.companyName, companyName) == 0) {
-            counter++;
-            printJobOffer(job);
-        }
-    }
 
-    file.close();
-    return counter;
-}
-
-void printAllOffers(const char *filename) {
-    ifstream file(filename, std::ios::binary);
-    if (!file.is_open()) {
-        cout << "File could not be opened!" << endl;
-        return;
+    while (file.read(jobAd.companyName, sizeof(char) * MAX_SIZE) &&
+        file.read((char*)&jobAd.teamSize, sizeof(int)) &&
+        file.read((char*)&jobAd.paidHolidayDays, sizeof(int)) &&
+        file.read((char*)&jobAd.projectCompletionBonus, sizeof(long long))) {
+        if (strcmp(jobAd.companyName, name) == 0)
+            return true;
     }
-    jobOffer job{};
-    while (file >> job.companyName >> job.teamSize >> job.vacationDays >> job.salary) {
-        printJobOffer(job);
-    }
+    return false;
 
     file.close();
 }
 
-void perfectOffer(const char *filename, int maxCoworkers, int minVacancyDays, int minSalary) {
-    ifstream file(filename, std::ios::binary);
-    if (!file.is_open()) {
-        cout << "File could not be opened!" << endl;
-        return;
-    }
-    jobOffer job{};
-    int counter = 0;
-    while (file >> job.companyName >> job.teamSize >> job.vacationDays >> job.salary) {
-        if (job.teamSize <= maxCoworkers && job.vacationDays >= minVacancyDays && job.salary >= minSalary) {
-            counter++;
-            printJobOffer(job);
-        }
-    }
+int main()
+{
+    JobAd jobAd;
 
-    if (counter == 0) {
-        cout << "No matching offers!" << endl;
-    }
+    cout << "Enter command(0 - to add offers" << endl;
+    cout << "              1 - to check offers above min salary " << endl;
+    cout << "              2 - to check if a company has sent an offer" << endl;
 
-    file.close();
+    int command;
+    cin >> command;
+    command = (Command)command;
+
+    switch (command)
+    {
+    case Command::add:
+        cout << "Enter the number of job ads:";
+        int n;
+        cin >> n;
+        CreateJobsOffers(fileName, jobAd, n);
+        break;
+
+    case Command::checkSAL:
+        cout << "Enter min salary: ";
+        int minSalary;
+        cin >> minSalary;
+        FilterOffers(fileName, minSalary, jobAd);
+        break;
+
+    case Command::checkCOMP:
+        cout << "Enter the company name that you want to check: ";
+        char companyName[MAX_SIZE];
+        cin.ignore();
+        cin.getline(companyName, MAX_SIZE);
+        if (existOffer(fileName, companyName, jobAd))
+            cout << "The company is sent a offer.";
+        else
+            cout << "The company is not sent a offer.";
+        break;
+
+    default:
+        cout << "Invalid command!" << endl;
+        break;
+    }
 }
 
-int main() {
-    cout << "Welcome to the job offers database!" << endl;
-    cout << "Supported commands:" << endl;
-    cout << "   a - add job offer" << endl;
-    cout << "   i - print all job offers" << endl;
-    cout << "   s <company_name> - search for job offer" << endl;
-    cout << "   f <salary> - filter job offers" << endl;
-    cout << "   q - quit" << endl;
-    char c = ' ';
-    while (c != 'q') {
-        cout << endl << "Enter command: ";
-        cin >> c;
-        cout << endl;
-        switch (c) {
-            case 'a':
-                readJobsFromTerminal();
-                break;
-            case 'i':
-                printAllOffers(FILE_NAME);
-                break;
-            case 's':
-                cin.ignore(1, ' ');
-                char companyName[max_length + 1];
-                cin.getline(companyName, max_length + 1);
-                if (!existsOffer(FILE_NAME, companyName)) {
-                    cout << "Company doesn't exists!" << endl;
-                }
-                break;
-            case 'f':
-                cin.ignore(1, ' ');
-                long long minSalary;
-                cin >> minSalary;
-                filterOffers(FILE_NAME, minSalary);
-                break;
-            case 'q':
-                cout << "Exiting..." << endl;
-                break;
-            default:
-                cout << "Invalid command!" << endl;
-                break;
-        }
-    }
-    return 0;
-}

@@ -1,179 +1,120 @@
 #include <iostream>
 #include <fstream>
+#include <sstream>
 
-using std::cin, std::cout, std::endl, std::ofstream, std::ifstream;
+using namespace std;
 
-const char *FILE_NAME = "jobOffers.dat";
-const int max_length = 25;
+char ifpath[] = "C:\\Users\\boris\\OneDrive\\Desktop\\inFile.txt";
+char ofpath[] = "C:\\Users\\boris\\OneDrive\\Desktop\\outFile.data";
 
-struct jobOffer {
-    char companyName[max_length + 1];
-    size_t teamSize;
-    size_t vacationDays;
-    long long salary;
+const int MAX_SIZE = 100;
+
+struct JobOffer
+{
+    char name[26];
+    unsigned int coworkers;
+    unsigned int paidOfftime;
+    unsigned long long payment;
 };
 
-void printJobOffer(const jobOffer &job) {
-    cout << "Company name: " << job.companyName << endl;
-    cout << "Team size: " << job.teamSize << endl;
-    cout << "Vacation days: " << job.vacationDays << endl;
-    cout << "Salary: " << job.salary << endl;
-    cout << "-----------------------------------" << endl;
+JobOffer allOffers[MAX_SIZE];
+int offers;
+
+void saveInfo()
+{
+    ofstream streamWriter(ofpath, ios::binary | ios::app);
+
+    if (streamWriter.is_open())
+        streamWriter.write((char*)&allOffers, offers * sizeof(JobOffer));
+
+    streamWriter.close();
 }
 
-bool writeJobOffersToFile(const char *&filename, const jobOffer *const &jobs, const int &N) {
-    ofstream file(filename, std::ios::binary | std::ios::app);
-    if (!file.is_open()) {
-        cout << "File could not be opened!" << endl;
-        return false;
-    }
-    for (int i = 0; i < N; ++i) {
-        file << jobs[i].companyName << " " << jobs[i].teamSize << " " << jobs[i].vacationDays << " " << jobs[i].salary
-             << endl;
-    }
-
-    cout << "Job offers successfully written to file!" << endl;
-
-    file.close();
-    return true;
-}
-
-
-void readJobsFromTerminal(bool multiple = false) {
-    int N = 1;
-    if (multiple) {
-        cout << "Enter number of jobs: ";
+void readOffersConsole()
+{
+    int N;
+    do {
+        cout << "Enter the amount of offers you're getting: ";
         cin >> N;
-    }
-    jobOffer *jobs = new jobOffer[N];
-    for (int i = 0; i < N; ++i) {
-        cout << "Enter company name: ";
-        cin >> jobs[i].companyName;
-        cout << "Enter team size: ";
-        cin >> jobs[i].teamSize;
-        cout << "Enter vacation days: ";
-        cin >> jobs[i].vacationDays;
-        cout << "Enter salary: ";
-        cin >> jobs[i].salary;
-        cout << endl;
-    }
+    } while (N < 0);
+    cin.ignore();
 
-    writeJobOffersToFile(FILE_NAME, jobs, N);
-    delete[] jobs;
+    int i;
+    for (i = 0; i < N; ++i)
+    {
+        cin.getline(allOffers[i].name, 26);
+        cin >> allOffers[i].coworkers
+            >> allOffers[i].paidOfftime
+            >> allOffers[i].payment;
+        cin.ignore();
+    }
+    offers = N;
 }
 
-void filterOffers(const char *filename, long long minSalary) {
-    ifstream file(filename, std::ios::binary);
-    if (!file.is_open()) {
-        cout << "File could not be opened!" << endl;
-        return;
-    }
-    jobOffer job{};
-    while (file >> job.companyName >> job.teamSize >> job.vacationDays >> job.salary) {
-        if (job.salary >= minSalary) {
-            printJobOffer(job);
+void filterOffers(const char* filePath, long long minSalary)
+{
+    ifstream streamReader(filePath);
+    JobOffer tempoffer;
+
+    while (!streamReader.eof())
+    {
+        streamReader.read((char*)&tempoffer.name       , sizeof(tempoffer.name));
+        streamReader.read((char*)&tempoffer.coworkers  , sizeof(tempoffer.coworkers));
+        streamReader.read((char*)&tempoffer.paidOfftime, sizeof(tempoffer.paidOfftime));
+        streamReader.read((char*)&tempoffer.payment    , sizeof(tempoffer.payment));
+
+        if (tempoffer.payment >= minSalary)
+        {
+            cout << tempoffer.name        << ' '
+                 << tempoffer.coworkers   << ' '
+                 << tempoffer.paidOfftime << ' '
+                 << tempoffer.payment     << '\n';
         }
     }
 
-    file.close();
+    streamReader.close();
 }
 
-bool existsOffer(const char *filename, const char *companyName) {
-    ifstream file(filename, std::ios::binary);
-    if (!file.is_open()) {
-        cout << "File could not be opened!" << endl;
-        return false;
-    }
-    jobOffer job{};
-    int counter = 0;
-    while (file >> job.companyName >> job.teamSize >> job.vacationDays >> job.salary) {
-        if (strcmp(job.companyName, companyName) == 0) {
-            counter++;
-            printJobOffer(job);
-        }
+bool existOffer(const char* filePath, const char* name)
+{
+    ifstream streamReader(filePath);
+    char tempname[sizeof(allOffers[0].name)];
+    char tempdump[sizeof(JobOffer) - sizeof(allOffers[0].name)];
+    
+    while (!streamReader.eof())
+    {
+        streamReader.read((char*)&tempname, sizeof(allOffers[0].name));
+        streamReader.read((char*)&tempdump, sizeof(tempdump));
+
+        if (tempname == name)
+            return true;
     }
 
-    file.close();
-    return counter;
+    streamReader.close();
+    return false;
 }
 
-void printAllOffers(const char *filename) {
-    ifstream file(filename, std::ios::binary);
-    if (!file.is_open()) {
-        cout << "File could not be opened!" << endl;
-        return;
-    }
-    jobOffer job{};
-    while (file >> job.companyName >> job.teamSize >> job.vacationDays >> job.salary) {
-        printJobOffer(job);
+void perfectOffer(const char* filePath, int maxCoworkers, int minVacantions, int minSalary, int entries)
+{
+    ofstream streamWriter(filePath, ios::binary | ios::app);
+    ifstream streamReader(ifpath, ios::binary);
+
+    streamReader.read((char*)&allOffers, entries * sizeof(JobOffer));
+    
+    for (int i = 0; i < entries; ++i)
+    {
+        if (allOffers[i].coworkers <= maxCoworkers && allOffers[i].paidOfftime >= minVacantions && allOffers[i].payment >= minSalary)
+            streamWriter.write((char*)&allOffers[i], sizeof(JobOffer));
     }
 
-    file.close();
+    streamReader.close();
+    streamWriter.close();
 }
 
-void perfectOffer(const char *filename, int maxCoworkers, int minVacancyDays, int minSalary) {
-    ifstream file(filename, std::ios::binary);
-    if (!file.is_open()) {
-        cout << "File could not be opened!" << endl;
-        return;
-    }
-    jobOffer job{};
-    int counter = 0;
-    while (file >> job.companyName >> job.teamSize >> job.vacationDays >> job.salary) {
-        if (job.teamSize <= maxCoworkers && job.vacationDays >= minVacancyDays && job.salary >= minSalary) {
-            counter++;
-            printJobOffer(job);
-        }
-    }
+int main()
+{
+    readOffersConsole();
+    saveInfo();
 
-    if (counter == 0) {
-        cout << "No matching offers!" << endl;
-    }
-
-    file.close();
-}
-
-int main() {
-    cout << "Welcome to the job offers database!" << endl;
-    cout << "Supported commands:" << endl;
-    cout << "   a - add job offer" << endl;
-    cout << "   i - print all job offers" << endl;
-    cout << "   s <company_name> - search for job offer" << endl;
-    cout << "   f <salary> - filter job offers" << endl;
-    cout << "   q - quit" << endl;
-    char c = ' ';
-    while (c != 'q') {
-        cout << endl << "Enter command: ";
-        cin >> c;
-        cout << endl;
-        switch (c) {
-            case 'a':
-                readJobsFromTerminal();
-                break;
-            case 'i':
-                printAllOffers(FILE_NAME);
-                break;
-            case 's':
-                cin.ignore(1, ' ');
-                char companyName[max_length + 1];
-                cin.getline(companyName, max_length + 1);
-                if (!existsOffer(FILE_NAME, companyName)) {
-                    cout << "Company doesn't exists!" << endl;
-                }
-                break;
-            case 'f':
-                cin.ignore(1, ' ');
-                long long minSalary;
-                cin >> minSalary;
-                filterOffers(FILE_NAME, minSalary);
-                break;
-            case 'q':
-                cout << "Exiting..." << endl;
-                break;
-            default:
-                cout << "Invalid command!" << endl;
-                break;
-        }
-    }
     return 0;
 }

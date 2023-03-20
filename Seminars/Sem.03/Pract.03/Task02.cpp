@@ -19,23 +19,21 @@ struct jobOffer {
 };
 
 void filterOffers(ifstream& file, long long minSalary);
-void perfectOffer(ifstream& file, int maxCoworkers,
-	int minVacancyDays, int minSalary);
-void readOffersFromConsoleAndSaveInFile(const char* filePath,
-	int requestsCount);
+void perfectOffer(ifstream& file, int maxCoworkers, int minVacancyDays, int minSalary);
+void readOffersFromConsoleAndSaveInFile(const char* filePath, int requestsCount);
+jobOffer* readOffersFromFile(ifstream& file, size_t& jobOffersCount);
 
 
 int main()
 {
 	readOffersFromConsoleAndSaveInFile("file.dat", 2);
-	ifstream file("file.dat", ios::binary | ios::in);	
+	ifstream file("file.dat", ios::binary | ios::in);
 	if (!file.is_open())
 	{
 		cout << "Error opening " << "file.dat" << "." << endl;
-		return -1;
+		return EXIT_FAILURE;
 	}
-
-
+	filterOffers(file, 2000);
 	file.close();
 }
 
@@ -49,8 +47,6 @@ void readSingleOffer(jobOffer& offer) {
 	cout << "Salary: ";
 	cin >> offer.salary;
 }
-
-
 
 void readOffersFromConsoleAndSaveInFile(const char* filePath, int requestsCount) {
 	ofstream file(filePath, ios::binary | ios::out | ios::app);
@@ -77,7 +73,7 @@ size_t getFileSize(ifstream& file) {
 	return fileSize;
 }
 
-void printOffer(jobOffer& jobAd) {
+void printOffer(const jobOffer& jobAd) {
 	cout << "Company Name: " << jobAd.companyName << endl;
 	cout << "Team count: " << jobAd.teamCount << endl;
 	cout << "Paid vacation days count: " << jobAd.paidVacancyDays << endl;
@@ -85,16 +81,17 @@ void printOffer(jobOffer& jobAd) {
 	cout << endl;
 }
 
-jobOffer* readOffersFromFile(ifstream& file, size_t fileSize, size_t jobAdsCount) {
-	jobOffer* jobOffers = new jobOffer[jobAdsCount];
-	file.read((char*)jobOffers, jobAdsCount * sizeof(jobOffer));
+jobOffer* readOffersFromFile(ifstream& file, size_t& jobOffersCount) {
+	size_t fileSize = getFileSize(file);
+	jobOffersCount = fileSize / sizeof(jobOffer);
+	jobOffer* jobOffers = new jobOffer[jobOffersCount];
+	file.read((char*)jobOffers, jobOffersCount * sizeof(jobOffer));
 	return jobOffers;
 }
 
 void filterOffers(ifstream& file, long long minSalary) {
-	size_t fileSize = getFileSize(file);
-	size_t jobOffersCount = fileSize / sizeof(jobOffer);
-	jobOffer* jobOffers = readOffersFromFile(file, fileSize, jobOffersCount);
+	size_t jobOffersCount = 0;
+	jobOffer* jobOffers = readOffersFromFile(file, jobOffersCount);
 
 	for (size_t i = 0; i < jobOffersCount; i++)
 	{
@@ -128,9 +125,8 @@ bool areEqual(const char* arr1, const char* arr2) {
 }
 
 bool existOffer(ifstream& file, const char* name) {
-	size_t fileSize = getFileSize(file);
-	size_t jobOffersCount = fileSize / sizeof(jobOffer);
-	jobOffer* jobOffers = readOffersFromFile(file, fileSize, jobOffersCount);
+	size_t jobOffersCount = 0;
+	jobOffer* jobOffers = readOffersFromFile(file, jobOffersCount);
 	for (size_t i = 0; i < jobOffersCount; i++)
 	{
 		if (areEqual(jobOffers[i].companyName, name))
@@ -139,16 +135,15 @@ bool existOffer(ifstream& file, const char* name) {
 			return true;
 		}
 	}
+	return false;
 }
-
-
 
 //bonus
 void perfectOffer(ifstream& file, int maxCoworkers,
 	int minVacancyDays, int minSalary) {
 	size_t fileSize = getFileSize(file);
-	size_t jobOffersCount = fileSize / sizeof(jobOffer);
-	jobOffer* jobOffers = readOffersFromFile(file, fileSize, jobOffersCount);
+	size_t jobOffersCount = 0;
+	jobOffer* jobOffers = readOffersFromFile(file, jobOffersCount);
 
 	for (size_t i = 0; i < jobOffersCount; i++)
 	{
@@ -161,6 +156,3 @@ void perfectOffer(ifstream& file, int maxCoworkers,
 	}
 	delete[] jobOffers;
 }
-
-
-

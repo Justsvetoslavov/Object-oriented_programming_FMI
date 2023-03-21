@@ -1,102 +1,121 @@
 #include <iostream>
 #include <fstream>
 
-using std::cin, std::cout, std::endl, std::ofstream, std::ifstream;
-
-const char *FILE_NAME = "students.csv";
-
-const int max_length = 16;
-const int max_users = 1024;
-const int max_digits = 5;
-
-enum hairColor {
-    BLONDE,
-    BROWN,
-    BLACK,
-    RED,
-    WHITE,
+const int MAX_ST_NO = 1024;
+const int  max_length = 16;
+const int max_fn_length = 5;
+enum class haircolor {
+	brown,
+	black,
+	blonde,
+	red,
+	white,
 };
 
-const static char *hairColorNames[] = {
-        "BLONDE",
-        "BROWN",
-        "BLACK",
-        "RED",
-        "WHITE",
+class Student {
+public:
+	char name[max_length+1];
+	char lastname[max_length+1];
+	char fn[max_fn_length + 1];
+	haircolor color;
+	double gpa;
+
+
 };
 
-struct Student {
-    char name[max_length + 1];
-    char surname[max_length + 1];
-    char facultyNumber[max_digits + 1];
-    double averageGrade;
-    hairColor hair;
-};
-
-struct System {
-    Student students[max_users];
-    int studentsCount;
-
-    void addStudent(const Student &student) {
-        if (studentsCount >= max_users) {
-            cout << "Max users reached!" << endl;
-            return;
-        }
-        students[studentsCount] = student;
-        studentsCount++;
-    }
-};
-
-bool writeStudentsToFile(const char *filename, System &system) {
-    ofstream file(filename, std::ios::app);
-    if (!file.is_open()) {
-        cout << "File could not be opened!" << endl;
-        return false;
-    }
-    for (int i = 0; i < system.studentsCount; i++) {
-        file << system.students[i].name << "," << system.students[i].surname
-             << "," << system.students[i].facultyNumber << "," << system.students[i].averageGrade
-             << "," << hairColorNames[system.students[i].hair] << endl;
-    }
-    file.close();
-    return true;
+void writeToFile(const char* filename, int num, const Student* st) {
+	std::ofstream file(filename, std::ios::out | std::ios::binary);
+	if (!file.is_open()) {
+		std::cout << "Error opening file!";
+		return;
+	}
+	file.write((const char*)st, sizeof(Student) * num);
+	for (int i = 0; i < num; i++) {
+		file << st[i].name << "," << st[i].lastname << "," << st[i].fn << "," << st[i].gpa << ",";
+		switch (st[i].color) {
+		case haircolor::brown:
+			file << "brown";
+			break;
+		case haircolor::black:
+			file << "black";
+			break;
+		case haircolor::blonde:
+			file << "blonde";
+			break;
+		case haircolor::red:
+			file << "red";
+			break;
+		case haircolor::white:
+			file << "white";
+			break;
+		}
+		file << "\n";
+	}
+	file.close();
 }
 
-bool readStudentsFromFile(const char *filename, System &system) {
-    ifstream file(filename);
-    if (!file.is_open()) {
-        cout << "File could not be opened!" << endl;
-        return false;
-    }
-    char buffer[1024];
-    system.studentsCount = 0;
-    while (!file.eof() && system.studentsCount < max_users && file.getline(buffer, 1024)) {
-        Student student{};
-        strcpy(student.name, strtok(buffer, ","));
-        strcpy(student.surname, strtok(NULL, ","));
-        strcpy(student.facultyNumber, strtok(NULL, ","));
-        student.averageGrade = atof(strtok(NULL, ","));
-        student.hair = (hairColor) atoi(strtok(NULL, ","));
-        system.addStudent(student);
-    }
-    file.close();
-    return true;
+
+size_t getFileSize(std::ifstream& file) {
+	size_t currentPos = file.tellg();
+	file.seekg(0, std::ios::end);
+	size_t fileSize = file.tellg();
+	file.seekg(currentPos);
+
+	return fileSize;
+}
+Student* readFromFile(const char* filename, int& numStudents) {
+	std::ifstream file(filename, std::ios::in | std::ios::binary);
+	if (!file.is_open()) {
+		std::cout << "Error opening file!";
+		return nullptr;
+	}
+	size_t fileSize = getFileSize(file);
+	numStudents = fileSize / sizeof(Student);
+	Student* students = new Student[numStudents];
+	file.read((char*)students, fileSize);
+	file.close();
+	return students;
+}
+
+
+void printStudent(const Student& student) {
+	std::cout << student.name << "," << student.lastname << ",";
+	switch (student.color) {
+	case haircolor::brown:
+		std::cout << "brown";
+		break;
+	case haircolor::black:
+		std::cout << "black";
+		break;
+	case haircolor::blonde:
+		std::cout << "blonde";
+		break;
+	case haircolor::red:
+		std::cout << "red";
+		break;
+	case haircolor::white:
+		std::cout << "white";
+		break;
+	default:
+		std::cout << "unknown";
+	}
+	std::cout << "," << student.fn << "," << student.gpa << std::endl;
 }
 
 int main() {
-    System system{};
-    system.studentsCount = 0;
 
-    system.addStudent({"Ivan", "Ivanov", "12345", 5.5, BLONDE});
-    system.addStudent({"Pesho", "Peshev", "12346", 5.6, BROWN});
+	Student students[2] = {
+		{"John", "Doe", haircolor::brown, "123", 3.5},
+		{"Jane", "Smith", haircolor::blonde, "67890", 4.0}
+	};
+	writeToFile("students.csv", 2, students);
 
-    writeStudentsToFile(FILE_NAME, system);
-    readStudentsFromFile(FILE_NAME, system);
+	int numStudents;
+	Student* readStudents = readFromFile("students.csv", numStudents);
+	for (int i = 0; i < numStudents; i++) {
+		printStudent(readStudents[i]);
+	}
+	delete[] readStudents;
 
-    for (int i = 0; i < system.studentsCount; i++) {
-        cout << system.students[i].name << " " << system.students[i].surname << " "
-             << system.students[i].facultyNumber << " " << system.students[i].averageGrade << " "
-             << hairColorNames[system.students[i].hair] << endl;
-    }
-    return 0;
+	return 0;
 }

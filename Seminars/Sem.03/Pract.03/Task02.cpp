@@ -12,7 +12,7 @@ const int MAX_JOBADS = 1024;
 const char fileName[] = "file.dat";
 
 enum Command {
-    add, checkSAL, checkCOMP
+    add, checkSAL, checkCOMP, quit
 };
 
 struct JobAd {
@@ -44,10 +44,11 @@ void WriteJobAdToFile(const char* fileName, JobAd& jobAd, const int& N)
         return;
     }
 
-    file.write(jobAd.companyName, sizeof(char) * MAX_SIZE);
+    file.write(jobAd.companyName, sizeof(jobAd.companyName));
     file.write((const char*)&jobAd.teamSize, sizeof(int));
     file.write((const char*)&jobAd.paidHolidayDays, sizeof(int));
     file.write((const char*)&jobAd.projectCompletionBonus, sizeof(long long));
+    file.close();
 }
 
 void CreateJobsOffers(const char* fileName, JobAd& jobAd, const int& n)
@@ -64,7 +65,7 @@ void CreateJobsOffers(const char* fileName, JobAd& jobAd, const int& n)
     delete[] jobs;
 }
 
-void PrintJobOffer(JobAd jobAd)
+void PrintJobOffer(JobAd& jobAd)
 {
     cout << "Company name: " << jobAd.companyName << endl;
     cout << "Team size: " << jobAd.teamSize << endl;
@@ -81,10 +82,7 @@ void FilterOffers(const char* filename, long long minSalary, JobAd& jobAd) {
         return;
     }
 
-    while (file.read(jobAd.companyName, sizeof(char) * MAX_SIZE) &&
-        file.read((char*)&jobAd.teamSize, sizeof(int)) &&
-        file.read((char*)&jobAd.paidHolidayDays, sizeof(int)) &&
-        file.read((char*)&jobAd.projectCompletionBonus, sizeof(long long))) {
+    while (file.read((char*)&jobAd, sizeof(JobAd))) {
         if (jobAd.projectCompletionBonus >= minSalary) {
             PrintJobOffer(jobAd);
         }
@@ -118,45 +116,53 @@ bool existOffer(const char* filePath, const char* name, JobAd& jobAd)
 int main()
 {
     JobAd jobAd;
+    bool running = true;
 
-    cout << "Enter command(0 - to add offers" << endl;
-    cout << "              1 - to check offers above min salary " << endl;
-    cout << "              2 - to check if a company has sent an offer" << endl;
+    while (running) {
+        cout << "Enter command(0 - to add offers" << endl;
+        cout << "              1 - to check offers above min salary " << endl;
+        cout << "              2 - to check if a company has sent an offer)" << endl;
+        cout << "              3 - to exit" << endl;
 
-    int command;
-    cin >> command;
-    command = (Command)command;
+        int command;
+        cin >> command;
+        command = (Command)command;
 
-    switch (command)
-    {
-    case Command::add:
-        cout << "Enter the number of job ads:";
-        int n;
-        cin >> n;
-        CreateJobsOffers(fileName, jobAd, n);
-        break;
+        switch (command) {
+        case Command::add:
+            cout << "Enter the number of job ads:";
+            int n;
+            cin >> n;
+            CreateJobsOffers(fileName, jobAd, n);
+            break;
 
-    case Command::checkSAL:
-        cout << "Enter min salary: ";
-        int minSalary;
-        cin >> minSalary;
-        FilterOffers(fileName, minSalary, jobAd);
-        break;
+        case Command::checkSAL:
+            cout << "Enter min salary: ";
+            int minSalary;
+            cin >> minSalary;
+            FilterOffers(fileName, minSalary, jobAd);
+            break;
 
-    case Command::checkCOMP:
-        cout << "Enter the company name that you want to check: ";
-        char companyName[MAX_SIZE];
-        cin.ignore();
-        cin.getline(companyName, MAX_SIZE);
-        if (existOffer(fileName, companyName, jobAd))
-            cout << "The company is sent a offer.";
-        else
-            cout << "The company is not sent a offer.";
-        break;
+        case Command::checkCOMP:
+            cout << "Enter the company name that you want to check: ";
+            char companyName[MAX_SIZE];
+            cin.ignore();
+            cin.getline(companyName, MAX_SIZE);
+            if (existOffer(fileName, companyName, jobAd))
+                cout << "The company is sent a offer.";
+            else
+                cout << "The company is not sent a offer.";
+            break;
 
-    default:
-        cout << "Invalid command!" << endl;
-        break;
+        case Command::quit:
+            running = false;
+            break;
+
+        default:
+            cout << "Invalid command!" << endl;
+            break;
+        }
     }
+
 }
 

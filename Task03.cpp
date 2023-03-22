@@ -3,7 +3,7 @@
 #include <fstream>
 
 const int MAX_GAMES = 20;
-const int MAX_SYMB = 1024;
+const int MAX_SYMBOLS = 1024;
 const char *PATH = "test.txt";
 
 class Game {
@@ -37,8 +37,8 @@ public:
     }
 
     void SetTitle(const char *title) {
-       // if (this->title != nullptr)
-           // delete []this->title;
+        if (this->title != nullptr)
+            delete[]this->title;
         this->title = new char[strlen(title) + 1];
         strcpy(this->title, title);
     }
@@ -69,6 +69,7 @@ class GamePlatform {
 
 public:
     int size = 0;
+
     void addGame(const char *title, float price, bool isAvailable) {
         if (size == MAX_GAMES)
             return;
@@ -89,7 +90,8 @@ public:
 
     void readAll() const {
         for (int i = 0; i < size; ++i)
-            games[i].print();
+            if (games[i].getPrice() != -1)
+                games[i].print();
     }
 
     void readMinMaxPriceGame() const {
@@ -112,7 +114,7 @@ public:
 
     void readFree() const {
         for (int i = 0; i < size; ++i)
-            if (games[i].isFree())
+            if (games[i].isFree() && games[i].getPrice() != -1)
                 games[i].print();
     }
 
@@ -126,46 +128,54 @@ public:
 
     void writeToFile() const {
         std::fstream file(PATH, std::ios::out);
-        for (int i = 0; i < size; ++i) {
-            file << "Title: " << games[i].getTitle() << std::endl
-                    << "Price: " << games[i].getPrice() << std::endl
-                    << "Available: " << games[i].getIsAvailable() << std::endl;
-        }
+        for (int i = 0; i < size; ++i)
+            if (games[i].getPrice() != -1)
+                file << "\nTitle: " << games[i].getTitle() << std::endl
+                     << "Price: " << games[i].getPrice() << std::endl
+                     << "Available: " << games[i].getIsAvailable();
         file.close();
     }
 
     Game readGame(std::fstream &file) {
         Game game;
-        char reader[MAX_SYMB];
+        char reader[MAX_SYMBOLS];
         float price;
         bool avail;
-        file.getline(reader, MAX_SYMB, ':');
-        file.getline(reader, MAX_SYMB);
+        file.getline(reader, MAX_SYMBOLS, ' ');
+        file.getline(reader, MAX_SYMBOLS);
         game.SetTitle(reader);
-        file.getline(reader, MAX_SYMB, ':');
+        file.getline(reader, MAX_SYMBOLS, ' ');
         file >> price;
         game.SetPrice(price);
-        file.getline(reader, MAX_SYMB, ':');
+        file.getline(reader, MAX_SYMBOLS, ' ');
         file >> avail;
+        file.getline(reader, MAX_SYMBOLS);
         game.SetIsAvailable(avail);
+        return game;
     }
 
     void readFromFile() {
         std::fstream file(PATH, std::ios::in);
-        if (file.is_open())
+        if (!file.is_open())
             return;
         size = 0;
-        while(!file.eof()) {
+        while (!file.eof())
             games[size++] = readGame(file);
-        }
         file.close();
     }
 };
 
 int main() {
-    Game game("none", 0, 0);
-    game.print();
-    GamePlatform gmpl;
-    gmpl.addGame("none", 0, 0);
-    gmpl.writeToFile();
+//    Game game("none", 0, 0);
+//    game.print();
+    GamePlatform gamePlatform;
+//    gamePlatform.addGame("test1", 1, 1);
+//    gamePlatform.addGame("test2", 2, 0);
+    gamePlatform.readFromFile();
+//    gamePlatform.readAll();
+//    gamePlatform.readMinMaxPriceGame();
+//    gamePlatform.deleteByIndex(0);
+    gamePlatform.readFree();
+    gamePlatform.readAll();
+    gamePlatform.writeToFile();
 }

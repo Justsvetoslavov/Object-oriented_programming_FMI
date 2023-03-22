@@ -1,24 +1,22 @@
 #include <iostream>
 #include <fstream>
-#include <string>
 
 using std::cin;
 using std::cout;
 using std::endl;
 using std::ifstream;
 using std::ofstream;
-using std::string;
 
 const int MAX_SIZE = 16;
 const int MAX_STUDENT = 1024;
 const char* FILE_NAME = "Students.csv";
 
 enum HairColor {
-    brown,
-    black,
-    blond,
-    red,
-    white
+    BROWN,
+    BLACK,
+    BLOND,
+    RED,
+    WHITE
 };
 
 struct Student {
@@ -43,7 +41,7 @@ void InitStudent(Student& student)
     cout << "Enter fc: ";
     do {
         cin >> student.fn;
-    } while (student.fn < 10000 && student.fn < 9999);
+    } while (student.fn < 100000 && student.fn > 9999);
 
     cout << "Enter average grade: ";
     cin >> student.averageGrade;
@@ -62,22 +60,17 @@ void WriteStudentToFile(ofstream& file, Student& student)
         return;
     }
 
-    file << "Name: " << student.name << ", " << endl;
-
-    file << "Surname: " << student.surname << ", " << endl;
-
-    file << "FN: " << student.fn << ", " << endl;
-
-    file << "Average grade: " << student.averageGrade << ", " << endl;
+    file << student.name << ", " << student.surname << ", "  << student.fn << ", " << student.averageGrade << ", " << endl;
 
     file << "Hair color: ";
     switch (student.hairColor)
     {
-    case HairColor::brown:file << "brown"; break;
-    case HairColor::black:file << "black"; break;
-    case HairColor::blond:file << "blond"; break;
-    case HairColor::red:file << "red"; break;
-    case HairColor::white:file << "white"; break;
+    case HairColor::BROWN:file << "brown"; break;
+    case HairColor::BLACK:file << "black"; break;
+    case HairColor::BLOND:file << "blond"; break;
+    case HairColor::RED:file << "red"; break;
+    case HairColor::WHITE:file << "white"; break;
+    default: break;
     }
 }
 
@@ -87,9 +80,9 @@ static const char* enum_string[] = { "brown",
     "red",
     "white" };
 
-string convertToenum(int val)
+const char* convertToenum(int val)
 {
-    string MyStr(enum_string[val]);
+    const char* MyStr(enum_string[val]);
     return MyStr;
 }
 
@@ -107,7 +100,7 @@ void ReadSudentFromFile(ifstream& file, Student& student)
 
     file >> student.fn;
 
-    string hairColorStr;
+    char* hairColorStr;
     file >> hairColorStr;
     for (int i = 0; i < sizeof(enum_string) / sizeof(enum_string[0]); i++)
     {
@@ -185,7 +178,7 @@ int main()
 
     do {
         cin >> studentsCount;
-    } while (studentsCount < 1 && studentsCount > 1024);
+    } while (studentsCount > 1 && studentsCount < 1024);
 
     for (size_t i = 0; i < studentsCount; i++)
     {

@@ -1,6 +1,6 @@
 #include <iostream>
 #include <fstream>
-#include "GamePlatform.hpp"
+#include "game_platform.hpp"
 
 using std::cin, std::cout, std::endl, std::ifstream, std::ofstream;
 

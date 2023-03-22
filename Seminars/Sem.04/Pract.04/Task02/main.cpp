@@ -1,5 +1,5 @@
 #include <iostream>
-#include "Exam.hpp"
+#include "exam.hpp"
 
 using std::cin, std::cout, std::endl;
 

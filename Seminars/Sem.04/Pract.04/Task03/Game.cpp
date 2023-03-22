@@ -1,5 +1,5 @@
 #include <iostream>
-#include "Game.hpp"
+#include "game.hpp"
 
 using std::cout, std::endl, std::boolalpha;
 

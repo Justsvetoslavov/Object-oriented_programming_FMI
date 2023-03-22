@@ -1,5 +1,5 @@
 #include <iostream>
-#include "GamePlatform.hpp"
+#include "game_platform.hpp"
 
 using std::cin, std::cout, std::endl;
 

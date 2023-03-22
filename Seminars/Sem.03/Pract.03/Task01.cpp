@@ -1,6 +1,5 @@
 #include <iostream>
 #include <fstream>
-#include <iomanip>
 
 using std::cin;
 using std::cout;
@@ -297,7 +296,7 @@ int main()
 	if (!studentsBinaryFile.is_open())
 	{
 		cout << "File not open";
-		return -1;
+		return EXIT_FAILURE;
 	}
 
 	handleMenuInput(studentsBinaryFile);

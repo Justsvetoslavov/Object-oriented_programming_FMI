@@ -12,7 +12,7 @@ const int MAX_COMPANY_NAME_LENGTH = 25;
 const int MAX_INPUT_LENGTH = 256;
 
 struct jobOffer {
-	char companyName[MAX_COMPANY_NAME_LENGTH]; //25
+	char companyName[MAX_COMPANY_NAME_LENGTH + 1]; //26
 	int teamCount; //4
 	int paidVacancyDays; //4
 	long long salary; //8

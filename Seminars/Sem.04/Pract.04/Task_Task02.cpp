@@ -15,11 +15,17 @@ Task::Task(const char *name, const char *description, int points)
 
 void Task::SetName(const char *name)
 {
+    if(strlen(name) >= MAX_TASK_NAME_SIZE)
+        return;
+
     strcpy_s(m_name, name);
 }
 
 void Task::SetDescription(const char *description)
 {
+    if(strlen(description) >= MAX_TASK_DESCRIPTION_SIZE)
+        return;
+
     strcpy_s(m_description, description);
 }
 

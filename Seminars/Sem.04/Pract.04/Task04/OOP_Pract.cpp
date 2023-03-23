@@ -1,5 +1,4 @@
 #include <iostream>
-
 #include "Secret.h"
 
 int main()

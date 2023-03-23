@@ -48,7 +48,7 @@ public:
         return color;
     }
 
-    char* copyString(char arr[], char* from){
+    char* copyString(char *arr, const char* from){
 
         for(int i=0;from[i]!='\0';i++){
             arr[i]=from[i];
@@ -57,6 +57,21 @@ public:
     }
 
 };
+
+void seperateTheLine(char*line,Student st){
+    int counterOfTwoDots = 0;
+
+    for (int i = 0, j = 0; line[i] != '\0'; i++) {
+        char temp = line[i];
+        if (temp == ',') {
+            counterOfTwoDots++;
+            j = 0;
+            continue;
+        }
+        //finish
+    }
+}
+
 
 void readStudent(Student st){
     char buff[17];
@@ -94,12 +109,23 @@ void writeInFile(Student*arr,int length){
     ofs.close();
 }
 
+
+void readFromFile(Student*arr,int &n){
+    std::ifstream ifs("student.txt",std::ios::in);
+
+    while(!ifs.eof()){
+        char buff[1024];
+        ifs.getline(buff,1024);
+    }
+}
+
 int main(){
-    const int n=3;
+    int n=3;
     Student *arr= new Student[n];
 
     for(int i=0;i<n;i++){
         readStudent(arr[i]);
     }
+    delete[]arr;
     return 0;
 }

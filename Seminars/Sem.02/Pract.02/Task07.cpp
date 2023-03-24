@@ -1,235 +1,221 @@
 #include <iostream>
 #include <fstream>
 
-const unsigned short MAX_SIZE = 128;
-const unsigned short MAX_USERS = 100;
-const unsigned short BUFFER_SIZE = 150;
-const unsigned short COMMAND_SIZE = 150;
-const char* SYSTEM_FILE_NAME = "system.txt";
-unsigned short registeredUsers = 0;
+const int MAX_LEN = 128;
+const int MAX_NUMBER_OF_USERS = 100;
 
-struct User
-{
-    char name[MAX_SIZE + 1];
-    char email[MAX_SIZE + 1];
-    char password[MAX_SIZE + 1];
+struct User {
+    char name[MAX_LEN];
+    char email[MAX_LEN];
+    char password[MAX_LEN];
 };
 
-struct System
-{
-    User users[MAX_USERS];
+struct System {
+    User users[MAX_NUMBER_OF_USERS];
+    unsigned int numberOfUsers = 0;
 };
 
-void registerUser(User& user);
-bool validName(const char* name);
-bool validEmail(const char* email);
-bool validPassword(const char* password);
-void writeUserToFile(const User& user);
-void readUserFromFile();
-bool userInSystem(System s, const unsigned short registeredUsers);
-bool myStrCompare(const char* arr1, const char* arr2);
-unsigned int myStrLen(const char* arr);
-void loadUsersFromFile(System& s);
+void myStrcpy(char* dest, const char* src) {
+    int ind = 0;
+    while (*src) {
+        dest[ind++] = *(src++);
+    }
+    dest[ind] = '\0';
+}
 
+void readUserFromFile(std::ifstream& file, User& user) {
+    file.getline(user.name, MAX_LEN);
+    file.getline(user.email, MAX_LEN);
+    file.getline(user.password, MAX_LEN);
+}
+
+void writeUserToFile(std::ofstream& file, const User& user) {
+    file << user.name << "\n";
+    file << user.email << "\n";
+    file << user.password << "\n";
+}
+
+void registerUser(System& system) {
+    if (system.numberOfUsers >= MAX_NUMBER_OF_USERS) {
+        std::cout << "Error. The system is full\n";
+        return;
+    }
+
+    char buff[MAX_LEN];
+    User user;
+
+    std::cout << "Enter name:\n";
+    std::cin.ignore();
+    std::cin.getline(buff, MAX_LEN);
+    myStrcpy(user.name, buff);
+
+    std::cout << "Enter email:\n";
+    std::cin.getline(buff, MAX_LEN);
+    myStrcpy(user.email, buff);
+
+    std::cout << "Enter password:\n";
+    std::cin.getline(buff, MAX_LEN);
+    myStrcpy(user.password, buff);
+
+    system.users[system.numberOfUsers] = user;
+    system.numberOfUsers++;
+
+    std::cout << "Registration successful\n";
+}
+
+void writeSystemToFile(const char fileName[], const System& system) {
+    std::ofstream file(fileName);
+
+    if (!file.is_open()) {
+        std::cout << "Error\n";
+        return;
+    }
+
+    file << system.numberOfUsers << "\n";
+
+    for (int i = 0; i < system.numberOfUsers; i++) {
+        writeUserToFile(file, system.users[i]);
+    }
+
+    file.close();
+}
+
+void readSystemFromFile(const char fileName[], System& system) {
+    std::ifstream file(fileName);
+
+    if (!file.is_open()) {
+        std::cout << "Error\n";
+        return;
+    }
+
+    unsigned int size;
+    file >> size;
+    system.numberOfUsers = size;
+    file.get();
+
+    for (int i = 0; i < size; i++) {
+        readUserFromFile(file, system.users[i]);
+    }
+
+    file.close();
+}
+
+int myStrlen(const char* str) {
+    int ctr = 0;
+    while (*str) {
+        ctr++;
+        str++;
+    }
+    return ctr;
+}
+
+bool myStrcmp(const char* str1, const char* str2) {
+    int len1 = myStrlen(str1);
+    int len2 = myStrlen(str2);
+
+    if (len1 != len2) {
+        return false;
+    }
+
+    //The strings are of equal length, so one check is enough
+    while (*str1) {
+        if (*str1 != *str2) {
+            return false;
+        }
+        str1++;
+        str2++;
+    }
+    return true;
+}
+
+int getUserIndex(const System& system, const char email[]) {
+    for (int i = 0; i < system.numberOfUsers; i++) {
+        if (myStrcmp(system.users[i].email, email)) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+void loginUser(const System& system) {
+    char buff[MAX_LEN];
+    std::cout << "Enter email:\n";
+    std::cin.ignore();
+    std::cin.getline(buff, MAX_LEN);
+
+    int ind = getUserIndex(system, buff);
+
+    if (ind < 0) {
+        std::cout << "User not found\n";
+        return;
+    }
+
+    do {
+        std::cout << "Enter password:\n";
+        std::cin.getline(buff, MAX_LEN);
+
+        if (myStrcmp(system.users[ind].password, buff)) {
+            std::cout << "Login successful\n";
+            return;
+        }
+
+        else {
+            std::cout << "Incorrect password\n";
+            std::cout << "Enter 0 to quit and 1 to try again\n";
+            int command;
+            std::cin >> command;
+
+            switch (command) {
+            case 0:
+                return;
+            case 1:
+                break;
+            default:
+                std::cout << "Invalid command\n";
+            }
+        }
+
+    } while (1);
+}
+
+void printUser(const User& user) {
+    std::cout << user.name << " " << user.email << " " << user.password << "\n";
+}
+
+void printSystem(const System& system) {
+    for (int i = 0; i < system.numberOfUsers; i++) {
+        printUser(system.users[i]);
+    }
+}
 
 int main()
 {
-    System s;
-    loadUsersFromFile(s);
-    char command[COMMAND_SIZE + 1];
-    do
-    {
-        std::cout << "Enter command \n Register, Login or End \n";
-        std::cin.getline(command, COMMAND_SIZE + 1);
+    const char fileName[] = "System.txt";
+    System system;
+    readSystemFromFile(fileName, system);
+    printSystem(system);
 
-        switch (command[0])
-        {
-        case 'R':
-            registerUser(s.users[registeredUsers]);
-            writeUserToFile(s.users[registeredUsers]);
-            registeredUsers += 1;
+    int command;
+    bool getUserInput = true;
+
+    do {
+        std::cout << "Enter 0 to quit, 1 to register and 2 to login:\n";
+        std::cin >> command;
+
+        switch (command) {
+        case 0:
+            getUserInput = false;
             break;
-        case 'L':
-            if(userInSystem(s, registeredUsers))
-                std::cout << "Login successful \n";
-            else
-                std::cout << "There is not such a user \n";
-            continue;
-            break;    
+        case 1: 
+            registerUser(system);
+            break;
+        case 2:
+            loginUser(system);
+            break;
         default:
-            std::cout << "Invalid command \n";
-            break;
+            std::cout << "Invalid command\n";
         }
-    } while (!myStrCompare(command, "End"));
-    
-    readUserFromFile();
+    } while (getUserInput);
 
-    return 0;
-}
-
-void registerUser(User& user)
-{
-    std::cout << "Enter name: " << '\n'; 
-    do
-    {
-        std::cin.getline(user.name, MAX_SIZE + 1);
-        if(!validName(user.name))
-            std::cout << "Invalid Name \n";
-    } while (!validName(user.name));
-
-    std::cout << "Enter email: " << '\n'; 
-    do
-    {
-         std::cin.getline(user.email, MAX_SIZE + 1);
-        if(!validEmail(user.email))
-            std::cout << "Invalid email \n";
-    } while (!validEmail(user.email));
-    
-    std::cout << "Enter password: " << '\n'; 
-    do
-    {
-        std::cin.getline(user.password, MAX_SIZE + 1);
-        if(!validPassword(user.password))
-            std::cout << "Invalid password! It has to be at least 8 symbols. \n And has at least one lower letter, upper letter, number and a special symbol. \n";
-    } while (!validPassword(user.password));
-}
-
-bool validName(const char* name)
-{
-    int index = 0;
-    while(name[index] != '\0')
-    {
-        if(!('a' <= name[index] && name[index] <= 'z') && !('A' <= name[index] && name[index] <= 'Z') && name[index] != ' ')
-            return false;
-        index += 1;
-    }
-    return true;
-}
-
-bool validEmail(const char* email)
-{
-    int count = 0;
-    int index = 0;
-    const char* com = "com";
-    while(email[index] != '\0')
-    {
-        if(email[index] == '@')
-            count += 1;
-        index += 1;
-    }
-    for(int i = index - 3, j = 0; i < index; i++, j++)
-    {
-        if(email[i] != com[j])
-            return false;
-    }
-    return count != 0;
-}
-
-bool validPassword(const char* password)
-{
-    int countLowerLetters = 0, countUpperLetters = 0, countNumbers = 0, countSpecialSymbols = 0, index = 0;
-    while(password[index] != '\0')
-    {
-        if('a' <= password[index] && password[index] <= 'z')
-            countLowerLetters += 1;
-        else if('A' <= password[index] && password[index] <= 'Z')
-            countUpperLetters += 1;
-        else if('0' <= password[index] && password[index] <= '9')
-            countNumbers += 1;
-        else
-            countSpecialSymbols += 1;
-
-        index += 1;
-    }
-    return countLowerLetters > 0 && countUpperLetters > 0 && countNumbers > 0 && countSpecialSymbols > 0 && index + 1 >= 8;
-}
-
-void writeUserToFile(const User& user)
-{
-    std::fstream file(SYSTEM_FILE_NAME, std::ios::app);
-    file << "Name: " << user.name << '\n'
-    << "Email: " << user.email << '\n'
-    << "Password: " << user.password <<'\n';
-    file.flush();
-
-    file.close();
-}
-
-void readUserFromFile()
-{
-    std::fstream file(SYSTEM_FILE_NAME);
-    while(!file.eof())
-    {
-        char buffer[BUFFER_SIZE];
-        file.getline(buffer, BUFFER_SIZE);
-        std::cout << buffer << '\n';
-    }
-
-    file.close();
-}
-
-bool userInSystem(System s, const unsigned short registeredUsers)
-{
-    char email[MAX_SIZE + 1];
-    char password[MAX_SIZE + 1];
-    
-    std::cout << "Enter email: " << '\n'; 
-    do
-    {
-         std::cin.getline(email, MAX_SIZE + 1);
-        if(!validEmail(email))
-            std::cout << "Invalid email \n";
-    } while (!validEmail(email));
-
-    std::cout << "Enter password: " << '\n'; 
-    std::cin.getline(password, MAX_SIZE + 1);
-    
-
-    for (size_t i = 0; i < registeredUsers; i++)
-    {
-        if(myStrCompare(s.users[i].email, email) && myStrCompare(s.users[i].password, password))
-            return true;
-    }
-    return false;
-}
-
-bool myStrCompare(const char* arr1, const char* arr2)
-{
-    if(myStrLen(arr1) != myStrLen(arr2))
-        return false;
-    int index = 0;
-    while(arr1[index] != '\0')
-    {
-        if(arr1[index] != arr2[index])
-            return false;
-        index += 1;
-    }
-    return true;
-}
-
-unsigned int myStrLen(const char* arr)
-{
-    unsigned int count = 0;
-    while(arr[count] != '\0')
-    {
-        count += 1;
-    }
-    return count;
-}
-
-void loadUsersFromFile(System& s)
-{
-    std::ifstream file(SYSTEM_FILE_NAME);
-    char follower[MAX_SIZE + 1];
-    while(!file.eof())
-    {
-        file >> follower;
-        file >> s.users[registeredUsers].name;
-        file >> follower;
-        file >> s.users[registeredUsers].email;
-        file >> follower;
-        file >> s.users[registeredUsers].password;
-        registeredUsers += 1;
-    }
-    file.close();
+    writeSystemToFile(fileName, system);
 }

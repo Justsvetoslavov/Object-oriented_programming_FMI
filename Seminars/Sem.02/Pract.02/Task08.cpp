@@ -11,7 +11,6 @@ enum class Category {
 };
 
 const int EXAM_TYPES = 3;
-
 enum class ExamType {
 	Exam,
 	CourseProject,
@@ -20,9 +19,8 @@ enum class ExamType {
 };
 
 const int  MAX_LEN = 100;
-
 struct ElectiveCourse {
-	unsigned int ID;
+	size_t ID;
 	char name[MAX_LEN];
 	Category category;
 	double credits;
@@ -33,57 +31,57 @@ const int MAX_NUMBER_OF_COURSES = 10;
 ElectiveCourse electiveCourses[MAX_NUMBER_OF_COURSES];
 int coursesCount = 0;
 
-void initCourses() {
+void InitCourses() {
 	electiveCourses[0] = { 123, "OOP Pract", Category::PR, 2.5, {ExamType::CourseProject} };
 	electiveCourses[1] = { 234, "Vim", Category::OKN, 3.0, {ExamType::CourseProject, ExamType::Test} };
 	electiveCourses[2] = { 273, "Statistics", Category::PM, 4.0, {ExamType::CourseProject, ExamType::Exam} };
 	coursesCount = 3;
 }
 
-int myStrlen(const char* str) {
-	int ctr = 0;
-	while (*str) {
-		ctr++;
-		str++;
-	}
-	return ctr;
+size_t MyStrlen(const char* str) {
+    size_t index = 0;
+    while (str[index] != '\0') {
+        ++index;
+    }
+    return index;
 }
 
-unsigned stringToInt(const char str[]) {
-	unsigned int result = 0;
-	unsigned int  powerOfTen = 1;
-	int len = myStrlen(str);
+unsigned StringToInt(const char* str) {
+	size_t result = 0;
+	size_t powerOfTen = 1;
+	size_t len = MyStrlen(str);
 
-	for (int i = len - 1; i >= 0; i--) {
+	for (size_t i = len - 1; i >= 0; --i) {
 		result += (str[i] - '0') * powerOfTen;
 		powerOfTen *= 10;
 	}
 	return result;
 }
 
-void myStrcpy(char* dest, const char* src) {
-	int ind = 0;
-	while (*src) {
-		dest[ind++] = *(src++);
-	}
-	dest[ind] = '\0';
+void MyStrcpy(char* dest, const char* src) {
+    size_t index = 0;
+    while (src[index] != '\0') {
+        dest[index] = src[index];
+        ++index;
+    }
+    dest[index] = '\0';
 }
 
-void saveElectiveCourseToFile(std::ofstream& file, const ElectiveCourse& electiveCourse) {
+void SaveElectiveCourseToFile(std::ofstream& file, const ElectiveCourse& electiveCourse) {
 	file << electiveCourse.ID << ",";
 	file << electiveCourse.name << ",";
 	file << (int)electiveCourse.category << ",";
 	file << electiveCourse.credits << ",";
 
-	for (int i = 0; i < EXAM_TYPES; i++) {
+	for (size_t i = 0; i < EXAM_TYPES; ++i) {
 		file << (int)electiveCourse.examType[i] << ",";
 	}
 
 	file << '\n';
 }
 
-void saveElectiveCoursesToFile(const char fileName[]) {
-	std::ofstream writeFile(fileName, std::ios::trunc);
+void SaveElectiveCoursesToFile(const char fileName[]) {
+	std::ofstream writeFile(fileName);
 
 	if (!writeFile.is_open()) {
 		std::cout << "Error\n";
@@ -91,8 +89,8 @@ void saveElectiveCoursesToFile(const char fileName[]) {
 	}
 
 	writeFile << coursesCount << "\n";
-	for (int i = 0; i < coursesCount; i++) {
-		saveElectiveCourseToFile(writeFile, electiveCourses[i]);
+	for (size_t i = 0; i < coursesCount; ++i) {
+		SaveElectiveCourseToFile(writeFile, electiveCourses[i]);
 	}
 
 	writeFile.close();
@@ -102,16 +100,16 @@ void loadElectiveCourseFromFile(std::ifstream& file, ElectiveCourse& electiveCou
 	//ID
 	char buff[MAX_LEN];
 	file.getline(buff, MAX_LEN, ',');
-	unsigned int temp = stringToInt(buff);
+	unsigned int temp = StringToInt(buff);
 	electiveCourse.ID = temp;
 
 	//Name
 	file.getline(buff, MAX_LEN, ',');
-	myStrcpy(electiveCourse.name, buff);
+	MyStrcpy(electiveCourse.name, buff);
 
 	//Category
 	file.getline(buff, MAX_LEN, ',');
-	temp = stringToInt(buff);
+	temp = StringToInt(buff);
 	electiveCourse.category = (Category)temp;
 
 	//Credits
@@ -119,14 +117,14 @@ void loadElectiveCourseFromFile(std::ifstream& file, ElectiveCourse& electiveCou
 	electiveCourse.credits = std::stod(buff);
 
 	//Exam type
-	for (int i = 0; i < EXAM_TYPES; i++) {
+	for (size_t i = 0; i < EXAM_TYPES; ++i) {
 		file.getline(buff, MAX_LEN, ',');
-		electiveCourse.examType[i] = (ExamType)stringToInt(buff);
+		electiveCourse.examType[i] = (ExamType)StringToInt(buff);
 	}
 	file.get();
 }
 
-void loadElectiveCoursesFromFile(const char fileName[]) {
+void LoadElectiveCoursesFromFile(const char* fileName) {
 	std::ifstream file(fileName);
 
 	if (!file.is_open()) {
@@ -136,17 +134,17 @@ void loadElectiveCoursesFromFile(const char fileName[]) {
 
 	file >> coursesCount;
 	file.get();
-	for (int i = 0; i < coursesCount; i++) {
-		loadElectiveCourseFromFile(file, electiveCourses[i]);
+	for (size_t i = 0; i < coursesCount; ++i) {
+		LoadElectiveCourseFromFile(file, electiveCourses[i]);
 	}
 
 	file.close();
 }
 
-int searchByID(const unsigned int ID) {
+int SearchByID(const size_t ID) {
 	int ind = -1;
 
-	for (int i = 0; i < coursesCount; i++) {
+	for (size_t i = 0; i < coursesCount; ++i) {
 		if (electiveCourses[i].ID == ID) {
 			ind = i;
 			break;
@@ -156,7 +154,7 @@ int searchByID(const unsigned int ID) {
 	return ind;
 }
 
-void printElectiveCourse(const unsigned int ID) {
+void PrintElectiveCourse(const size_t ID) {
 	int ind = searchByID(ID);
 
 	if (ind < 0) {
@@ -167,27 +165,27 @@ void printElectiveCourse(const unsigned int ID) {
 	std::cout << electiveCourses[ind].ID << " " << electiveCourses[ind].name << " ";
 	std::cout << (int)electiveCourses[ind].category << " " << electiveCourses[ind].credits << " ";
 	
-	for (int i = 0; i < EXAM_TYPES; i++) {
+	for (size_t i = 0; i < EXAM_TYPES; ++i) {
 		std::cout << (int)electiveCourses[ind].examType[i] << " ";
 	}
 
 	std::cout << "\n";
 }
 
-void printElectiveCourses() {
-	for (int i = 0; i < coursesCount; i++) {
-		printElectiveCourse(electiveCourses[i].ID);
+void PrintElectiveCourses() {
+	for (size_t i = 0; i < coursesCount; ++i) {
+		PrintElectiveCourse(electiveCourses[i].ID);
 	}
 	std::cout << "\n\n";
 }
 
-void addElectiveCourse(const ElectiveCourse& electiveCourse) {
+void AddElectiveCourse(const ElectiveCourse& electiveCourse) {
 	if (MAX_NUMBER_OF_COURSES <= coursesCount) {
 		std::cout << "The database is full\n";
 		return;
 	}
 
-	int ind = searchByID(electiveCourse.ID);
+	int ind = SearchByID(electiveCourse.ID);
 
 	//Overwrite
 	if (ind >= 0) {
@@ -202,8 +200,8 @@ void addElectiveCourse(const ElectiveCourse& electiveCourse) {
 	}
 }
 
-void removeElectiveCourse(const unsigned int ID) {
-	int ind = searchByID(ID);
+void RemoveElectiveCourse(const unsigned int ID) {
+	int ind = SearchByID(ID);
 
 	if (ind < 0) {
 		std::cout << "The course wasn't found\n";
@@ -212,7 +210,7 @@ void removeElectiveCourse(const unsigned int ID) {
 
 	else {
 		//Shift all values
-		for (int i = ind; i < coursesCount; i++) {
+		for (size_t i = ind; i < coursesCount; ++i) {
 			electiveCourses[i] = electiveCourses[i + 1];
 		}
 		coursesCount--;
@@ -222,16 +220,16 @@ void removeElectiveCourse(const unsigned int ID) {
 	}
 }
 
-void printElectiveCoursesInCategory(const Category& category) {
-	for (int i = 0; i < coursesCount; i++) {
+void PrintElectiveCoursesInCategory(const Category& category) {
+	for (size_t i = 0; i < coursesCount; ++i) {
 		if (electiveCourses[i].category == category) {
 			printElectiveCourse(electiveCourses[i].ID);
 		}
 	}
 }
 
-void printElectiveCoursesInInterval(const double minC, const double maxC) {
-	for (int i = 0; i < coursesCount; i++) {
+void PrintElectiveCoursesInInterval(const double minC, const double maxC) {
+	for (size_t i = 0; i < coursesCount; ++i) {
 		if (electiveCourses[i].credits >= minC && electiveCourses[i].credits <= maxC) {
 			printElectiveCourse(electiveCourses[i].ID);
 		}
@@ -240,35 +238,35 @@ void printElectiveCoursesInInterval(const double minC, const double maxC) {
 
 int main()
 {
-	////The first time this program is started, 
-	////save the example elective courses to a file 
+	// The first time this program is started, 
+	// save the example elective courses to a file 
 
-	//initCourses();
-	//saveElectiveCoursesToFile("myfile.csv");
+	// initCourses();
+	// saveElectiveCoursesToFile("myfile.csv");
 
-	loadElectiveCoursesFromFile("myfile.csv");
-	printElectiveCourses();
+	LoadElectiveCoursesFromFile("myfile.csv");
+	PrintElectiveCourses();
 
 	//Overwrite OOP Pract (ID = 123) with Java
 	ElectiveCourse myElectiveCourse1 = { 123, "Java", Category::OKN, 4.0, {ExamType::CourseProject, ExamType::Test} };
-	addElectiveCourse(myElectiveCourse1);
-	printElectiveCourses();
+	AddElectiveCourse(myElectiveCourse1);
+	PrintElectiveCourses();
 
 	//Add Rust without overwriting
 	ElectiveCourse myElectiveCourse2 = { 899, "Rust", Category::OKN, 4.5, {ExamType::CourseProject, ExamType::Exam} };
-	addElectiveCourse(myElectiveCourse2);
-	printElectiveCourses();
+	AddElectiveCourse(myElectiveCourse2);
+	PrintElectiveCourses();
 
 	//Remove 234 (Vim)
-	removeElectiveCourse(234);
-	printElectiveCourses();
+	RemoveElectiveCourse(234);
+	PrintElectiveCourses();
 
 	std::cout << "Courses in category OKN:\n";
-	printElectiveCoursesInCategory(Category::OKN);
+	PrintElectiveCoursesInCategory(Category::OKN);
 
 	std::cout << "\n\nCourses in interval:\n";
-	printElectiveCoursesInInterval(3, 4);
+	PrintElectiveCoursesInInterval(3, 4);
 
 	//Save all changes
-	saveElectiveCoursesToFile("myfile.csv");
+	SaveElectiveCoursesToFile("myfile.csv");
 }

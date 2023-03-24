@@ -5,9 +5,9 @@ const int MAX_LEN = 128;
 const int MAX_NUMBER_OF_USERS = 100;
 
 struct User {
-    char name[MAX_LEN];
-    char email[MAX_LEN];
-    char password[MAX_LEN];
+    char name[MAX_LEN + 1];
+    char email[MAX_LEN + 1];
+    char password[MAX_LEN + 1];
 };
 
 struct System {
@@ -15,103 +15,111 @@ struct System {
     unsigned int numberOfUsers = 0;
 };
 
-void myStrcpy(char* dest, const char* src) {
-    int ind = 0;
-    while (*src) {
-        dest[ind++] = *(src++);
+void MyStrcpy(char* dest, const char* src) {
+    size_t index = 0;
+    while (src[index] != '\0') {
+        dest[index] = src[index];
+        ++index;
     }
-    dest[ind] = '\0';
+    dest[index] = '\0';
 }
 
-void readUserFromFile(std::ifstream& file, User& user) {
+void ReadUserFromFile(std::ifstream& file, User& user) {
     file.getline(user.name, MAX_LEN);
     file.getline(user.email, MAX_LEN);
     file.getline(user.password, MAX_LEN);
+
+    user.name[MAX_LEN] = user.email[MAX_LEN] = user.password[MAX_LEN] = '\0'; //add null terminator
 }
 
-void writeUserToFile(std::ofstream& file, const User& user) {
+void WriteUserToFile(std::ofstream& file, const User& user) {
     file << user.name << "\n";
     file << user.email << "\n";
     file << user.password << "\n";
 }
 
-void registerUser(System& system) {
+bool RegisterUser(System& system) {
     if (system.numberOfUsers >= MAX_NUMBER_OF_USERS) {
         std::cout << "Error. The system is full\n";
-        return;
+        return false;
     }
 
-    char buff[MAX_LEN];
+    char buff[MAX_LEN + 1];
     User user;
+    std::cin.ignore();
 
     std::cout << "Enter name:\n";
-    std::cin.ignore();
     std::cin.getline(buff, MAX_LEN);
-    myStrcpy(user.name, buff);
+    buff[MAX_LEN] = '\0';
+    MyStrcpy(user.name, buff);
 
     std::cout << "Enter email:\n";
     std::cin.getline(buff, MAX_LEN);
-    myStrcpy(user.email, buff);
+    buff[MAX_LEN] = '\0';
+    MyStrcpy(user.email, buff);
 
     std::cout << "Enter password:\n";
     std::cin.getline(buff, MAX_LEN);
-    myStrcpy(user.password, buff);
+    buff[MAX_LEN] = '\0';
+    MyStrcpy(user.password, buff);
 
     system.users[system.numberOfUsers] = user;
-    system.numberOfUsers++;
+    ++system.numberOfUsers;
 
     std::cout << "Registration successful\n";
+    return true;
 }
 
-void writeSystemToFile(const char fileName[], const System& system) {
+bool WriteSystemToFile(const char* fileName, const System& system) {
     std::ofstream file(fileName);
 
     if (!file.is_open()) {
         std::cout << "Error\n";
-        return;
+        return false;
     }
 
     file << system.numberOfUsers << "\n";
 
-    for (int i = 0; i < system.numberOfUsers; i++) {
-        writeUserToFile(file, system.users[i]);
+    for (size_t i = 0; i < system.numberOfUsers; i++) {
+        WriteUserToFile(file, system.users[i]);
     }
 
     file.close();
+    return true;
 }
 
-void readSystemFromFile(const char fileName[], System& system) {
+bool readSystemFromFile(const char fileName[], System& system) {
     std::ifstream file(fileName);
 
     if (!file.is_open()) {
         std::cout << "Error\n";
-        return;
+        return false;
     }
 
-    unsigned int size;
+    size_t size;
     file >> size;
     system.numberOfUsers = size;
     file.get();
 
-    for (int i = 0; i < size; i++) {
-        readUserFromFile(file, system.users[i]);
+    for (size_t i = 0; i < size; ++i) {
+        ReadUserFromFile(file, system.users[i]);
     }
 
     file.close();
+    return true;
 }
 
-int myStrlen(const char* str) {
-    int ctr = 0;
-    while (*str) {
-        ctr++;
-        str++;
+size_t MyStrlen(const char* str) {
+    size_t index = 0;
+    while (str[index] != '\0') {
+        ++index;
     }
-    return ctr;
+    return index;
 }
 
-bool myStrcmp(const char* str1, const char* str2) {
-    int len1 = myStrlen(str1);
-    int len2 = myStrlen(str2);
+bool MyStrcmp(const char* str1, const char* str2) {
+    int len1 = MyStrlen(str1);
+    int len2 = MyStrlen(str2);
 
     if (len1 != len2) {
         return false;
@@ -128,38 +136,39 @@ bool myStrcmp(const char* str1, const char* str2) {
     return true;
 }
 
-int getUserIndex(const System& system, const char email[]) {
-    for (int i = 0; i < system.numberOfUsers; i++) {
-        if (myStrcmp(system.users[i].email, email)) {
+int GetUserIndex(const System& system, const char* email) {
+    for (size_t i = 0; i < system.numberOfUsers; ++i) {
+        if (MyStrcmp(system.users[i].email, email)) {
             return i;
         }
     }
     return -1;
 }
 
-void loginUser(const System& system) {
-    char buff[MAX_LEN];
-    std::cout << "Enter email:\n";
+bool LoginUser(const System& system) {
     std::cin.ignore();
-    std::cin.getline(buff, MAX_LEN);
 
-    int ind = getUserIndex(system, buff);
+    char buff[MAX_LEN + 1];
+    std::cout << "Enter email:\n";
+    std::cin.getline(buff, MAX_LEN);
+    buff[MAX_LEN] = '\0';
+
+    int ind = GetUserIndex(system, buff);
 
     if (ind < 0) {
         std::cout << "User not found\n";
-        return;
+        return false;
     }
 
     do {
         std::cout << "Enter password:\n";
         std::cin.getline(buff, MAX_LEN);
+        buff[MAX_LEN] = '\0';
 
-        if (myStrcmp(system.users[ind].password, buff)) {
+        if (MyStrcmp(system.users[ind].password, buff)) {
             std::cout << "Login successful\n";
-            return;
-        }
-
-        else {
+            return false;
+        } else {
             std::cout << "Incorrect password\n";
             std::cout << "Enter 0 to quit and 1 to try again\n";
             int command;
@@ -167,24 +176,24 @@ void loginUser(const System& system) {
 
             switch (command) {
             case 0:
-                return;
+                return false;
             case 1:
                 break;
             default:
                 std::cout << "Invalid command\n";
+                return false;
             }
         }
-
-    } while (1);
+    } while(true);
 }
 
-void printUser(const User& user) {
+void PrintUser(const User& user) {
     std::cout << user.name << " " << user.email << " " << user.password << "\n";
 }
 
-void printSystem(const System& system) {
-    for (int i = 0; i < system.numberOfUsers; i++) {
-        printUser(system.users[i]);
+void PrintSystem(const System& system) {
+    for (size_t i = 0; i < system.numberOfUsers; ++i) {
+        PrintUser(system.users[i]);
     }
 }
 
@@ -192,8 +201,8 @@ int main()
 {
     const char fileName[] = "System.txt";
     System system;
-    readSystemFromFile(fileName, system);
-    printSystem(system);
+    ReadSystemFromFile(fileName, system);
+    PrintSystem(system);
 
     int command;
     bool getUserInput = true;
@@ -207,15 +216,15 @@ int main()
             getUserInput = false;
             break;
         case 1: 
-            registerUser(system);
+            RegisterUser(system);
             break;
         case 2:
-            loginUser(system);
+            LoginUser(system);
             break;
         default:
             std::cout << "Invalid command\n";
         }
     } while (getUserInput);
 
-    writeSystemToFile(fileName, system);
+    WriteSystemToFile(fileName, system);
 }

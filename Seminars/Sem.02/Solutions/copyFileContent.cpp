@@ -2,7 +2,7 @@
 #include <fstream>
 #include "constants.h"
 
-bool copyFileContent(const char* from, const char* to)
+bool CopyFileContent(const char* from, const char* to)
 {
 	std::ifstream in(from);
 	std::ofstream out(to);

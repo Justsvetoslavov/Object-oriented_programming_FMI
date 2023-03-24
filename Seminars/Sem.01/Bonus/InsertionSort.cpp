@@ -1,18 +1,14 @@
 #include <iostream>
 
-void swap(int& a, int& b) {
-	int temp = a;
-	a = b;
-	b = temp;
-}
-
-void print(const int* arr, size_t length) {
+void Print(const int* arr, size_t length)
+{
 	for (size_t i = 0; i < length; i++) {
 		std::cout << arr[i] << " ";
 	}
 }
 
-void insertionSort(int* arr, size_t length) {
+void InsertionSort(int* arr, size_t length)
+{
 	for (size_t i = 1; i < length; i++) {
 		int currentNumber = arr[i];
 
@@ -26,9 +22,10 @@ void insertionSort(int* arr, size_t length) {
 	}
 }
 
-int main() {
+int main()
+{
 	int arr[] = { 9, 5, 6, 3, 4, 7, 2, 1, 8 };
 
-	insertionSort(arr, 9);
-	print(arr, 9);
+	InsertionSort(arr, 9);
+	Print(arr, 9);
 }

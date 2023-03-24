@@ -2,8 +2,7 @@
 #include <fstream>
 #include "constants.h"
 
-// TODO: refactor
-size_t getLinesCount(std::ifstream& in)
+size_t GetLinesCount(std::ifstream& in)
 {
 	size_t counter = 0;
 	while (!in.eof()) {

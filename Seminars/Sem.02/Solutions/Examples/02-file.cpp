@@ -2,7 +2,7 @@
 #include <fstream>
 #include "constants.h"
 
-int baseExample1()
+int BaseExample1()
 {
 	{
 		std::ofstream out(FILE_NAME); // create input file stream associated with test.txt
@@ -34,7 +34,7 @@ int baseExample1()
 	}
 }
 
-int formattedInput()
+int FormattedInput()
 {
 	{
 		std::ofstream out(FILE_NAME);
@@ -66,7 +66,7 @@ int formattedInput()
 	}
 }
 
-int unformattedInput()
+int UnformattedInput()
 {
 	{
 		std::ofstream out(FILE_NAME);

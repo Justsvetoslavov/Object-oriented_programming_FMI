@@ -1,13 +1,13 @@
-#include <iostream>
+﻿#include <iostream>
 #include <fstream>
-#include "constants.h"
 
-bool PrintSourceCode(const char* fileName)
+const int BUFFER_SIZE = 1024;
+
+bool PrintSourceCode(const char fileName[])
 {
 	std::ifstream in(fileName);
 
 	if (!in.is_open()) {
-		std::cout << INVALID_FILE_ERR_MSG;
 		return false;
 	}
 
@@ -18,5 +18,5 @@ bool PrintSourceCode(const char* fileName)
 	}
 
 	in.close();
-	return true;
+    return true;
 }

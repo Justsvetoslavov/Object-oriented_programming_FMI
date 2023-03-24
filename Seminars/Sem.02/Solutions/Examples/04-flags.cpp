@@ -2,7 +2,7 @@
 #include <fstream>
 #include "constants.h"
 
-int test()
+int Test()
 {
 	std::ifstream file(FILE_NAME);
 	//file.good();  // all operations went good
@@ -14,7 +14,7 @@ int test()
 	return 0;
 }
 
-int failExample()
+int FailExample()
 {
 	int a;
 	std::cin >> a;

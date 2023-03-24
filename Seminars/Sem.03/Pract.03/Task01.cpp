@@ -1,156 +1,102 @@
 #include <iostream>
 #include <fstream>
 
-using std::cin, std::cout, std::endl, std::ifstream, std::ofstream, std::ios;
+using std::cin, std::cout, std::endl, std::ofstream, std::ifstream;
 
-const int MAX_GROUP_SIZE = 1024;
-const int NAME_LENGTH = 16;
-const int NUMBER_LENGTH = 5;
-const char* FILE_NAME = "data.csv";
+const char *FILE_NAME = "students.csv";
 
-enum HairColor {
-    BROWN, 
-    BLACK, 
-    BLONDE, 
-    RED, 
-    WHITE, 
-    OTHER
+const int max_length = 16;
+const int max_users = 1024;
+const int max_digits = 5;
+
+enum hairColor {
+    BLONDE,
+    BROWN,
+    BLACK,
+    RED,
+    WHITE,
+};
+
+const static char *hairColorNames[] = {
+        "BLONDE",
+        "BROWN",
+        "BLACK",
+        "RED",
+        "WHITE",
 };
 
 struct Student {
-    char firstName[NAME_LENGTH + 1];
-    char secondName[NAME_LENGTH + 1];
-    char facultyNumber[NUMBER_LENGTH + 1];
-    double grade;
-    HairColor hairColor;
+    char name[max_length + 1];
+    char surname[max_length + 1];
+    char facultyNumber[max_digits + 1];
+    double averageGrade;
+    hairColor hair;
+};
 
-    char* getHairColor() {
-        switch (hairColor) {
-            case 0: 
-              return "BROWN";
-            case 1: 
-              return "BLACK";
-            case 2:
-              return "BLONDE";
-            case 3:
-              return "RED";
-            case 4: 
-              return "WHITE";
+struct System {
+    Student students[max_users];
+    int studentsCount;
+
+    void addStudent(const Student &student) {
+        if (studentsCount >= max_users) {
+            cout << "Max users reached!" << endl;
+            return;
         }
-        return "OTHER";
+        students[studentsCount] = student;
+        studentsCount++;
     }
 };
 
-struct Group {
-    Student students[MAX_GROUP_SIZE];
-    int size = 0;
-
-    void addStudent(Student& student) {
-        students[size++] = student;
-    }
-
-    void printGroup() {
-        cout << "Group: " << endl;
-        for (int i = 0; i < size; i++) {
-            Student current = students[i];
-            cout << current.firstName << " " << current.secondName << " " << current.facultyNumber << " " << current.grade << " " << current.getHairColor() << endl;
-        }
-    }
-};
-
-bool areEquals(char* str1, char* str2) {
-    if (*str1 == '\0' && *str2 == '\0') {
-        return true;
-    } else if (*str1 != *str2) {
+bool writeStudentsToFile(const char *filename, System &system) {
+    ofstream file(filename, std::ios::app);
+    if (!file.is_open()) {
+        cout << "File could not be opened!" << endl;
         return false;
-    } else {
-        return areEquals(++str1, ++str2);
     }
+    for (int i = 0; i < system.studentsCount; i++) {
+        file << system.students[i].name << "," << system.students[i].surname
+             << "," << system.students[i].facultyNumber << "," << system.students[i].averageGrade
+             << "," << hairColorNames[system.students[i].hair] << endl;
+    }
+    file.close();
+    return true;
 }
 
-HairColor stringToColor(char* str) {
-    if (areEquals(str, "BROWN")) {
-        return BROWN;
-    } else if (areEquals(str, "BLACK")) {
-        return BLACK;
-    } else if (areEquals(str, "BLONDE")) {
-        return BLONDE;
-    } else if (areEquals(str, "RED")) {
-        return RED;
-    } else if (areEquals(str, "WHITE")) {
-        return WHITE;
-    }
-
-    return OTHER;
-}
-
-void saveGroupToFile(ofstream& file, Group& group) {
+bool readStudentsFromFile(const char *filename, System &system) {
+    ifstream file(filename);
     if (!file.is_open()) {
-        cout << "Error";
-        return;
+        cout << "File could not be opened!" << endl;
+        return false;
     }
-
-    for (int i = 0; i < group.size; i++) {
-        Student current = group.students[i];
-
-        if (i != 0) {
-            file << endl;
-        }
-        
-        file << current.firstName << "," << current.secondName << "," << current.facultyNumber << "," 
-             << current.grade << "," << current.getHairColor();
+    char buffer[1024];
+    system.studentsCount = 0;
+    while (!file.eof() && system.studentsCount < max_users && file.getline(buffer, 1024)) {
+        Student student{};
+        strcpy(student.name, strtok(buffer, ","));
+        strcpy(student.surname, strtok(NULL, ","));
+        strcpy(student.facultyNumber, strtok(NULL, ","));
+        student.averageGrade = atof(strtok(NULL, ","));
+        student.hair = (hairColor) atoi(strtok(NULL, ","));
+        system.addStudent(student);
     }
+    file.close();
+    return true;
 }
 
-void readGroupFromFile(ifstream& file, Group& group) {
-    if (!file.is_open()) {
-        cout << "Error";
-        return;
-    }
-
-    while (!file.eof()) {
-        char hair[7];
-
-        Student student;
-        file.getline(student.firstName, 1024, ',');
-        file.getline(student.secondName, 1024, ',');
-        file.getline(student.facultyNumber, 1024, ',');
-        file >> student.grade;
-        file.getline(hair, 2, ',');
-        file.getline(hair, 7, '\n');
-
-        student.hairColor = stringToColor(hair);
-
-        group.addStudent(student);
-    }
-}
- 
 int main() {
+    System system{};
+    system.studentsCount = 0;
 
-    Student s1 = {"First", "F", "11111", 5.2, BLACK};
-    Student s2 = {"Second", "S", "22222", 5.5, BLONDE};
-    Student s3 = {"Third", "T", "33333", 4.7, BLONDE};
+    system.addStudent({"Ivan", "Ivanov", "12345", 5.5, BLONDE});
+    system.addStudent({"Pesho", "Peshev", "12346", 5.6, BROWN});
 
-    Group group;
-    group.addStudent(s1);
-    group.addStudent(s2);
-    group.addStudent(s3);
+    writeStudentsToFile(FILE_NAME, system);
+    readStudentsFromFile(FILE_NAME, system);
 
-    ofstream fileO(FILE_NAME, ios::app);
-    
-    saveGroupToFile(fileO, group);
-    
-    fileO.close();
-
-    Group group2;
-
-    ifstream fileI(FILE_NAME);
-
-    readGroupFromFile(fileI, group2);
-
-    fileI.close();
-
-    group2.printGroup();
-
+    for (int i = 0; i < system.studentsCount; i++) {
+        cout << system.students[i].name << " " << system.students[i].surname << " "
+             << system.students[i].facultyNumber << " " << system.students[i].averageGrade << " "
+             << hairColorNames[system.students[i].hair] << endl;
+    }
     return 0;
 }

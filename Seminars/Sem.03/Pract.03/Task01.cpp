@@ -127,25 +127,6 @@ int CountOfStudents(std::ifstream& file) {
 	return rowCounter;
 }
 
-void UnsetCharSymbols(char* buffer) {
-	for (int i = 0; buffer[i] != '\0'; i++) {
-		buffer[i] = '\0';
-	}
-}
-
-void CharToHairColor(Student& student, char* buffer) {
-	if (buffer[0] == '0')
-		student.color = hairColor::brown;
-	else if (buffer[0] == '1')
-		student.color = hairColor::black;
-	else if (buffer[0] == '2')
-		student.color = hairColor::blonde;
-	else if (buffer[0] == '3')
-		student.color = hairColor::red;
-	else
-		student.color = hairColor::white;
-}
-
 int LengthOfCharArray(char* array) {
 	int length = 0;
 	for (int i = 0; array[i] != '\0'; i++)
@@ -168,46 +149,44 @@ Student ReadStudentFromFile(std::ifstream& file) {
 	file.getline(st.familyName, max_Name_Size + 1, ',');
 	file.getline(buffer, 6, ',');
 	st.facultyNumber = CharToInt(buffer);
-	UnsetCharSymbols(buffer);
 	file.getline(buffer, 5, ',');
 	st.averageScore = strtod(buffer, nullptr);
-	UnsetCharSymbols(buffer);
 	file.getline(buffer, 2, '\n');
-	CharToHairColor(st, buffer);
+	st.color = (hairColor)(int)(buffer[0] - '0');
 	return st;
 }
 
-void CheckMaxSizeOfStudents(std::ifstream& file, unsigned& countOfUnsavedStudents, const int countOfSavedStudents) {
+bool IsFileAtMaxCapacity(std::ifstream& file, unsigned& countOfUnsavedStudents, const int countOfSavedStudents) {
 	if (countOfSavedStudents + countOfUnsavedStudents == max_Count_Of_Students)
 	{
 		std::cout << "The file already has 1024 students!";
-		return;
+		return true;
 	}
 	else if (countOfSavedStudents + countOfUnsavedStudents > max_Count_Of_Students) {
-		std::cout << "The maximum count of students you can enter is " << max_Count_Of_Students - countOfSavedStudents << '\n';
 		countOfUnsavedStudents = max_Count_Of_Students - countOfSavedStudents;
+		std::cout << "The maximum count of students you can enter is " << countOfUnsavedStudents << '\n';
 	}
+	return false;
 }
 
-void PrintHairColor(int hairIndex) {
-	if (hairIndex == 0)
-		std::cout << "brown\n";
-	else if (hairIndex == 1)
-		std::cout << "black\n";
-	else if (hairIndex == 2)
-		std::cout << "blonde\n";
-	else if (hairIndex == 3)
-		std::cout << "red\n";
-	else if(hairIndex == 4)
-		std::cout << "white\n";
+const char* PrintHairColor(int hairIndex) {
+	if (hairIndex == (int)hairColor::brown)
+		return "brown";
+	else if (hairIndex == (int)hairColor::black)
+		return "black";
+	else if (hairIndex == (int)hairColor::blonde)
+		return "blonde";
+	else if (hairIndex == (int)hairColor::red)
+		return "red";
+	else
+		return "white";
 }
 
 void PrintStudent(const Student& student) {
 	std::cout << "Student: " << student.firstName << ' ' << student.familyName << std::endl;
 	std::cout << "FN: " << student.facultyNumber << std::endl;
 	std::cout << "Average score: " << student.averageScore << std::endl;
-	std::cout << "Hair color: ";
-	PrintHairColor((int)student.color);
+	std::cout << "Hair color: " << PrintHairColor((int)student.color) << std::endl;
 }
 
 int main()
@@ -220,7 +199,8 @@ int main()
 		return 1;
 
 	int countOfSavedStudents = CountOfStudents(readFile);
-	CheckMaxSizeOfStudents(readFile, countOfUnsavedStudents, countOfSavedStudents);
+	if (IsFileAtMaxCapacity(readFile, countOfUnsavedStudents, countOfSavedStudents))
+		return 1;
 	readFile.close();
 
 	for (int i = 0; i < countOfUnsavedStudents; i++) {

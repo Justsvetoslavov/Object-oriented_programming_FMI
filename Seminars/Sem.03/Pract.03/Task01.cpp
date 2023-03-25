@@ -27,20 +27,25 @@ enum MenuOption
 };
 
 struct Student {
-	char firstName[FIRST_NAME_LENGTH + 1];
-	char lastName[LAST_NAME_LENGTH + 1];
+	char firstName[FIRST_NAME_LENGTH + 1]{};
+	char lastName[LAST_NAME_LENGTH + 1]{};
 	unsigned int facultyNumber;
-	double gpa;
-	HairColor hairColor;
+	double gradePointAverage;
+	HairColor hairColor{};
 
-	Student() {}
+	Student()
+	{
+		facultyNumber = 0;
+		gradePointAverage = 3.0;
+		hairColor = HairColor::black;
+	}
 
 	Student(const char* _firstName, const char* _lastName,
-		const unsigned int _facultyNumber, const double _gpa, const HairColor _hairColor) {
+		const unsigned int _facultyNumber, const double _gradePointAverage, const HairColor _hairColor) {
 		strcpy_s(firstName, _firstName);
 		strcpy_s(lastName, _lastName);
 		facultyNumber = _facultyNumber;
-		gpa = _gpa;
+		gradePointAverage = _gradePointAverage;
 		hairColor = _hairColor;
 	}
 };
@@ -98,36 +103,24 @@ bool isNameInputValid(const char* str, const short MAX_STR_SIZE)
 	return str[MAX_STR_SIZE] == '\0';
 }
 
-void initStudentFromConsole(Student& outputStudent) {
-	cin.ignore();
-
-	cout << "Input first name: ";
-
-	char firstName[FIRST_NAME_LENGTH + 1]{};
+void getName(char* name, const short MAX_LENGTH)
+{
 	do
 	{
-		cin >> firstName;
-		if (!isNameInputValid(firstName, FIRST_NAME_LENGTH))
+		cin >> name;
+		if (!isNameInputValid(name, MAX_LENGTH))
 		{
 			cout << "Please enter a valid name (max 16 chars): ";
 		}
 		else break;
 	} while (true);
+}
 
-	cout << "Input last name: ";
-	char lastName[LAST_NAME_LENGTH + 1]{};
-	do
-	{
-		cin >> lastName;
-		if (!isNameInputValid(lastName, LAST_NAME_LENGTH))
-		{
-			cout << "Please enter a valid name (max 16 chars): ";
-		}
-		else break;
-	} while (true);
+unsigned short getFacultyNumber()
+{
+	unsigned short facultyNumber = 0;
 
 	cout << "Input faculty number: ";
-	unsigned int facultyNumber = 0;
 	do
 	{
 		cin >> facultyNumber;
@@ -138,21 +131,30 @@ void initStudentFromConsole(Student& outputStudent) {
 		else break;
 	} while (true);
 
-	cout << "Input GPA: ";
-	double gpa = 0;
+	return facultyNumber;
+}
+
+double getGradePointAverage()
+{
+	double gradePointAverage = 0;
+
+	cout << "Input grade point average: ";
 	do
 	{
-		cin >> gpa;
-		if (!(2 <= gpa && gpa <= 6))
+		cin >> gradePointAverage;
+		if (!(2 <= gradePointAverage && gradePointAverage <= 6))
 		{
-			cout << "Please enter a valid gpa (between 2.00 and 6.00): ";
+			cout << "Please enter a valid grade point average (between 2.00 and 6.00): ";
 		}
 		else break;
 	} while (true);
 
-	cout << "Input hair color\n(brown, black, blonde, red, white): ";
-	HairColor hairColor;
+	return gradePointAverage;
+}
 
+void getHairColor(HairColor& hairColor)
+{
+	cout << "Input hair color\n(brown, black, blonde, red, white): ";
 	do
 	{
 		char hairColorInput[7];
@@ -163,8 +165,27 @@ void initStudentFromConsole(Student& outputStudent) {
 		}
 		else break;
 	} while (true);
+}
 
-	outputStudent = Student(firstName, lastName, facultyNumber, gpa, hairColor);
+void initStudentFromConsole(Student& outputStudent) {
+	cin.ignore();
+
+	cout << "Input first name: ";
+	char firstName[FIRST_NAME_LENGTH + 1]{};
+	getName(firstName, FIRST_NAME_LENGTH);
+
+	cout << "Input last name: ";
+	char lastName[LAST_NAME_LENGTH + 1]{};
+	getName(lastName, LAST_NAME_LENGTH);
+
+	const unsigned int facultyNumber = getFacultyNumber();
+
+	const double gradePointAverage = getGradePointAverage();
+
+	HairColor hairColor{};
+	getHairColor(hairColor);
+
+	outputStudent = Student(firstName, lastName, facultyNumber, gradePointAverage, hairColor);
 }
 
 void writeStudentToFile(std::fstream& binaryFile, const Student& student) {
@@ -198,7 +219,7 @@ void printStudents(std::fstream& studentsBinaryFile) {
 	const size_t studentsCount = getStudentsCountInBinaryFile(studentsBinaryFile);
 	const Student* students = loadStudentsArray(studentsBinaryFile, studentsCount);
 
-	cout << "First name\tLast name\tFaculty number\tGPA\tHair color" << std::endl;
+	cout << "First name\tLast name\tFaculty number\tGrade point average\tHair color" << std::endl;
 
 	for (size_t i = 0; i < studentsCount; i++)
 	{
@@ -206,7 +227,7 @@ void printStudents(std::fstream& studentsBinaryFile) {
 			students[i].firstName << "\t\t" <<
 			students[i].lastName << "\t\t" <<
 			students[i].facultyNumber << "\t\t" <<
-			students[i].gpa << "\t" <<
+			students[i].gradePointAverage << "\t" <<
 			enumFieldToString(students[i].hairColor) <<
 			std::endl;
 	}
@@ -219,7 +240,13 @@ void exportStudentsToCsv(std::fstream& studentsBinaryFile) {
 	const Student* students = loadStudentsArray(studentsBinaryFile, studentsCount);
 
 	std::ofstream csvOutputFile("output.csv", std::ios::out | std::ios::trunc);
-	csvOutputFile << "First name,Last name,Faculty number,GPA,Hair color" << std::endl;
+
+	if (!csvOutputFile.is_open())
+	{
+		return;
+	}
+
+	csvOutputFile << "First name,Last name,Faculty number,Grade point average,Hair color" << std::endl;
 
 	for (size_t i = 0; i < studentsCount; i++)
 	{
@@ -227,7 +254,7 @@ void exportStudentsToCsv(std::fstream& studentsBinaryFile) {
 			students[i].firstName << ',' <<
 			students[i].lastName << ',' <<
 			students[i].facultyNumber << ',' <<
-			students[i].gpa << ',' <<
+			students[i].gradePointAverage << ',' <<
 			enumFieldToString(students[i].hairColor) <<
 			std::endl;
 	}
@@ -242,11 +269,10 @@ void handleMenuInput(std::fstream& studentsBinaryFile)
 
 	cout << "Menu options:\n1) Input student\n2) Read students\n3) Export to csv\n4) Exit\n";
 
-	while (true)
+	do
 	{
 		cout << "Input menu option (1-4): ";
 		cin >> menuOptionInput;
-
 		if (menuOptionInput == MenuOption::inputStudent)
 		{
 			if (getStudentsCountInBinaryFile(studentsBinaryFile) > STUDENTS_MAX_COUNT)
@@ -275,16 +301,11 @@ void handleMenuInput(std::fstream& studentsBinaryFile)
 			exportStudentsToCsv(studentsBinaryFile);
 			cout << "Success\n\n";
 		}
-		else if (menuOptionInput == MenuOption::exitProgram)
-		{
-			studentsBinaryFile.close();
-			return;
-		}
-		else
+		else if (menuOptionInput != MenuOption::exitProgram)
 		{
 			cout << "Choose a valid option: ";
 		}
-	}
+	} while (menuOptionInput != MenuOption::exitProgram);
 }
 
 int main()
@@ -300,4 +321,5 @@ int main()
 	}
 
 	handleMenuInput(studentsBinaryFile);
+	studentsBinaryFile.close();
 }

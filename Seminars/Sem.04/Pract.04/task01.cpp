@@ -20,6 +20,9 @@ public:
         setInter(inter);
     }
     void setName( char*name){
+        if(name == nullptr){
+            copyString(this->name,"");
+        }
         copyString(this->name,name);
     }
     char* getName(char*name){
@@ -27,6 +30,9 @@ public:
     }
 
     void setAge(int age){
+        if(age<18){
+            age=18;
+        }
         this->age=age;
     }
     int getAge(){
@@ -34,6 +40,9 @@ public:
     }
 
     void setInter(int inter){
+        if(inter<0){
+            inter=0;
+        }
         this->internship=inter;
     }
     int getInter(){

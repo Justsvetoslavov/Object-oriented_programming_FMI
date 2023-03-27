@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
-#include "Task02_GamePlatform.h"
-#include "Task02_Utils.h"
+#include "Task03_GamePlatform.h"
+#include "Task03_Utils.h"
 
 const int DEFAULT_GAME_CAPACITY = 16;
 const char FILE_NAME[] = "platform.dat";

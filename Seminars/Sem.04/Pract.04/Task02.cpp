@@ -1,8 +1,6 @@
 #include <iostream>
-#include <cstring>
-#include <fstream>
 
-#include "Exam_Task02.h"
+#include "Task02/Exam.h"
 
 int main()
 {
@@ -14,15 +12,10 @@ int main()
 
     Exam ex(5, tasks, 3);
 
-    std::ofstream writer("file.dat");
-    ex.WriteToFile(writer);
-
-    writer.close();
-
-    std::ifstream reader("file.dat");
+    ex.WriteToFile("file.dat");
 
     Exam ex1;
-    ex1.ReadFromFile(reader);
+    ex1.ReadFromFile("file.dat");
 
     std::cout << "======ORIGINAL======\n";
     ex.Print();

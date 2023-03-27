@@ -1,6 +1,11 @@
-#include "Exam_Task02.h"
+#include "Exam.h"
 
 #include <iostream>
+#include <fstream>
+
+Exam::Exam()
+        : Exam(0)
+{}
 
 Exam::Exam(int minPoints)
 {
@@ -16,28 +21,34 @@ Exam::Exam(int minPoints, const Task *tasks, size_t tasksLength)
 
     for (int i = 0; i < tasksLength; ++i)
     {
-        m_tasks[m_currentTaskPtr++] = tasks[i];
+        m_tasks[m_currentTaskIndex++] = tasks[i];
     }
 }
 
 void Exam::AddTask(const Task &task)
 {
-    if (m_currentTaskPtr >= MAX_TASKS_IN_EXAM)
+    if (m_currentTaskIndex >= MAX_TASKS_IN_EXAM)
         return;
 
-    m_tasks[m_currentTaskPtr++] = task;
+    m_tasks[m_currentTaskIndex++] = task;
 }
 
-void Exam::WriteToFile(std::ofstream &file) const
+void Exam::WriteToFile(const char* fileName) const
 {
+    std::ofstream file(fileName, std::ios::binary);
+
     if (!file.is_open())
         return;
 
     file.write((const char *) this, sizeof(Exam));
+
+    file.close();
 }
 
-void Exam::ReadFromFile(std::ifstream &file)
+void Exam::ReadFromFile(const char* fileName)
 {
+    std::ifstream file(fileName, std::ios::binary);
+
     if (!file.is_open())
         return;
 
@@ -46,11 +57,13 @@ void Exam::ReadFromFile(std::ifstream &file)
     file.read((char *) &ex, sizeof(Exam));
 
     m_minScore = ex.m_minScore;
-    m_currentTaskPtr = ex.m_currentTaskPtr;
-    for (int i = 0; i < ex.m_currentTaskPtr; ++i)
+    m_currentTaskIndex = ex.m_currentTaskIndex;
+    for (int i = 0; i < ex.m_currentTaskIndex; ++i)
     {
         m_tasks[i] = ex.m_tasks[i];
     }
+
+    file.close();
 }
 
 void Exam::ChangeMin(int min)
@@ -62,7 +75,7 @@ int Exam::GetMaxScore() const
 {
     int maxScore = 0;
 
-    for (int i = 0; i < m_currentTaskPtr; ++i)
+    for (int i = 0; i < m_currentTaskIndex; ++i)
     {
         maxScore += m_tasks[i].GetPoints();
     }
@@ -72,7 +85,7 @@ int Exam::GetMaxScore() const
 
 void Exam::Print() const
 {
-    for (int i = 0; i < m_currentTaskPtr; ++i)
+    for (int i = 0; i < m_currentTaskIndex; ++i)
     {
         std::cout <<
                   "Name: `" << m_tasks[i].GetName() << "`\n" <<

@@ -6,8 +6,8 @@ const int MAX_TASK_DESCRIPTION_SIZE = 127;
 class Task
 {
 private:
-    char m_name[MAX_TASK_NAME_SIZE + 1]{};
-    char m_description[MAX_TASK_DESCRIPTION_SIZE + 1]{};
+    char m_name[MAX_TASK_NAME_SIZE + 1];
+    char m_description[MAX_TASK_DESCRIPTION_SIZE + 1];
     int m_points;
 public:
     Task();

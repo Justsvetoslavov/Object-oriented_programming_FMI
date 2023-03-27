@@ -1,6 +1,6 @@
 #include <iostream>
-#include "Task02_Game.h"
-#include "Task02_Utils.h"
+#include "Task03_Game.h"
+#include "Task03_Utils.h"
 
 const int DEFAULT_TITLE_SIZE = 16;
 const double EPSILON = 0.0001;

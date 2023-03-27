@@ -1,9 +1,7 @@
 #include <iostream>
 #include <fstream>
-using namespace std;
 
-void replaceInFile(char ch, char ch2, fstream& file)
-{
+void replaceInFile(char ch, char ch2, fstream& file) {
 	char currentSymbol;
 	while (!file.eof())
 	{
@@ -11,7 +9,7 @@ void replaceInFile(char ch, char ch2, fstream& file)
 		if (currentSybmol != ch) {
 			continue;
 		}
-		file.seekp(-1, ios::cur);
+		file.seekp(-1, std::ios::cur);
 		file.put(ch2);
 		file.flush();
 	}
@@ -19,10 +17,9 @@ void replaceInFile(char ch, char ch2, fstream& file)
 
 int main()
 {
-	fstream file("treasureTrail.txt", ios::in | ios::out);
+	std::fstream file("treasureTrail.txt", std::ios::in | std::ios::out);
 	
-	if(!file.is_open())
-	{
+	if(!file.is_open()) {
 		std::cout << "Error while opening the file!" << std::endl;
 		return 1;
 	}

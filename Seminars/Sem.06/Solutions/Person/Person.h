@@ -10,7 +10,7 @@ public:
 	Person(const char* name, int age);
 	Person(const Person& other);
 	Person& operator=(const Person& other);
-  ~Person();
+  	~Person();
 
 	const char* getName() const;
 	int getAge() const;

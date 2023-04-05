@@ -24,6 +24,6 @@ private:
 	unsigned GetBucketCount() const;
 	unsigned char GetMask(unsigned number) const;
 
-    void CopyFrom(const SetOfNumbers& other);
+   	void CopyFrom(const SetOfNumbers& other);
 	void Free();
 };

@@ -20,6 +20,6 @@ public:
 
 	void print() const;
 private:
-  void CopyFrom(const Person& other);
+  	void CopyFrom(const Person& other);
 	void Free();
 };

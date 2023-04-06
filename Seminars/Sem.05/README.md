@@ -172,12 +172,12 @@ struct Test {
 		std::cout << "Destuctor";
 	}
 };
-Test create() 
-{
+
+Test create() {
 	return Test(); // default constructor 
 }
-int main() 
-{
+
+int main() {
 	Test t = create();
 } // destructor
 ```

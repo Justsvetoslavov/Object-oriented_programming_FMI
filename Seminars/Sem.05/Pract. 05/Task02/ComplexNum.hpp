@@ -27,9 +27,9 @@ public:
 
 	ComplexNum multiply(const ComplexNum& cocomplexNum1, const ComplexNum& complexNum2);
 	
-	ComplexNum conjugate(ComplexNum& complexNum);
+	void conjugate(ComplexNum& complexNum);
 
-	ComplexNum getConjugated(ComplexNum& complexNum);
+	void getConjugated(ComplexNum& complexNum);
 
 	void print(const ComplexNum& complexNum);
 

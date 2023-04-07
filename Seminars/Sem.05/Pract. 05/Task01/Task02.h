@@ -4,6 +4,10 @@ class ComplexNumber
 {
     double real;
     double imaginary;
+    
+    friend ComplexNumber add(const ComplexNumber &, const ComplexNumber &);
+    friend ComplexNumber subtract(const ComplexNumber &, const ComplexNumber &);
+    friend ComplexNumber multiply(const ComplexNumber &, const ComplexNumber &);
 
 public:
     ComplexNumber();

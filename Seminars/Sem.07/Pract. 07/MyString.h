@@ -1,6 +1,6 @@
 #pragma once
 
-const int DEFAULT_CAPACITY = 16;
+const int DEFAULT_CAPACITY = 2;
 
 class MyString
 {
@@ -25,6 +25,7 @@ public:
 
 public:
     int length() const;
+    int size() const;
     bool empty() const;
     void clear();
     const char *c_str() const;
@@ -32,12 +33,14 @@ public:
     MyString &append(const MyString &);
     MyString &append(const char *);
 
-    int compare();
+    int compare(const MyString &) const;
+    int compare(const char *) const;
     void shrink_to_fit();
-    void push_back();
+    void push_back(char);
     void pop_back();
 
 private:
+    void manageCapacity(int, bool);
     void setData(const char *);
 
     void free();

@@ -1,20 +1,21 @@
 #include <iostream>
 
-void myStrCpy(char *destination, const char *source)
+void myStrCpy(char *destination, const char *source, int startIdx)
 {
     if (!destination || !source)
     {
         return;
     }
 
-    int i = 0;
+    int idx = 0;
 
-    while (source[i])
+    while (source[idx] != '\0')
     {
-        destination[i] = source[i];
-        ++i;
+        destination[startIdx] = source[idx];
+        ++startIdx;
+        ++idx;
     }
-    destination[i] = '\0';
+    destination[startIdx] = '\0';
 }
 
 int myStrLen(const char *str)
@@ -36,9 +37,14 @@ Then we make title to point to the content that new title points at the heap. no
 At the end of the scope new title dies and title points to the new arr.
 We pass the pointer as reference and not as copy so that after the function call title points to the new memory
 */
-void resize(char *&data, int capacity)
+void resize(char *&data, int capacity, bool shouldCopy)
 {
     char *newData = new char[capacity];
+
+    if (shouldCopy)
+    {
+        myStrCpy(newData, data, 0);
+    }
 
     delete[] data;
 

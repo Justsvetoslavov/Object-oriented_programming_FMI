@@ -2,11 +2,10 @@
 #include "Utils.h"
 
 // Big 4 follow
-MyString::MyString(const char *data)
-{
-    _data = new char[DEFAULT_CAPACITY]{'\0'};
-    _capacity = DEFAULT_CAPACITY;
+MyString::MyString() : _data(new char[DEFAULT_CAPACITY]{'\0'}), _capacity(DEFAULT_CAPACITY) {}
 
+MyString::MyString(const char *data) : _data(new char[DEFAULT_CAPACITY]{'\0'}), _capacity(DEFAULT_CAPACITY)
+{
     setData(data);
 }
 
@@ -95,7 +94,7 @@ char &MyString::at(int idx)
     {
         throw "Index Out Of Bound Exception";
     }
-    return operator[](idx);
+    return _data[idx];
 }
 
 const char &MyString::at(int idx) const
@@ -104,7 +103,7 @@ const char &MyString::at(int idx) const
     {
         throw "Index Out Of Bound Exception";
     }
-    return operator[](idx);
+    return _data[idx];
 }
 
 MyString &MyString::operator+=(const MyString &other)
@@ -116,21 +115,23 @@ MyString &MyString::operator+=(const char *data)
 {
     return append(data);
 }
+
+char *MyString::operator*() const
+{
+    return _data;
+}
 // Member operators end
 
-// not sorted
+// Member functions follow
 MyString &MyString::append(const MyString &other)
 {
-    if (other._data)
-    {
-        append(other._data);
-    }
-    return *this;
+
+    return append(other._data);
 }
 
 MyString &MyString::append(const char *data)
 {
-    if (data)
+    if (data && data[0] != '\0')
     {
         int size = myStrLen(data);
 
@@ -163,6 +164,11 @@ int MyString::size() const
     return _size;
 }
 
+int MyString::capacity() const
+{
+    return _capacity;
+}
+
 bool MyString::empty() const
 {
     return !_size;
@@ -179,11 +185,7 @@ void MyString::clear()
 
 int MyString::compare(const MyString &other) const
 {
-    if (!other._data)
-    {
-        throw "nullptr exception";
-    }
-    return myStrCmp(_data, other._data);
+    return compare(other._data);
 }
 
 int MyString::compare(const char *data) const
@@ -225,3 +227,176 @@ const char *MyString::c_str() const
 {
     return _data;
 }
+
+char &MyString::front()
+{
+    if (!_size)
+    {
+        throw "Empty String Exception";
+    }
+
+    return _data[0];
+}
+
+const char &MyString::front() const
+{
+    if (!_size)
+    {
+        throw "Empty String Exception";
+    }
+
+    return _data[0];
+}
+
+char &MyString::back()
+{
+    if (!_size)
+    {
+        throw "Empty String Exception";
+    }
+
+    return _data[_size - 1];
+}
+
+const char &MyString::back() const
+{
+    if (!_size)
+    {
+        throw "Empty String Exception";
+    }
+
+    return _data[_size - 1];
+}
+
+MyString &MyString::replace(int start, int len, const MyString &other)
+{
+    MyString temp = substr(0, start);
+    temp.append(other);
+    temp.append(substr(start + len, _size - len - start));
+
+    *this = temp;
+
+    return *this;
+}
+
+MyString &MyString::replace(int start, int len, int count, char ch)
+{
+    MyString temp = substr(0, start);
+
+    for (int i = 0; i < count; ++i)
+    {
+        temp.push_back(ch);
+    }
+
+    temp.append(substr(start + len, _size - len - start));
+
+    *this = temp;
+
+    return *this;
+}
+
+MyString MyString::substr(int start, int len) const
+{
+    MyString temp;
+
+    for (int i = 0; i < len; ++i)
+    {
+        temp.push_back(at(start + i));
+    }
+
+    return temp;
+}
+
+void MyString::swap(MyString &other)
+{
+    char *tempData = _data;
+    int tempSize = _size;
+    int tempCapacity = _capacity;
+
+    _data = other._data;
+    _size = other._size;
+    _capacity = other._capacity;
+
+    other._data = tempData;
+    other._size = tempSize;
+    other._capacity = tempCapacity;
+}
+// Member functions end
+
+// non-member functions follow
+MyString operator+(const MyString &lhs, const MyString &rhs)
+{
+    MyString temp(lhs);
+    temp += rhs;
+    return temp;
+}
+
+bool operator==(const MyString &lhs, const MyString &rhs)
+{
+    return lhs.compare(rhs) == 0;
+}
+
+bool operator!=(const MyString &lhs, const MyString &rhs)
+{
+    return !(lhs == rhs);
+}
+
+bool operator<(const MyString &lhs, const MyString &rhs)
+{
+    return lhs.compare(rhs) < 0;
+}
+
+// never gets called because const char* is converted to MyString object first by converting constructor.
+// leaving code for completeness.
+bool operator<(const char *lhs, const MyString &rhs)
+{
+    return rhs.compare(lhs) > 0;
+}
+
+bool operator>(const MyString &lhs, const MyString &rhs)
+{
+    return lhs.compare(rhs) > 0;
+}
+
+// never gets called because const char* is converted to MyString object first by converting constructor.
+// leaving code for completeness.
+bool operator>(const char *lhs, const MyString &rhs)
+{
+    return rhs.compare(rhs) < 0;
+}
+
+bool operator>=(const MyString &lhs, const MyString &rhs)
+{
+    return !(lhs < rhs);
+}
+
+// never gets called because const char* is converted to MyString object first by converting constructor.
+// leaving code for completeness.
+bool operator>=(const char *lhs, const MyString &rhs)
+{
+    return !(rhs > rhs);
+}
+
+bool operator<=(const MyString &lhs, const MyString &rhs)
+{
+    return !(lhs > rhs);
+}
+
+// never gets called because const char* is converted to MyString object first by converting constructor.
+// leaving code for completeness.
+bool operator<=(const char *lhs, const MyString &rhs)
+{
+    return !(rhs < lhs);
+}
+
+std::ostream &operator<<(std::ostream &out, const MyString &obj)
+{
+    return out << obj._data;
+}
+
+std::istream &operator>>(std::istream &in, const MyString &obj)
+{
+    return in >> obj._data;
+}
+
+// non-member functions end

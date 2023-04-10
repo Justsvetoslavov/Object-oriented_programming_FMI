@@ -37,7 +37,7 @@ Then we make title to point to the content that new title points at the heap. no
 At the end of the scope new title dies and title points to the new arr.
 We pass the pointer as reference and not as copy so that after the function call title points to the new memory
 */
-void resize(char *&data, int capacity, bool shouldCopy)
+void resizeUtil(char *&data, int capacity, bool shouldCopy)
 {
     char *newData = new char[capacity];
 

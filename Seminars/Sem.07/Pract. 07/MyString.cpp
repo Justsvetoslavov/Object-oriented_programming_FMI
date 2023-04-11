@@ -1,19 +1,21 @@
 #include "MyString.h"
 #include "Utils.h"
 
-/*
-------------------------------------------------------------------------------------------
-Dear reviewer, I hope you will appreciate the effort I put for this task/mini project :)
-Thank you
-------------------------------------------------------------------------------------------
-*/
-
 // Big 4
-MyString::MyString() : _data(new char[DEFAULT_CAPACITY]{'\0'}), _capacity(DEFAULT_CAPACITY) {}
+MyString::MyString() : MyString(nullptr) {}
 
 MyString::MyString(const char *data) : _data(new char[DEFAULT_CAPACITY]{'\0'}), _capacity(DEFAULT_CAPACITY)
 {
-    setData(data);
+    if (!data)
+    {
+        return;
+    }
+
+    int size = myStrLen(data);
+
+    manageCapacity(size, false);
+    myStrCpy(_data, data);
+    _size = size;
 }
 
 MyString::MyString(const MyString &other)
@@ -55,20 +57,6 @@ void MyString::manageCapacity(int size, bool shouldCopy)
     }
 }
 
-void MyString::setData(const char *data)
-{
-    if (!data)
-    {
-        return;
-    }
-
-    int size = myStrLen(data);
-
-    manageCapacity(size, false);
-    myStrCpy(_data, data);
-    _size = size;
-}
-
 void MyString::free()
 {
     delete[] _data;
@@ -80,23 +68,15 @@ void MyString::free()
 
 void MyString::copyFrom(const MyString &other)
 {
+    _size = other._size;
+    _capacity = other._capacity;
     copyData(other._data);
 }
 
 void MyString::copyData(const char *data)
 {
-    _data = new char[DEFAULT_CAPACITY]{'\0'};
-    _capacity = DEFAULT_CAPACITY;
-
-    if (!data)
-    {
-        return;
-    }
-
-    int size = myStrLen(data);
-    manageCapacity(size, false);
+    _data = new char[_capacity]{'\0'};
     myStrCpy(_data, data);
-    _size = size;
 }
 
 // Capacity:

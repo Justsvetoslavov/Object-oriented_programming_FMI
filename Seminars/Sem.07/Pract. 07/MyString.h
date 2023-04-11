@@ -2,7 +2,7 @@
 #include <istream>
 #include <ostream>
 
-const int DEFAULT_CAPACITY = 2;
+const int DEFAULT_CAPACITY = 8;
 
 class MyString
 {
@@ -71,7 +71,6 @@ public:
 private:
     // Big 4 helper functions
     void manageCapacity(int, bool);
-    void setData(const char *);
 
     void free();
     void copyFrom(const MyString &);

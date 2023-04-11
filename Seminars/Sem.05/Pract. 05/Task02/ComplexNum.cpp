@@ -60,33 +60,33 @@ ComplexNum ComplexNum::multiply(const ComplexNum& complexNum1, const ComplexNum&
 	return result;
 }
 
-void ComplexNum::conjugate(ComplexNum& complexNum)
+void ComplexNum::conjugate()
 {
-	 complexNum.b * (-1);
+	this->b *= (-1);
 }
 
-void ComplexNum::getConjugated(ComplexNum& complexNum)
+ComplexNum ComplexNum::getConjugated()
 {
-	complexNum.b = complexNum.b * (-1);
+	return ComplexNum(this->a, this->b * -1);
 }
 
-void ComplexNum::print(const ComplexNum& complexNum)
+void ComplexNum::print()
 {
 	if (this->b < 0)
 	{
-		cout << complexNum.a << "  " << complexNum.b << "i" << endl;
+		cout << this->a << this->b << "i" << endl;
 	}
 	else if (this->a == 0)
 	{
-		cout << complexNum.b << "i" << endl;
+		cout << this->b << "i" << endl;
 	}
 	else if (this->b == 0)
 	{
-		cout << complexNum.a << endl;
+		cout << this->a << endl;
 	}
 	else
 	{
-		cout << complexNum.a << " + " << complexNum.b << "i" << endl;
+		cout << this->a << " + " << this->b << "i" << endl;
 	}
 }
 

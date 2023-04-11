@@ -27,11 +27,11 @@ public:
 
 	ComplexNum multiply(const ComplexNum& cocomplexNum1, const ComplexNum& complexNum2);
 	
-	void conjugate(ComplexNum& complexNum);
+	void conjugate();
 
-	void getConjugated(ComplexNum& complexNum);
+	ComplexNum getConjugated();
 
-	void print(const ComplexNum& complexNum);
+	void print();
 
 	~ComplexNum() = default;
 };

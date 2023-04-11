@@ -15,20 +15,17 @@ int main()
 	cout << "If they equal: " << std::boolalpha << complexNum1.isEqual(complexNum1, complexNum2) << endl;
 	result = result.add(complexNum1, complexNum2);
 	cout << "The added: ";
-	result.print(result);
+	result.print();
 	result = result.multiply(complexNum1, complexNum2);
 	cout << "The multuply: ";
-	result.print(result);
+	result.print();
 	result = result.substract(complexNum1, complexNum2);
 	cout << "The substract: ";
-	result.print(result);
-	result = result.conjugate(result);
+	result.print();
 	cout << "The conjugated: ";
-	result.print(result);
-	result = result.getConjugated(result);
-	cout << "The returned: ";
-	result.print(result);
-	complexNum1.~ComplexNum();
-	complexNum2.~ComplexNum();
-	result.~ComplexNum();
+	result.conjugate();
+	result.print();
+	cout << "Get Conjugated number ";
+	ComplexNum conjugated = result.getConjugated();
+	conjugated.print();
 }

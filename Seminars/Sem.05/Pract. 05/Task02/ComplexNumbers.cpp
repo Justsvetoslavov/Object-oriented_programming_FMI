@@ -26,10 +26,7 @@ const ComplexNumber& ComplexNumber::Multiply(const ComplexNumber& num) const {
 }
 
 void ComplexNumber::Conjugate() {
-	if (this->imag < 0)
-		this->imag = abs(this->imag);
-	else
-		this->imag = -this->imag;
+	this->imag = -this->imag;
 }
 
 const ComplexNumber& ComplexNumber::GetConjugated(const ComplexNumber& num) {
@@ -52,8 +49,8 @@ const ComplexNumber& ComplexNumber::Add(const ComplexNumber& other) const {
 
 const ComplexNumber& ComplexNumber::Subtract(const ComplexNumber& other) const {
 	ComplexNumber sub;
-	sub.real = this->real + other.real;
-	sub.imag = this->imag + other.imag;
+	sub.real = this->real - other.real;
+	sub.imag = this->imag - other.imag;
 	return sub;
 }
 

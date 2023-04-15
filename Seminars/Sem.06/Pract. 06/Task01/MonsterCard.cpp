@@ -1,27 +1,58 @@
 #include "MonsterCard.h"
 #include <cstring>
-#pragma warning(disable : 4996)
+#pragma warning(disable: 4996)
 
-MonsterCard::MonsterCard() {
-	name[0] = '\0';
-	attPoints = 0;
-	defPoints = 0;
+MonsterCard::MonsterCard() : MonsterCard("Unknown", 0, 0){}
+
+MonsterCard::MonsterCard(const char* name, int attackPoints, int defensePoints) {
+	SetName(name);
+	SetAttackPoints(attackPoints);
+	SetDefensePoints(defensePoints);
 }
 
-MonsterCard::MonsterCard(const char* name, size_t attPoints, size_t defPoints) {
+void MonsterCard::SetName(const char* name) {
+	if (name == nullptr)
+		return;
+	this->name = new char[strlen(name) + 1];
 	strcpy(this->name, name);
-	this->attPoints = attPoints;
-	this->defPoints = defPoints;
 }
 
-const char* const MonsterCard::getName() const {
-	return name;
+void MonsterCard::SetAttackPoints(int points){
+	if (points < 0)
+		points = 0;
+	attackPoints = points;
 }
 
-size_t MonsterCard::getAttPoints() const{
-	return attPoints;
+void MonsterCard::SetDefensePoints(int points) {
+	if (points < 0)
+		points = 0;
+	defensePoints = points;
 }
 
-size_t MonsterCard::getDefPoints() const{
-	return defPoints;
+void MonsterCard::copyFrom(const MonsterCard& other) {
+	SetName(other.name);
+	SetAttackPoints(other.attackPoints);
+	SetDefensePoints(other.defensePoints);
+}
+
+void MonsterCard::free(){
+	delete[] name;
+	name = nullptr;
+	attackPoints = defensePoints = 0;
+}
+
+MonsterCard::MonsterCard(const MonsterCard& other){
+	copyFrom(other);
+}
+
+MonsterCard& MonsterCard::operator=(const MonsterCard& other){
+	if (this != &other) {
+		free();
+		copyFrom(other);
+	}
+	return *this;
+}
+
+MonsterCard::~MonsterCard(){
+	free();
 }

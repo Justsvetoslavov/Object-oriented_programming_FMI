@@ -1,29 +1,19 @@
 #pragma once
+#include "GlobalConstants.h"
 
-const short NAME_MAX_SIZE = 26;
-const short EFFECT_MAX_SIZE = 101;
-
-enum class MagicCardType {
+enum type {
 	trap,
 	buff,
-	spell,
-	unknown
+	spell
 };
 
 class MagicCard {
 private:
-	char name[NAME_MAX_SIZE];
-	char effect[EFFECT_MAX_SIZE];
-	MagicCardType type;
+	char name[name_Max_Size + 1];
+	char effect[effect_Max_Size + 1];
+	type cardType;
 public:
 	MagicCard();
-	MagicCard(const char* name, const char* effect, const MagicCardType type);
+	MagicCard(const char* name, const char* effect, type cardType);
+}; 
 
-	MagicCard(const MagicCard& magicCard) = default;
-	MagicCard& operator=(const MagicCard& magicCard) = default;
-	~MagicCard() = default;
-
-	const char* const getName() const;
-	const char* const getEffect() const;
-	MagicCardType getMagicCardType() const;
-};

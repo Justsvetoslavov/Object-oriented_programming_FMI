@@ -1,35 +1,26 @@
 #pragma once
-
-#include "MagicCard.h"
 #include "MonsterCard.h"
+#include "MagicCard.h"
 
-const short MAX_DECK_SIZE = 40;
-
-class Deck {
+class Deck{
 private:
-	MagicCard magicCards[MAX_DECK_SIZE / 2];
-	MonsterCard monsterCards[MAX_DECK_SIZE / 2];
-	
-	bool monsterCardUsedPositions[MAX_DECK_SIZE / 2];
-	bool magicCardUsedPositions[MAX_DECK_SIZE / 2];
+	MonsterCard monsterCards[20];
+	MagicCard magicCards[20];
+	unsigned monsterCardsCount = 0;
+	unsigned magicCardsCount = 0;
 
-	size_t magicCardsSize;
-	size_t monsterCardsSize;
 public:
-	Deck();
-
-	Deck(const Deck& deck) = default;
-	Deck& operator=(const Deck& deck) = default;
-	~Deck() = default;
-
-	size_t getMagicCardsSize() const;
-	size_t getMonsterCardsSize() const;
-
-	bool addMagicCardToDeck(const MagicCard& magicCard);
-	bool addMonsterCardToDeck(const MonsterCard& monsterdrCard);
-
-	bool addMagicCardToDeckAtIndex(const MagicCard& magicCard, const int index);
-	bool addMonsterCardToDeckAtIndex(const MonsterCard& monsterdrCard, const int index);
-	
-	void info() const;
+	int GetMagicCardsCount() const;
+	int GetMonstersCount() const;
+	void AddMagicCard(const char* name, const char* effect, type cardType);
+	void AddMagicCard(const MagicCard& card);
+	void AddMonsterCard(const char* name, int attackPoints, int defensePoints);
+	void AddMonsterCard(const MonsterCard& card);
+	void ChangeMagicCard(int index, const char* name, const char* effect, type cardType);
+	void ChangeMagicCard(int index, const MagicCard& card);
+	void ChangeMonsterCard(int index, const char* name, int attackPoints, int defensePoints);
+	void ChangeMonsterCard(int index, const MonsterCard& card);
+	void RemoveMagicCard(int index);
+	void RemoveMonsterCard(int index);
 };
+

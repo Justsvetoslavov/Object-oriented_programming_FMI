@@ -1,78 +1,122 @@
-#include<cstring>
 #include "Deck.h"
+#include <iostream>
+#pragma warning(disable: 4996)
 
-Deck::Deck() : magicCardsSize(0), monsterCardsSize(0) {
-	for (size_t i = 0; i <  MAX_DECK_SIZE / 2; i++)
-	{
-		monsterCardUsedPositions[i] = magicCardUsedPositions[i] = false;
+
+int Deck::GetMagicCardsCount() const {
+	return magicCardsCount;
+}
+
+int Deck::GetMonstersCount() const {
+	return monsterCardsCount;
+}
+
+void Deck::AddMagicCard(const char* name, const char* effect, type cardType) {
+	if (magicCardsCount == 20) {
+		std::cout << "The magic cards deck is full!\n";
+		return;
 	}
+
+	magicCards[magicCardsCount] = MagicCard(name, effect, cardType);
+	magicCardsCount++;
 }
 
-size_t Deck::getMagicCardsSize() const{
-	return magicCardsSize;
-}
-
-size_t Deck::getMonsterCardsSize() const{
-	return monsterCardsSize;
-}
-
-bool Deck::addMagicCardToDeck(const MagicCard& magicCard) {
-	for (size_t i = 0; i < MAX_DECK_SIZE / 2; i++)
-	{
-		if (!magicCardUsedPositions[i])
-		{
-			magicCards[i] = magicCard;
-			magicCardUsedPositions[i] = true;
-			magicCardsSize++;
-			return true;
-		}
+void Deck::AddMagicCard(const MagicCard& card) {
+	if (magicCardsCount == 20) {
+		std::cout << "The magic cards deck is full!\n";
+		return;
 	}
-	return false;
+
+	magicCards[magicCardsCount] = card;
+	magicCardsCount++;
 }
 
-bool Deck::addMonsterCardToDeck(const MonsterCard& monsterCard) {
-	for (size_t i = 0; i < MAX_DECK_SIZE / 2; i++)
-	{
-		if (!monsterCardUsedPositions[i])
-		{
-			monsterCards[i] = monsterCard;
-			monsterCardUsedPositions[i] = true;
-			monsterCardsSize++;
-			return true;
-		}
+void Deck::AddMonsterCard(const char* name, int attackPoints, int defensePoints) {
+	if (monsterCardsCount == 20) {
+		std::cout << "The monster cards deck is full!\n";
+		return;
 	}
-	return false;
+
+	monsterCards[monsterCardsCount] = MonsterCard(name, attackPoints, defensePoints);
+	monsterCardsCount++;
 }
 
-bool Deck::addMagicCardToDeckAtIndex(const MagicCard& magicCard, const int index) {
-	if (index >=  MAX_DECK_SIZE / 2)
-		return false;
+void Deck::AddMonsterCard(const MonsterCard& card) {
+	if (monsterCardsCount == 20) {
+		std::cout << "The monster cards deck is full!\n";
+		return;
+	}
 
-	if (!magicCardUsedPositions[index])
-		magicCardsSize++;
-
-	magicCards[index] = magicCard;
-	magicCardUsedPositions[index] = true;
-
-	return true;
+	monsterCards[monsterCardsCount] = card;
+	monsterCardsCount++;
 }
 
-bool Deck::addMonsterCardToDeckAtIndex(const MonsterCard& monsterCard, const int index) {
-	if (index >= MAX_DECK_SIZE / 2)
-		return false;
-
-	if (!monsterCardUsedPositions[index])
-		monsterCardsSize++;
-
-	monsterCards[index] = monsterCard;
-	monsterCardUsedPositions[index] = true;
-
-	return true;
+void Deck::ChangeMagicCard(int index, const char* name, const char* effect, type cardType) {
+	if (index > 20) {
+		std::cout << "The cards in the deck cannot exceed 20!\n";
+		return;
+	}
+	if (index > magicCardsCount) {
+		magicCards[magicCardsCount] = MagicCard(name, effect, cardType);
+		magicCardsCount++;
+	}
+	magicCards[index - 1] = MagicCard(name, effect, cardType);
 }
 
-void Deck::info() const
-{
-	std::cout << "Monster Cards: " << monsterCardsSize << std::endl;
-	std::cout << "Magic Cards: " << magicCardsSize << std::endl;
-	std::cout << "Deck size: " << monsterCardsSize + magicCardsSize << std::endl;
+void Deck::ChangeMagicCard(int index, const MagicCard& card) {
+	if (index > 20) {
+		std::cout << "The cards in the deck cannot exceed 20!\n";
+		return;
+	}
+	if (index > magicCardsCount) {
+		magicCards[magicCardsCount] = card;
+		magicCardsCount++;
+	}
+	magicCards[index - 1] = card;
+}
+
+void Deck::ChangeMonsterCard(int index, const char* name, int attackPoints, int defensePoints) {
+	if (index > 20) {
+		std::cout << "The cards in the deck cannot exceed 20!\n";
+		return;
+	}
+	if (index > monsterCardsCount) {
+		monsterCards[monsterCardsCount] = MonsterCard(name, attackPoints, defensePoints);
+		monsterCardsCount++;
+	}
+	monsterCards[index - 1] = MonsterCard(name, attackPoints, defensePoints);
+}
+
+void Deck::ChangeMonsterCard(int index, const MonsterCard& card) {
+	if (index > 20) {
+		std::cout << "The cards in the deck cannot exceed 20!\n";
+		return;
+	}
+	if (index > monsterCardsCount) {
+		monsterCards[monsterCardsCount] = card;
+		monsterCardsCount++;
+	}
+	monsterCards[index - 1] = card;
+}
+
+void Deck::RemoveMagicCard(int index) {
+	if (index > magicCardsCount) {
+		std::cout << "There is no magic card at the given position\n";
+		return;
+	}
+	for (int i = index - 1; i < magicCardsCount - 1; i++) {
+		magicCards[i] = magicCards[i + 1];
+	}
+	magicCardsCount--;
+}
+
+void Deck::RemoveMonsterCard(int index) {
+	if (index > monsterCardsCount) {
+		std::cout << "There is no monster card at the given position\n";
+		return;
+	}
+	for (int i = index - 1; i < monsterCardsCount - 1; i++) {
+		monsterCards[i] = monsterCards[i + 1];
+	}
+	monsterCardsCount--;
 }

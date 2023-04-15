@@ -1,84 +1,81 @@
 #include "Duelist.h"
 #include <cstring>
-#pragma warning (disable: 4996)
+#pragma warning(disable: 4996)
 
-Duelist::Duelist(){
-	name = new char[1];
-	name[0] = '\0';
-}
-
-Duelist::Duelist(const char* name, const Deck& deck){
-	this->name = new char[strlen(name) + 1];
-	strcpy(this->name, name);
+Duelist::Duelist(const char* name, const Deck& deck) {
+	SetName(name);
 	this->deck = deck;
 }
 
-Duelist::Duelist(const Duelist & other) {
-	copy(other);
+Duelist::Duelist(const Duelist& other) {
+	copyFrom(other);
 }
 
-Duelist& Duelist::operator=(const Duelist& other){
-	if(this != &other)
-	{
+Duelist& Duelist::operator=(const Duelist& other) {
+	if (this != &other) {
 		free();
-		copy(other);
+		copyFrom(other);
 	}
-
 	return *this;
 }
 
-Duelist::~Duelist(){
+Duelist::~Duelist() {
 	free();
 }
 
-void Duelist::copy(const Duelist& other){
-	name = new char[strlen(other.name) + 1];
-	strcpy(name, other.name);
-	deck = other.deck;
-}
-
-void Duelist::free(){
-	delete[] name; 
-}
-
-void Duelist::setName(const char* name)
-{
-	delete[] this->name;
+void Duelist::SetName(const char* name) {
+	if (name == nullptr)
+		return;
 	this->name = new char[strlen(name) + 1];
 	strcpy(this->name, name);
 }
-void Duelist::setDeck(const Deck& deck)
-{
-	this->deck = deck;
+
+void Duelist::AddMagicCardInDeck(const char* name, const char* effect, type cardType) {
+	deck.AddMagicCard(name, effect, cardType);
 }
 
-const char* Duelist::getName() const{
-	return name;
+void Duelist::AddMagicCardInDeck(const MagicCard& card) {
+	deck.AddMagicCard(card);
 }
 
-Deck Duelist::getDeck() const{
-	return deck;
+void Duelist::AddMonsterCardInDeck(const char* name, int attackPoints, int defensePoints) {
+	deck.AddMonsterCard(name, attackPoints, defensePoints);
 }
 
-bool Duelist::addMonsterCard(const MonsterCard& monsterCard){
-	return deck.addMonsterCardToDeck(monsterCard);
+void Duelist::AddMonsterCardInDeck(const MonsterCard& card) {
+	deck.AddMonsterCard(card);
 }
 
-bool Duelist::addMagicCard(const MagicCard& magicCard){
-	return deck.addMagicCardToDeck(magicCard);
+void Duelist::ChangeMagicCardInDeck(int index, const char* name, const char* effect, type cardType) {
+	deck.ChangeMagicCard(index, name, effect, cardType);
 }
 
-bool Duelist::changeMonsterCardAtIndex(const MonsterCard& monsterCard,const int index){
-	return deck.addMonsterCardToDeckAtIndex(monsterCard,index);
+void Duelist::ChangeMagicCardInDeck(int index, const MagicCard& card){
+	deck.ChangeMagicCard(index, card);
 }
 
-bool Duelist::changeMagicCardAtIndex(const MagicCard& magicCard, const int index){
-	return deck.addMagicCardToDeckAtIndex(magicCard,index);
+void Duelist::ChangeMonsterCardInDeck(int index, const char* name, int attackPoints, int defensePoints) {
+	deck.ChangeMonsterCard(index, name, attackPoints, defensePoints);
 }
 
-void Duelist::display() const
-{
-	std::cout << "Name: " << name << std::endl;
-	std::cout << "Deck info: " << std::endl;
-	this->deck.info();
+void Duelist::ChangeMonsterCardInDeck(int index, const MonsterCard& card){
+	deck.ChangeMonsterCard(index, card);
+}
+
+void Duelist::RemoveMagicCardFromDeck(int index){
+	deck.RemoveMagicCard(index);
+}
+
+void Duelist::RemoveMonsterCardFromDeck(int index){
+	deck.RemoveMonsterCard(index);
+}
+
+void Duelist::copyFrom(const Duelist& other) {
+	SetName(other.name);
+	this->deck = other.deck;
+}
+
+void Duelist::free() {
+	delete[] name;
+	name = nullptr;
 }

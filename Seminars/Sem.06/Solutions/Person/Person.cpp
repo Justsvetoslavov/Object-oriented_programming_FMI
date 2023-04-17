@@ -35,7 +35,7 @@ int Person::getAge() const {
 void Person::setName(const char* name) {
 	if (name == nullptr || this->name == name) {
 		return;
-    }
+    	}
 	
 	delete[] this->name;
 	size_t nameLen = strlen(name);

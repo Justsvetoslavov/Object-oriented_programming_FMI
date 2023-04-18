@@ -8,4 +8,4 @@
 - [Тема 5](https://github.com/Justsvetoslavov/Object-oriented_programming_FMI/tree/master/Seminars/Sem.05) : Разделна компилация. Препроцесор. Композиция и агрегация. Копиращ конструктор и оператор за присвоявяне (=)
 - [Тема 6](https://github.com/Justsvetoslavov/Object-oriented_programming_FMI/tree/master/Seminars/Sem.06) : Динамична памет в класовете. Голямата четворка (Rule of four).
 - [Тема 7](https://github.com/Justsvetoslavov/Object-oriented_programming_FMI/tree/master/Seminars/Sem.07) : Предефиниране на оператори. Приятелски класове и функции.
-- [Тема 8](https://github.com/Justsvetoslavov/Object-oriented_programming_FMI_2021-2022/tree/main/Sem.08) :  Композиция и агрегация в ООП. Масиви от обекти. has-a взаимоотношения.
+- [Тема 8](https://github.com/Justsvetoslavov/Object-oriented_programming_FMI/tree/master/Seminars/Sem.08) :  Композиция и агрегация в ООП. Масиви от обекти. has-a взаимоотношения.

@@ -33,6 +33,7 @@ public:
 	friend bool operator>(const String& lhs, const String& rhs);
 
 	friend std::ostream& operator<<(std::ostream& os, const String& string);
+	friend std::ostream& operator>>(std::istream& is, const String& string);
 private:
 	void CopyFrom(const String& other);
 	void Free();

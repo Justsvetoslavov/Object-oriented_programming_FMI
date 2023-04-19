@@ -1,5 +1,7 @@
 #pragma once
+#include <iostream>
 #include <cstring>
+
 
 class String
 {
@@ -23,7 +25,7 @@ public:
 	bool empty() const;
 	void clear();
 	const char* c_str() const;
-	String append(const String& string) const;
+	String append(const String& lhs, const String& rhs) ;
 	bool compare(const char* data1) const;
 
 	friend String operator+(const String& lhs, const String& rhs);
@@ -35,3 +37,4 @@ private:
 	void CopyFrom(const String& other);
 	void Free();
 };
+

@@ -1,4 +1,4 @@
-#include "Header.h"
+#include "String.h"
 #include <iostream>
 #pragma warning (disable : 4996)
 
@@ -40,6 +40,8 @@ String::~String()
 
 char& String::operator[](size_t index)
 {
+    if (index > strlen(data))
+        return data[0];
     return data[index];
 }
 
@@ -92,16 +94,9 @@ const char* String::c_str() const
 {
     return data;
 }
-String String::append(const String& string) const
+String String::append(const String& lhs, const String& rhs)
 {
-    String result;
-    result.data = new char[length() + string.length() + 1];
-    strcpy(result.data, data);
-    strcpy(result.data + length(), string.data);
-    delete[] data;
-    data = result.data;
-
-    return 
+    return lhs + rhs;
 }
 bool String::compare(const char* data1) const
 {
@@ -109,11 +104,8 @@ bool String::compare(const char* data1) const
 }
 String operator+(const String& lhs, const String& rhs)
 {
-    String temp;
-    temp.data = new char[strlen(lhs.data) + strlen(rhs.data) + 1];
-    strcpy(temp.data, lhs.data);
-    strcpy(temp.data + strlen(lhs.data), rhs.data);
-    temp.data[strlen(lhs.data) + strlen(rhs.data)] = '\0';
+    String temp(lhs);
+    temp += rhs;
     return temp;
 }
 
@@ -131,7 +123,6 @@ void String::CopyFrom(const String& other)
 {
     data = new char[strlen(other.data) + 1];
     strcpy(data, other.data);
-    data[strlen(other.data)] = '\0';
 }
 
 std::ostream& operator<<(std::ostream& os, const String& string)
@@ -140,9 +131,23 @@ std::ostream& operator<<(std::ostream& os, const String& string)
     return os;
 }
 
+std::istream& operator>>(std::istream& is, String& string) {
+    char c;
+    size_t index = 0;
+    while (is.get(c)) {
+        if (c == '\n') {
+            break;
+        }
+        string[index] = c;
+        index++;
+    }
+    return is;
+}
+
 void String::Free()
 {
     delete[] data;
+    this->data = nullptr;
 }
 
 int main()
@@ -155,6 +160,7 @@ int main()
     cout << str3 << endl;
 
     str3 = "World";
+    str3 += str2;
     cout << str3 << endl;
 
     str3 += "!!";
@@ -175,9 +181,9 @@ int main()
     char c = str2[1];
     cout << c;
 
-    
+
     String str4("Hello, world!");
-    cout << str4.append("!!!") << endl;
+    cout << str4.append("Hello", "!!!") << endl;
     cout << str4.compare("1234") << endl;
     cout << str4.c_str() << endl;
     cout << str4.empty() << endl;

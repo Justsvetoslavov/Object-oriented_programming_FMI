@@ -2,59 +2,52 @@
 
 ## Член-функции.
 Член-функциите са функции, които работят с член-данните на обекта от дадена структура.
- ```c++
-struct Point
-{
+```c++
+struct Point {
 	int x;
 	int y;
 };
 
-bool IsInFirstQuadrant(const Point& p)
-{
+bool IsInFirstQuadrant(const Point& p) {
 	return p.x >= 0 && p.y >= 0;
 }
 
-int main()
-{
+int main() {
 	Point p1 = {3, 4};
 	Point p2 = {-9, 8};
 	std::cout << IsInFirstQuadrant(p1) << std::endl;
 	std::cout << IsInFirstQuadrant(p2) << std::endl;
 }
- ```
+```
  
 Може функцията да бъде член-функция:
- ```c++
-struct Point
-{
+```c++
+struct Point {
 	int x, y;
 
-	bool IsInFirstQuadrant() const
-	{
+	bool IsInFirstQuadrant() const {
 		return x >= 0 && y >= 0;
 	}
 	
 };
 
-int main()
-{
+int main() {
 	Point p1 = {3, 4};
 	Point p2 = {-9, 8};
 	std::cout << p1.IsInFirstQuadrant() << std::endl;
 	std::cout << p2.IsInFirstQuadrant() << std::endl;
 }
- ```
-#  
+```
+  
 **Член-функциите**:
  - Работят с член-данните на класа.
- -  Извикват се с обект на класа
+ - Извикват се с обект на класа
  - Компилаторът преобразува всяка **член-функция** на дадена структура в
    обикновена функция с уникално име и един допълнителен параметър
    – **константен указател към обекта**.
 
 ```c++
-bool Point::isInFirstQuadrant()
-{
+bool Point::isInFirstQuadrant() {
 	return x >= 0 && y >= 0;
 }
 ```
@@ -62,8 +55,7 @@ bool Point::isInFirstQuadrant()
 се превежда в:
 
 ```c++
-bool Point::isInFirstQuadrant(Point* const this)
-{     
+bool Point::isInFirstQuadrant(Point* const this) {     
 	//remember since this is a pointer (const) to Point we use the -> operator instead, which is equivalent to (*this).member;
 	return this->x >= 0 && this->y >= 0;
 }
@@ -129,23 +121,19 @@ void Test(obj& changeable, const obj& unchangeable) {
  ```c++
 #include <iostream>
 
-struct Test 
-{
-  Test()
-  {
+struct Test  {
+  Test() {
   	std::cout << "Object is created" << std::endl;
   }
   
- ~Test()
-  {
+  ~Test() {
   	std::cout << "Object is destroyed" << std::endl;
   }
 
   int a, b;
 };
 
-int main()
-{
+int main() {
 	{
 		Test t; // Object is created 
 			{
@@ -155,6 +143,65 @@ int main()
 	} //Object is destroyed (t)
 }
  ```
+
+**Конструктори и деструктор при влагане на обекти.**
+ 
+  ```c++
+#include <iostream>
+#include <iomanip>
+struct A {
+	A() {
+		std::cout << "Constructor(default) of A" << std::endl;
+	}
+
+	~A() {
+		std::cout << "Destructor of A" << std::endl;
+	}
+};
+
+struct B {
+	B() {
+		std::cout << "Constructor(default) of B" << std::endl;
+	}
+
+	~B() {
+		std::cout << "Destructor of B" << std::endl;
+	}
+};
+
+struct C
+{
+	C() {
+		std::cout << "Constructor(default) of C" << std::endl;
+	}
+
+	~C() {
+		std::cout << "Destructor of C" << std::endl;
+	}
+};
+
+struct X
+{
+	A first;
+	B second;
+	C obejectsArray[3];
+
+	X() { //calls Constructor(default) of A, Constructor(default) of B, Constructor(default) of C" (x3)
+		std::cout << "Constructor of X" << std::endl;
+	}
+
+	~X() {
+		std::cout << "Destructor of X" << std::endl;
+	} //calls Destructor of C" (x3) , Destructor of B, Destructor of A
+
+};
+
+int main()
+{
+	X  obj; //Constructor of X
+} // Destructor of X
+```
+
 ## Капсулация (encapsulation).
 **Капсулацията** (известно още като "скриване на информация") е един от основните принципи в ООП. Тя налага разбиването на един клас на интерфейс и имплементация. <br />
 Интерфейсът представлява набор от операции, които потребителят може да изпълнява свободно по начин, който не "бърка" в имплементацията. <br />
@@ -179,45 +226,38 @@ int main()
 ```c++
 #include <iostream>
 
-struct Student 
-{
+struct Student {
 private:
 	int grade;
 	int age;
 public:
-	Student(int grade, int age)
-	{
+	Student(int grade, int age) {
 		setGrade(grade);
 		setAge(age);
 	}
 
-	int getGrade() const
-	{
+	int getGrade() const {
 		return grade;
 	}
 
-	int getAge() const
-	{
+	int getAge() const {
 		return age;
 	}
 
-	void setGrade(int grade)
-	{
+	void setGrade(int grade) {
 		if(grade >= 2 && grade <= 6) {
 			this->grade = grade;
 		}
 	}
 
-	void setAge(int age) 
-	{
+	void setAge(int age) {
 		if(age >= 0) {
 			this->age = age;
 		}
 	}
 };
 
-int main()
-{
+int main() {
 	{
 		Test t; // Object is created 
 		{
@@ -225,6 +265,24 @@ int main()
 		} // Object is destroyed (t2)
 
 	} //Object is destroyed (t)
+}
+
+```
+### Mutable (пример)
+Спецификатора mutable е приложен само в С++. Той позволява на член на обект да предефинира константността. Така mutable член на const обект не е const и може да бъде изменян.
+ ```c++
+struct Test {
+private:
+	mutable int n;
+public:
+	void f() const {
+		n++;
+	}
+};
+
+int main() {
+	const Test t;
+	t.f();
 }
 ```
 

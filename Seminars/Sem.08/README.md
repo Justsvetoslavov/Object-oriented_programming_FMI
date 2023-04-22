@@ -7,14 +7,12 @@
 
 #### Пример 1
 ```c++
-class A
-{
+class A {
  .
  .
  .
 }
-class B
-{
+class B {
 	 int n;
 	 A obj;
 }
@@ -23,15 +21,14 @@ class B
 
 #### Пример 2
 ```c++
-class A
-{
+class A {
 	A(int a, int b)
  .
  .
  .
 }
-class B
-{
+
+class B {
 	B() : obj(1, 2)
 	{}
 	
@@ -46,17 +43,15 @@ class B
 ```c++
 class B;
 
-class A
-{
-	void copyFrom(const A& other)
-	{
+class A {
+	void CopyFrom(const A& other) {
 		arr = new int[other.size];
 		for (size_t i = 0; i < other.size; i++)
 			arr[i] = other.arr[i];
 		size = other.size;
 	}
-	void free()
-	{
+
+	void Free() {
 		delete[] arr;
 	}
 
@@ -65,52 +60,48 @@ public:
 	int* arr; //dynamic array
 	size_t size; 
   
-	A(int n) : size(n)
-	{
+	A(int n) : size(n) {
 		arr = new int[n];
 	}
-	A(const A& other) : nestedObject(other.objTest), size(other.size)
-	{
-		copyFrom(other);
-	}
-	A& operator=(const A& other)
-	{
-		nestedObject= other.nestedObject;
-		size = other.size;
 
-		if (this != &other)
-		{
+	A(const A& other) : nestedObject(other.objTest), size(other.size) {
+		CopyFrom(other);
+	}
+
+	const A& operator=(const A& other) {
+		if (this != &other) {
+			nestedObject = other.nestedObject;
 			free();
 			copyFrom(other);
 		}
 		return *this;
 	}
 
-	~A()
-	{
+	~A() {
 		free();
 	}
 };
- ```
+```
+
 **ВАЖНО**: Деструкторите на член-данните **НЕ** трябва да се извикват експлицитно в деструктора на класа.
 
 ## Масиви от обекти
 #### Статичен масив от обекти
+
 ```c++
 class A;
-int main()
-{
+int main() {
 	A arr[5]; //5 def. constr.
 } //5 destr
- ```
+```
+
 Създава **статичен** масив с 5 обекта от тип A. На всеки от тях се е извикал конструктора по подразбиране.
 Масивът ще се изтрие, когато приключи функцията. <br/>
 
 #### Статичен масив от указатели към обекти
 ```c++
 class A;
-int main()
-{
+int main() {
 	A* arr[5]; //5 empty pointers.
 	
 	arr[0] = new A();
@@ -119,27 +110,28 @@ int main()
 	delete arr[0];
 	delete arr[2];
 }
- ```
+```
+
 Създава **статичен** масив с 5 указателя . Само на 2 от тези указатели присвояваме обекти, които са заделени в динамичната памет.
 Масивът ще се изтрие, когато приключи функцията. <br/> 
 
 #### Динамичен масив от обекти
 ```c++
 class A;
-int main()
-{
+int main() {
 	A* arr = new A[5]; //5 def constr.
 	delete[] arr; //5 destr
 } 
- ```
+```
+
 Създава **динамичен** масив с 5 обекта от тип A. На всеки от тях се е извикал конструктора по подразбиране.
 Масивът ще се изтрие (и ще се изтрият обектите), когато се извика delete[] върху него.
 
 #### Динамичен масив от указатели към обекти
 ```c++
 class A;
-int main()
-{
+
+int main() {
 	A** arr = new A*[5]; //5 empty pointers.
 	
 	arr[0] = new A(); //def constr. 
@@ -150,6 +142,7 @@ int main()
 	
 	delete[] arr;
 }
- ```
+```
+
 Създава **динамичен** масив с 5 указателя . Само на 2 от тези указатели присвояваме обекти, които са заделени в динамичната памет.
 Масивът ще се изтрие (и ще се изтрият обектите), когато се извика delete[] върху него.

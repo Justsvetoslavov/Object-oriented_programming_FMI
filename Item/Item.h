@@ -6,6 +6,10 @@ class Item {
     int amount;
     int price;
 
+    void copyItem(const Item& item);
+
+    void free();
+
 public:
 
     Item();
@@ -20,6 +24,8 @@ public:
 
     bool getAmount() const;
 
+    void delItem();
+
     double getPrice() const;
 
     void setName(const char* name);
@@ -28,11 +34,7 @@ public:
 
     void setPrice(const int price);
 
-    void copyItem(const Item& item);
-
     Item& operator=(const Item& item);
-
-    void delItem();
 
     void save(std::fstream& file) const;
 };

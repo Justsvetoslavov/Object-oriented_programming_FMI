@@ -6,6 +6,9 @@ class Monster {
     unsigned int damage;
     unsigned int hp;
 
+    void copyFrom(const Monster& monster);
+    void free();
+
 public:
 
     Monster();
@@ -17,4 +20,6 @@ public:
     Monster& operator=(const Monster& monster);
 
     void delMonster();
+
+    Monster(const Monster& monster);
 };

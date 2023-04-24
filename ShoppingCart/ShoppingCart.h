@@ -9,6 +9,10 @@ class ShoppingCart {
 public:
     ShoppingCart();
 
+    ShoppingCart(const ShoppingCart& cart);
+
+    ShoppingCart& operator=(const ShoppingCart& cart);
+
     ~ShoppingCart();
 
     void addItem(const Item &item);
@@ -36,4 +40,8 @@ private:
     void addSpace();
 
     int findPos(const char* name) const;
+
+    void free();
+
+    void copyFrom(const ShoppingCart& cart);
 };

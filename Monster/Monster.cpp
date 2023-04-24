@@ -14,23 +14,37 @@ Monster::Monster(const char *name, const unsigned int enemies, const unsigned in
     this->hp = defenders;
 }
 
+Monster::Monster(const Monster &monster) {
+    copyFrom(monster);
+}
+
 Monster::~Monster() {
-    delete[] name;
+    free();
 }
 
 Monster &Monster::operator=(const Monster& monster) {
-    delete[] name;
-    name = new char[strlen(monster.name) + 1];
-    strcpy(this->name, monster.name);
-    this->hp = monster.hp;
-    this->damage = monster.damage;
+    if (this != &monster) {
+        free();
+        copyFrom(monster);
+    }
     return *this;
 }
 
 void Monster::delMonster() {
-    delete[] name;
+    free();
     name = new char[1];
     name[0] = '\0';
+}
+
+void Monster::free() {
+    delete[] name;
     hp = 0;
     damage = 0;
+}
+
+void Monster::copyFrom(const Monster &monster) {
+    name = new char[strlen(monster.name) + 1];
+    strcpy(name, monster.name);
+    hp = monster.hp;
+    damage = monster.damage;
 }

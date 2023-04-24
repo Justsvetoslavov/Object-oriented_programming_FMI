@@ -1,7 +1,3 @@
-//
-// Created by grade on 29.3.2023 г..
-//
-
 #include "Magic.h"
 
 Magic::Magic(const char *name, const char *effect, Type type) {

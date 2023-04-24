@@ -7,7 +7,7 @@ ShoppingCart::ShoppingCart() {
 }
 
 ShoppingCart::~ShoppingCart() {
-    delete[] items;
+    free();
 }
 
 void ShoppingCart::addItem(const Item &item) {
@@ -83,13 +83,11 @@ void ShoppingCart::mySwap(Item &item1, Item &item2) {
 }
 
 void ShoppingCart::addSpace() {
-    Item *copyItems = new Item[size];
+    Item *newItems = new Item[size * 2];
     for (int i = 0; i < size; ++i)
-        copyItems[i] = items[i];
+        newItems[i] = items[i];
     delete[] items;
-    items = new Item[size * 2];
-    for (int i = 0; i < size; ++i)
-        items[i] = copyItems[i];
+    items = newItems;
     size *= 2;
 }
 
@@ -100,4 +98,29 @@ int ShoppingCart::findPos(const char* name) const {
         }
     }
     return -1;
+}
+
+void ShoppingCart::free() {
+    delete[] items;
+    size = count = 0;
+}
+
+void ShoppingCart::copyFrom(const ShoppingCart &cart) {
+    count = cart.count;
+    size = cart.size;
+    items = new Item[size];
+    for (int i = 0; i < count; ++i)
+        items[i] = cart.items[i];
+}
+
+ShoppingCart &ShoppingCart::operator=(const ShoppingCart &cart) {
+    if (this != &cart) {
+        free();
+        copyFrom(cart);
+    }
+    return *this;
+}
+
+ShoppingCart::ShoppingCart(const ShoppingCart &cart) {
+    copyFrom(cart);
 }

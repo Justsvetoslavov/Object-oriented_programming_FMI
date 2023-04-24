@@ -19,7 +19,7 @@ Item::Item(const Item& item) {
 }
 
 Item::~Item() {
-    delItem();
+    free();
 }
 
 const char* Item::getName() const {
@@ -35,7 +35,7 @@ double Item::getPrice() const {
 }
 
 void Item::setName(const char* name) {
-    delItem();
+    delete[] name;
     this->name = new char[strlen(name) + 1];
     strcpy(this->name, name);
 }
@@ -57,18 +57,23 @@ void Item::copyItem(const Item& item) {
 
 Item &Item::operator=(const Item &item) {
     if (this != &item) {
-        delItem();
+        free();
         copyItem(item);
     }
     return *this;
 }
 
 void Item::delItem() {
-    price = -1;
-    amount = false;
-    delete[] name;
+    name = new char[1];
+    name[0] = '\0';
 }
 
 void Item::save(std::fstream &file) const {
     file << name << ',' << amount << ',' << getPrice() << std::endl;
+}
+
+void Item::free() {
+    price = -1;
+    amount = false;
+    delete[] name;
 }

@@ -4,16 +4,18 @@ class Duelist {
     char* name;
     Deck deck;
 
+    void free();
+    void copyFrom(const Duelist& duelist);
+
 public:
 
-    Duelist() {
-        name = new char[1];
-        name[0] = '\0';
-    }
+    Duelist(const Duelist& duelist);
+
+    Duelist();
 
     Duelist(const char* name, Deck deck1);
 
-    ~Duelist() {
-        delete[] name;
-    }
+    ~Duelist();
+
+    Duelist& operator=(const Duelist& duelist);
 };

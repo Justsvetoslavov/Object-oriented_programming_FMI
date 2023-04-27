@@ -25,7 +25,7 @@ ShoppingCart::~ShoppingCart() {
 }
 
 void ShoppingCart::IncreaseItemsCount() {
-	if (itemsCount + 1 > maxItemsCount)
+	if (itemsCount + 1 >= maxItemsCount)
 		Resize();
 	itemsCount++;
 }

@@ -1,78 +1,101 @@
-#include<cstring>
 #include "Deck.h"
+#include "MagicCard.h"
+#include "MonsterCard.h"
 
-Deck::Deck() : magicCardsSize(0), monsterCardsSize(0) {
-	for (size_t i = 0; i <  MAX_DECK_SIZE / 2; i++)
+Deck::Deck() = default;
+
+Deck::Deck(const Deck& other) = default;
+
+Deck& Deck::operator=(const Deck& other) = default;
+
+Deck::~Deck() = default;
+
+const size_t Deck::monsterCardsNumber() const
+{
+	return numberOfMonsterCards;
+}
+
+const size_t Deck::magicCardsNumber() const
+{
+	return numberOfMagicCards;
+}
+
+void Deck::addMonsterCard(const MonsterCard& monsterCard)
+{
+	for (size_t i = 0; i < CARDS_NUMBER; ++i)
 	{
-		monsterCardUsedPositions[i] = magicCardUsedPositions[i] = false;
-	}
-}
-
-size_t Deck::getMagicCardsSize() const{
-	return magicCardsSize;
-}
-
-size_t Deck::getMonsterCardsSize() const{
-	return monsterCardsSize;
-}
-
-bool Deck::addMagicCardToDeck(const MagicCard& magicCard) {
-	for (size_t i = 0; i < MAX_DECK_SIZE / 2; i++)
-	{
-		if (!magicCardUsedPositions[i])
-		{
-			magicCards[i] = magicCard;
-			magicCardUsedPositions[i] = true;
-			magicCardsSize++;
-			return true;
-		}
-	}
-	return false;
-}
-
-bool Deck::addMonsterCardToDeck(const MonsterCard& monsterCard) {
-	for (size_t i = 0; i < MAX_DECK_SIZE / 2; i++)
-	{
-		if (!monsterCardUsedPositions[i])
+		if (i == numberOfMonsterCards - 1)
 		{
 			monsterCards[i] = monsterCard;
-			monsterCardUsedPositions[i] = true;
-			monsterCardsSize++;
-			return true;
+			++numberOfMonsterCards;
 		}
 	}
-	return false;
 }
 
-bool Deck::addMagicCardToDeckAtIndex(const MagicCard& magicCard, const int index) {
-	if (index >=  MAX_DECK_SIZE / 2)
-		return false;
-
-	if (!magicCardUsedPositions[index])
-		magicCardsSize++;
-
-	magicCards[index] = magicCard;
-	magicCardUsedPositions[index] = true;
-
-	return true;
-}
-
-bool Deck::addMonsterCardToDeckAtIndex(const MonsterCard& monsterCard, const int index) {
-	if (index >= MAX_DECK_SIZE / 2)
-		return false;
-
-	if (!monsterCardUsedPositions[index])
-		monsterCardsSize++;
-
-	monsterCards[index] = monsterCard;
-	monsterCardUsedPositions[index] = true;
-
-	return true;
-}
-
-void Deck::info() const
+void Deck::addMagicCard(const MagicCard& magicCard)
 {
-	std::cout << "Monster Cards: " << monsterCardsSize << std::endl;
-	std::cout << "Magic Cards: " << magicCardsSize << std::endl;
-	std::cout << "Deck size: " << monsterCardsSize + magicCardsSize << std::endl;
+	for (size_t i = 0; i < CARDS_NUMBER; ++i)
+	{
+		if (i == numberOfMagicCards - 1)
+		{
+			magicCards[i] = magicCard;
+			++numberOfMagicCards;
+		}
+	}
+}
+
+void Deck::changeMonsterCardAtIndex(const MonsterCard& monsterCard, const size_t index)
+{
+	for (size_t i = 0; i < numberOfMonsterCards; ++i)
+	{
+		if (i == index)
+		{
+			monsterCards[i] = monsterCard;
+		}
+	}
+}
+
+void Deck::changeMagicCardAtIndex(const MagicCard& magicCard, const size_t index)
+{
+	for (size_t i = 0; i < numberOfMagicCards; ++i)
+	{
+		if (i == index)
+		{
+			magicCards[i] = magicCard;
+		}
+	}
+}
+
+void Deck::removeMonsterCardAtIndex(const size_t index)
+{
+	for (size_t i = 0; i < numberOfMonsterCards; ++i)
+	{
+		if (i == index)
+		{
+			for (size_t j = i; j < numberOfMonsterCards - i; ++j)
+			{
+				monsterCards[j] = monsterCards[j + 1];
+				--numberOfMonsterCards;
+			}
+
+			i = numberOfMonsterCards;
+		}
+	}
+}
+
+void Deck::removeMagicCardAtIndex(const size_t index)
+{
+	for (size_t i = 0; i < numberOfMagicCards; ++i)
+	{
+		if (i == index)
+		{
+			for (size_t j = i; j < numberOfMagicCards - i; ++j)
+			{
+				magicCards[j] = magicCards[j + 1];
+				--numberOfMagicCards;
+			}
+
+			i = numberOfMagicCards;
+		}
+	}
 }

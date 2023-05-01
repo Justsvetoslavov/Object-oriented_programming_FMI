@@ -1,35 +1,40 @@
 #pragma once
-
-#include "MagicCard.h"
 #include "MonsterCard.h"
+#include "MagicCard.h"
 
-const short MAX_DECK_SIZE = 40;
+const int CARDS_NUMBER = 20;
 
-class Deck {
-private:
-	MagicCard magicCards[MAX_DECK_SIZE / 2];
-	MonsterCard monsterCards[MAX_DECK_SIZE / 2];
-	
-	bool monsterCardUsedPositions[MAX_DECK_SIZE / 2];
-	bool magicCardUsedPositions[MAX_DECK_SIZE / 2];
+class Deck
+{
+	MonsterCard monsterCards[CARDS_NUMBER];
+	MagicCard magicCards[CARDS_NUMBER];
 
-	size_t magicCardsSize;
-	size_t monsterCardsSize;
+	size_t numberOfMonsterCards;
+	size_t numberOfMagicCards;
+
 public:
+
 	Deck();
 
-	Deck(const Deck& deck) = default;
-	Deck& operator=(const Deck& deck) = default;
-	~Deck() = default;
+	Deck(const Deck& other);
 
-	size_t getMagicCardsSize() const;
-	size_t getMonsterCardsSize() const;
+	Deck& operator=(const Deck& other);
 
-	bool addMagicCardToDeck(const MagicCard& magicCard);
-	bool addMonsterCardToDeck(const MonsterCard& monsterdrCard);
+	~Deck();
 
-	bool addMagicCardToDeckAtIndex(const MagicCard& magicCard, const int index);
-	bool addMonsterCardToDeckAtIndex(const MonsterCard& monsterdrCard, const int index);
-	
-	void info() const;
+	const size_t monsterCardsNumber() const;
+
+	const size_t magicCardsNumber() const;
+
+	void addMonsterCard(const MonsterCard& monsterCard);
+
+	void addMagicCard(const MagicCard& magicCard);
+
+	void changeMonsterCardAtIndex(const MonsterCard& monsterCard, const size_t index);
+
+	void changeMagicCardAtIndex(const MagicCard& magicCard, const size_t index);
+
+	void removeMonsterCardAtIndex(const size_t index);
+
+	void removeMagicCardAtIndex(const size_t index);
 };

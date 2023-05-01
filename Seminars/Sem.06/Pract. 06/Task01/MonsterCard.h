@@ -1,21 +1,35 @@
 #pragma once
+#include <iostream>
+#pragma warning(disable : 4996)
 
-const short MAX_SIZE = 26;
+class MonsterCard
+{
+    char* name;
+    size_t attackPoints;
+    size_t defensePoints;
 
-class MonsterCard {
-private:
-	char name[MAX_SIZE];
-	size_t attPoints;
-	size_t defPoints;
+    void copyFrom(const MonsterCard& other);
+
+    void free();
+
 public:
-	MonsterCard();
-	MonsterCard(const char*, size_t, size_t);
 
-	MonsterCard(const MonsterCard& monsterCard) = default;
-	MonsterCard& operator=(const MonsterCard& monsterCard) = default;
-	~MonsterCard() = default;
+    MonsterCard();
 
-	size_t getAttPoints() const;
-	size_t getDefPoints() const;
-	const char* const getName() const;
+    MonsterCard(const char* name, size_t attackPoints, size_t defensePoints);
+
+    MonsterCard(const MonsterCard& other);
+
+    MonsterCard& operator=(const MonsterCard& other);
+
+    ~MonsterCard();
+
+    const char* getName() const;
+
+    const size_t getAttackPoints() const;
+
+    const size_t getDefensePoints() const;
+
+    void setName(char* name);
+
 };

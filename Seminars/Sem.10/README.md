@@ -242,7 +242,7 @@ public:
 		    delete[] this->str;  //deallocate storage for this->str since we are overwriting it
 		    str = rhs.str;		 //steal the pointer from the rhs object and assign it to this->str
 		    rhs.str = nullptr;   //null out the rhs pointer
-        }
+        	}
 		return *this;		 //return the current object by reference to allow chain assignment
 	}
 };

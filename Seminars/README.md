@@ -11,3 +11,4 @@
 - [Тема 8](https://github.com/Justsvetoslavov/Object-oriented_programming_FMI/tree/master/Seminars/Sem.08) :  Композиция и агрегация в ООП. Масиви от обекти. has-a взаимоотношения.
 - [Teма 9](https://github.com/Justsvetoslavov/Object-oriented_programming_FMI/tree/master/Seminars/Sem.09) : Move семантики
 - [Teма 10](https://github.com/Justsvetoslavov/Object-oriented_programming_FMI/tree/master/Seminars/Sem.10) : Наследяване. is-a взаимоотношения.
+- [Тема 11](https://github.com/Justsvetoslavov/Object-oriented_programming_FMI/tree/master/Seminars/Sem.11) : Статично и динамично свързване. Виртуални функции. Полиморфизъм. Абстрактни класове.

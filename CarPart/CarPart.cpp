@@ -52,23 +52,3 @@ std::ostream& operator<<(std::ostream& os, const CarPart& part) {
     os  << '(' << part.id << ')' << " by " << part.manufacture << " - " << part.description;
     return os;
 }
-
-void CarPart::moveFrom(CarPart &&part) {
-    id = part.id;
-    manufacture = part.manufacture;
-    part.manufacture = nullptr;
-    description = part.description;
-    part.description = nullptr;
-}
-
-CarPart::CarPart(CarPart &&part) {
-    moveFrom(std::move(part));
-}
-
-CarPart &CarPart::operator=(CarPart &&part) {
-    if (this != &part) {
-        free();
-        moveFrom(std::move(part));
-    }
-    return *this;
-}

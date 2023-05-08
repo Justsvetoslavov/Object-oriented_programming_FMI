@@ -4,7 +4,7 @@
 class Battery: protected CarPart{
 
     unsigned short capacity = 0;
-    char* id;
+    char* id = new char[1];
 
     void copyFrom(const Battery& other);
     void free();

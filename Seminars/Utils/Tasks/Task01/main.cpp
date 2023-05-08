@@ -2,7 +2,7 @@
 #include <fstream>
 #include "./Server/Server.h"
 
-void main() {
+int main() {
 	Server s;
 	s.readFromFile();
 	//s.addUser("Test", "Test");

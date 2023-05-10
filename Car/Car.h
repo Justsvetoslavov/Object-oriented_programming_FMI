@@ -1,3 +1,4 @@
+#pragma once
 #include "../CarPart/Battery/Battery.h"
 #include "../CarPart/Engine/Engine.h"
 #include "../CarPart/Reservoir/Reservoir.h"
@@ -12,9 +13,10 @@ class Car {
     double weight;
 
 public:
-    Car(const Reservoir& reservoir, const Engine& engine, const Tires tires[],
+    Car(const Reservoir& reservoir, const Engine& engine, const Tires *tires,
         const Battery& battery, double mileage, double weight);
     const Reservoir& getReservoir() const;
     void drive(double km);
     friend Car* dragRace(Car* car1, Car* car2);
+    unsigned int getHorsePower() const;
 };

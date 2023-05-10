@@ -1,3 +1,4 @@
+#pragma once
 #include "../CarPart.h"
 
 class Engine : CarPart {
@@ -5,4 +6,5 @@ class Engine : CarPart {
 public:
     Engine() = default;
     Engine(int id, const char *name, const char *description, unsigned int horsePower);
+    unsigned int getHorsePower() const;
 };

@@ -1,3 +1,4 @@
+#pragma once
 #include "../CarPart.h"
 
 class Reservoir : CarPart {

@@ -32,7 +32,8 @@ void PC::setHeadphone(const Device &headphone) {
     PC::headphone = headphone;
 }
 
-PC::PC(const char *mouse, const char *keyboard, const char *microphone, const char *headphone) {
+PC::PC(double power, const char *model, int consumption, int ram, const char *mouse, const char *keyboard,
+       const char *microphone, const char *headphone) : Computer(power, model, consumption, ram) {
     this->mouse.setModel(mouse);
     this->keyboard.setModel(keyboard);
     this->microphone.setModel(microphone);
@@ -40,7 +41,8 @@ PC::PC(const char *mouse, const char *keyboard, const char *microphone, const ch
 }
 
 void PC::GetType() const {
-    std::cout << "It's PC";
+    std::cout << "It's PC\n";
+    getInfo();
 }
 
 void PC::GetDevices() const {

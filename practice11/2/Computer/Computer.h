@@ -14,8 +14,13 @@ class Computer {
 
 public:
     Computer();
+
     Computer(const Computer& comp);
+
     Computer& operator=(const Computer& comp);
+
+    Computer(double power, const char* model, int consumption, int ram);
+
     virtual ~Computer();
 
     double getPower() const;
@@ -37,4 +42,6 @@ public:
     virtual void GetType() const = 0;
 
     virtual void GetDevices() const = 0;
+
+    void getInfo() const;
 };

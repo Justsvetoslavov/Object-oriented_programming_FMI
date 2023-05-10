@@ -2,7 +2,7 @@
 #include "../Computer.h"
 #include "../../Device/Device.h"
 
-class PC : Computer{
+class PC : public Computer{
     Device mouse;
     Device keyboard;
     Device microphone;
@@ -12,7 +12,8 @@ public:
 
     PC() = default;
 
-    PC(const char* mouse, const char* keyboard, const char* microphone, const char* headphone);
+    PC(double power, const char* model, int consumption, int ram,
+       const char* mouse, const char* keyboard, const char* microphone, const char* headphone);
 
     const Device &getMouse() const;
 

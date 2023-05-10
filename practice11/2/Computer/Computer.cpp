@@ -1,7 +1,3 @@
-//
-// Created by grade on 5/10/2023.
-//
-
 #include "Computer.h"
 
 double Computer::getPower() const {
@@ -74,3 +70,12 @@ void Computer::copyFrom(const Computer &comp) {
     ram = comp.ram;
 }
 
+Computer::Computer(double power, const char *model, int consumption, int ram) : power(power), consumption(consumption), ram(ram) {
+    this->model = new char[strlen(model) + 1];
+    strcpy(this->model, model);
+}
+
+void Computer::getInfo() const {
+    std::cout << "Power: " << power << "\nModel: " << model
+       << "\nConsumption: " << consumption << "\nRAM: " << ram << std::endl;
+}

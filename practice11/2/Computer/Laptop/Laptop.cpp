@@ -25,7 +25,8 @@ void Laptop::setMonitor(const Device &monitor) {
     Laptop::monitor = monitor;
 }
 
-Laptop::Laptop(const char *mousePad, const char *keyboard, const char *monitor) {
+Laptop::Laptop(double power, const char* model, int consumption, int ram,
+               const char *mousePad, const char *keyboard, const char *monitor) : Computer(power, model, consumption, ram) {
     this->mousePad.setModel(mousePad);
     this->keyboard.setModel(keyboard);
     this->monitor.setModel(monitor);
@@ -33,6 +34,7 @@ Laptop::Laptop(const char *mousePad, const char *keyboard, const char *monitor) 
 
 void Laptop::GetType() const {
     std::cout << "It's laptop\n";
+    getInfo();
 }
 
 void Laptop::GetDevices() const {

@@ -1,7 +1,3 @@
-//
-// Created by grade on 5/10/2023.
-//
-
 #include "GamingConsole.h"
 
 const Device &GamingConsole::getGamepad() const {
@@ -20,13 +16,15 @@ void GamingConsole::setMonitor(const Device &monitor) {
     GamingConsole::monitor = monitor;
 }
 
-GamingConsole::GamingConsole(const char *joystick, const char *display) {
+GamingConsole::GamingConsole(double power, const char *model, int consumption, int ram
+                             , const char *joystick, const char *display) : Computer(power, model, consumption, ram) {
     gamepad.setModel(joystick);
     monitor.setModel(display);
 }
 
 void GamingConsole::GetType() const {
     std::cout << "It's Gaming Console\n";
+    getInfo();
 }
 
 void GamingConsole::GetDevices() const {

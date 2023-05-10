@@ -2,7 +2,7 @@
 #include "../Computer.h"
 #include "../../Device/Device.h"
 
-class Laptop : Computer {
+class Laptop : public Computer {
     Device mousePad;
     Device keyboard;
     Device monitor;
@@ -10,7 +10,8 @@ public:
 
     Laptop() = default;
 
-    Laptop(const char* mousePad, const char* keyboard, const char* monitor);
+    Laptop(double power, const char* model, int consumption, int ram,
+            const char* mousePad, const char* keyboard, const char* monitor);
 
     const Device &getMousePad() const;
 

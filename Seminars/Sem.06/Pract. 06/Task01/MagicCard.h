@@ -1,29 +1,31 @@
 #pragma once
+#include <cstring>
 
-const short NAME_MAX_SIZE = 26;
-const short EFFECT_MAX_SIZE = 101;
+const int NAME_MAX_SIZE = 25;
+const int EFFECT_MAX_SIZE = 100;
 
-enum class MagicCardType {
+enum class Type {
 	trap,
 	buff,
-	spell,
-	unknown
+	spell
 };
 
-class MagicCard {
+class MagicCard
+{
 private:
-	char name[NAME_MAX_SIZE];
-	char effect[EFFECT_MAX_SIZE];
-	MagicCardType type;
+	char name[NAME_MAX_SIZE + 1];
+	char effect[EFFECT_MAX_SIZE + 1];
+	Type type;
 public:
-	MagicCard();
-	MagicCard(const char* name, const char* effect, const MagicCardType type);
+	MagicCard() = default;
+	MagicCard(const char* name, const char* effect, const Type type);
 
-	MagicCard(const MagicCard& magicCard) = default;
-	MagicCard& operator=(const MagicCard& magicCard) = default;
-	~MagicCard() = default;
+	void SetName(const char* name);
+	void SetEffect(const char* effect);
+	void SetType(const Type type);
 
-	const char* const getName() const;
-	const char* const getEffect() const;
-	MagicCardType getMagicCardType() const;
+	const char* GetName() const;
+	const char* GetEffect() const;
+	const Type& GetType() const;
 };
+ 

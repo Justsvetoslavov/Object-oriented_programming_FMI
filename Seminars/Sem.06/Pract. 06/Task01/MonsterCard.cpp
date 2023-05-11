@@ -1,27 +1,74 @@
 #include "MonsterCard.h"
 #include <cstring>
-#pragma warning(disable : 4996)
+#pragma warning (disable : 4996)
 
-MonsterCard::MonsterCard() {
-	name[0] = '\0';
-	attPoints = 0;
-	defPoints = 0;
-}
+MonsterCard::MonsterCard() : MonsterCard("", 0, 0) {}
 
-MonsterCard::MonsterCard(const char* name, size_t attPoints, size_t defPoints) {
+void MonsterCard::CopyName(const char* name) {
+	this->name = new char[strlen(name) + 1];
 	strcpy(this->name, name);
-	this->attPoints = attPoints;
-	this->defPoints = defPoints;
 }
 
-const char* const MonsterCard::getName() const {
-	return name;
+void MonsterCard::CopyFrom(const MonsterCard& other) {
+	CopyName(other.name);
+	this->attackPoints = other.attackPoints;
+	this->defensePoints = other.defensePoints;
+}
+void MonsterCard::Free() {
+	delete[] this->name;
+	this->name = nullptr;
+	this->attackPoints = 0;
+	this->defensePoints = 0;
 }
 
-size_t MonsterCard::getAttPoints() const{
-	return attPoints;
+MonsterCard::MonsterCard(const char* name, unsigned attackPoints, unsigned defensePoints) {
+	SetName(name);
+	SetAttackPoints(attackPoints);
+	SetDefensePoints(defensePoints);
+}
+MonsterCard::MonsterCard(const MonsterCard& other) {
+	CopyFrom(other);
+}
+MonsterCard& MonsterCard::operator=(const MonsterCard& other) {
+	if (this != &other) {
+		Free();
+		CopyFrom(other);
+	}
+
+	return (*this);
+}
+MonsterCard::~MonsterCard() {
+	Free();
 }
 
-size_t MonsterCard::getDefPoints() const{
-	return defPoints;
+const char* MonsterCard::GetName() const {
+	return this->name;
+}
+unsigned MonsterCard::GetAttackPoints() const {
+	return this->attackPoints;
+}
+unsigned MonsterCard::GetDefensePoints() const {
+	return this->defensePoints;
+}
+
+void MonsterCard::SetName(const char* name) {
+	if (!name)
+		return;
+
+	if (this->name)
+		delete[] name;
+
+	CopyName(name);
+}
+void MonsterCard::SetAttackPoints(unsigned attackPoints) {
+	if (attackPoints < 0)
+		return;
+
+	this->attackPoints = attackPoints;
+}
+void MonsterCard::SetDefensePoints(unsigned defensePoints) {
+	if (defensePoints < 0)
+		return;
+
+	this->defensePoints = defensePoints;
 }

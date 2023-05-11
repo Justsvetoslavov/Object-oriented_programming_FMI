@@ -1,30 +1,31 @@
 #pragma once
 #include "Deck.h"
 
-class Duelist {
+class Duelist
+{
+private:
 	char* name;
 	Deck deck;
 public:
-	Duelist();
-	Duelist(const char*, const Deck&);
-	Duelist(const Duelist&);
-	Duelist& operator=(const Duelist&);
+	Duelist(const char* name);
+	Duelist(const Duelist& other);
+	Duelist& operator=(const Duelist& other);
 	~Duelist();
-	
-	void setName(const char*);
-	void setDeck(const Deck&);
 
-	const char* getName() const;
-	Deck getDeck() const;
+	void SetName(const char* name);
 
-	bool addMonsterCard(const MonsterCard& monsterCard);
-	bool addMagicCard(const MagicCard& MagicCard);
+	void SetDeck(const Deck& deck);
+	size_t GetMonsterCardsCountInDeck() const;
+	size_t GetMagicCardsCountInDeck() const;
+	bool AddMonsterCardInDeck(const MonsterCard& mc);
+	bool AddMagicCardInDeck(const MagicCard& mc);
+	bool ChangeMonsterInDeck(size_t id, const MonsterCard& mc);
+	bool ChangeMagicInDeck(size_t id, const MagicCard& mc);
+	bool RemoveMonsterInDeck(size_t id);
+	bool RemoveMagicInDeck(size_t id);
 
-	bool changeMonsterCardAtIndex(const MonsterCard& monsterCard, const int index);
-	bool changeMagicCardAtIndex(const MagicCard& magicCard, const int index);
-	
-	void display() const;
 private:
-	void copy(const Duelist& duelist);
-	void free();
+	void CopyName(const char* name);
+	void CopyFrom(const Duelist& duelist);
+	void Free();
 };

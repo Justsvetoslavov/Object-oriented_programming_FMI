@@ -1,25 +1,34 @@
 #include "MagicCard.h"
 #include <cstring>
-#pragma warning(disable : 4996)
-
-MagicCard::MagicCard() {
-	name[0] = '\0';
-	effect[0] = '\0';
-	type = MagicCardType::unknown;
+#pragma warning (disable : 4996)
+MagicCard::MagicCard(const char* name, const char* effect, const Type type) {
+	SetName(name);
+	SetEffect(effect);
+	SetType(type);
 }
 
-MagicCard::MagicCard(const char* name, const char* effect, const MagicCardType type){
+const char* MagicCard::GetName() const {
+	return this->name;
+}
+const char* MagicCard::GetEffect() const {
+	return this->effect;
+}
+const Type& MagicCard::GetType() const {
+	return this->type;
+}
+
+void MagicCard::SetName(const char* name) {
+	if (!name)
+		return;
+
 	strcpy(this->name, name);
-	strcpy(this->effect, effect);
-	this->type = type;
 }
+void MagicCard::SetEffect(const char* effect) {
+	if (!effect)
+		return;
 
-const char* const MagicCard::getName() const {
-	return name;
+	strcpy(this->effect, effect);
 }
-const char* const MagicCard::getEffect() const {
-	return effect;
-}
-MagicCardType MagicCard::getMagicCardType() const{
-	return type;
+void MagicCard::SetType(const Type type) {
+	this->type = type;
 }

@@ -1,21 +1,29 @@
 #pragma once
-
-const short MAX_SIZE = 26;
-
-class MonsterCard {
+class MonsterCard
+{
 private:
-	char name[MAX_SIZE];
-	size_t attPoints;
-	size_t defPoints;
+	char* name = nullptr;
+	unsigned attackPoints = 0;
+	unsigned defensePoints = 0;
 public:
 	MonsterCard();
-	MonsterCard(const char*, size_t, size_t);
+	MonsterCard(const char* name, unsigned attackPoints, unsigned defensePoints);
+	MonsterCard(const MonsterCard& other);
+	MonsterCard& operator=(const MonsterCard& other);
+	~MonsterCard();
 
-	MonsterCard(const MonsterCard& monsterCard) = default;
-	MonsterCard& operator=(const MonsterCard& monsterCard) = default;
-	~MonsterCard() = default;
+	const char* GetName() const;
+	unsigned GetAttackPoints() const;
+	unsigned GetDefensePoints() const;
 
-	size_t getAttPoints() const;
-	size_t getDefPoints() const;
-	const char* const getName() const;
+	void SetName(const char* name);
+	void SetAttackPoints(unsigned attackPoints);
+	void SetDefensePoints(unsigned defensePoints);
+
+private:
+	void CopyFrom(const MonsterCard& other);
+	void CopyName(const char* name);
+	void Free();
 };
+
+ 

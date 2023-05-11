@@ -1,162 +1,164 @@
 #include "ShoppingCart.h"
 #include <iostream>
-#include <cstring>
 #include <fstream>
 
-ShoppingCart::ShoppingCart() {
-	maxItemsCount = 5;
-	items = new Item[maxItemsCount];
-}
-
-ShoppingCart::ShoppingCart(const ShoppingCart& cart) {
-	copyFrom(cart);
-}
-
-ShoppingCart& ShoppingCart::operator=(const ShoppingCart& cart) {
-	if (this != &cart) {
-		free();
-		copyFrom(cart);
+void ShoppingCart::CopyFrom(const ShoppingCart& other) {
+	this->items = new Item[other.itemsCount];
+	for (size_t i = 0; i < other.itemsCount; i++)
+	{
+		this->items[i] = other.items[i];
 	}
-	return *this;
+	this->itemsCount = other.itemsCount;
+	this->cartCapacity = other.cartCapacity;
 }
-
+void ShoppingCart::Free() {
+	delete[] items;
+	this->items = nullptr;
+	this->itemsCount = 0;
+	this->cartCapacity = 0;
+}
+ShoppingCart::ShoppingCart()  {
+	this->cartCapacity = 9;
+	this->items = new Item[cartCapacity];
+	this->itemsCount = 0;
+}
+ShoppingCart::ShoppingCart(const ShoppingCart& other) {
+	CopyFrom(other);
+}
+ShoppingCart& ShoppingCart::operator=(const ShoppingCart& other) {
+	if (this != &other) {
+		Free();
+		CopyFrom(other);
+	}
+	return (*this);
+}
 ShoppingCart::~ShoppingCart() {
-	free();
+	Free();
 }
-
-void ShoppingCart::IncreaseItemsCount() {
-	if (itemsCount + 1 >= maxItemsCount)
-		Resize();
-	itemsCount++;
-}
-
-bool ShoppingCart::AddItem(const Item& item) {
-	for (int i = 0; i < itemsCount; i++) {
-		if (!strcmp(items[i].GetName(), item.GetName())) 
-			return false;
+void ShoppingCart::Resize(size_t newCapacity){
+	Item* temp = this->items;
+	this->items = new Item[newCapacity];
+	for (size_t i = 0; i < itemsCount; i++)
+	{
+		temp[i] = this->items[i];
 	}
-
-	items[itemsCount] = item;
-	IncreaseItemsCount();
-	return true;
+	this->cartCapacity = newCapacity;
+	delete[] temp;
 }
-
-bool ShoppingCart::RemoveItem(const char* name) {
-	if (name == nullptr)
-		return false;
-
-	for (int i = 0; i < itemsCount; i++) {
-		if (!strcmp(items[i].GetName(), name)) {
-			for (int j = i; j < itemsCount - 1; j++) 
-				items[j] = items[j + 1];
-			itemsCount--;
-			return true;
-		}
-	}
-
-	return false;
-}
-
-int ShoppingCart::ItemsCount() const {
-	return itemsCount;
-}
-
-bool ShoppingCart::Exists(const char* name) const {
-	return (Find(name) != -1) ? true : false;
-}
-
-bool ShoppingCart::IsEmpty() const {
-	return (itemsCount > 0) ? false : true;
-}
-
-double ShoppingCart::GetPriceOf(const char* name) const {
-	int index = Find(name);
-
-	if (index == -1) 
-		return 0.0;
-
-	return items[index].GetPrice();
-}
-
-double ShoppingCart::TotalPrice() const {
-	double totalPrice = 0;
-
-	for (int i = 0; i < itemsCount; i++) {
-		totalPrice += items[i].GetPrice();
-	}
-
-	return totalPrice;
-}
-
-void ShoppingCart::SortByName() {
-	for (int i = 0; i < itemsCount - 1; i++) {
-		int minIndex = i;
-		for (int j = i + 1; j < itemsCount; j++) {
-			if (strcmp(items[minIndex].GetName(), items[j].GetName()) > 0) {
-				minIndex = j;
-			}
-		}
-		if (minIndex != i) {
-			Item temp(items[minIndex]);
-			items[minIndex] = items[i];
-			items[i] = temp;
-		}
-	}
-}
-
-bool ShoppingCart::Save(const char* fileName) const {
-	if (fileName == nullptr)
-		return false;
-
-	std::ofstream file(fileName);
-	if (!file.is_open())
-		return false;
-
-	for (int i = 0; i < itemsCount; i++) {
-		file << items[i].GetName() << ',';
-		file << items[i].GetAvailability() << ',';
-		file << items[i].GetPrice() << std::endl;
-	}
-
-	file.close();
-	return true;
-}
-
-int ShoppingCart::Find(const char* name) const {
-	if (name == nullptr)
+size_t ShoppingCart::Find(const char* name) const {
+	if (!name)
 		return -1;
 
-	for (int i = 0; i < itemsCount; i++) {
-		if (!strcmp(items[i].GetName(), name))
+	for (size_t i = 0; i < itemsCount; i++)
+	{
+		if (!strcmp(this->items[i].GetName(), name))
 			return i;
 	}
 
 	return -1;
 }
 
-void ShoppingCart::copyFrom(const ShoppingCart& cart) {
-	if (cart.items == nullptr)
-		return;
-	items = new Item[cart.maxItemsCount];
-	itemsCount = cart.itemsCount;
-	maxItemsCount = cart.maxItemsCount;
-	for (int i = 0; i < itemsCount; i++) {
-		items[i] = cart.items[i];
+bool ShoppingCart::AddItem(const Item& item) {
+	if (this->itemsCount >= this->cartCapacity)
+		this->Resize(this->cartCapacity * 2);
+
+	size_t itemIdWithSameName = Find(item.GetName());
+
+	if (itemIdWithSameName != -1)
+		return false;
+
+	this->items[itemsCount++] = item;
+	return true;
+}
+
+bool ShoppingCart::RemoveItem(const char* name) {
+	if (!name)
+		return false;
+
+	size_t itemId = Find(name);
+
+	if (itemId == -1)
+		return false;
+
+	for (size_t i = itemId; i < itemsCount - 1; i++)
+	{
+		this->items[i] = this->items[i + 1];
+	}
+
+	this->itemsCount--;
+	return true;
+}
+
+size_t ShoppingCart::ItemsCount() const {
+	return this->itemsCount;
+}
+
+bool ShoppingCart::Exists(const char* name) const {
+	if (!name)
+		return false;
+
+	if (Find(name) == -1)
+		return false;
+
+	return true;
+}
+
+bool ShoppingCart::IsEmpty() const {
+	return this->itemsCount == 0;
+}
+
+double ShoppingCart::GetPriceOf(const char* name) const {
+	if (!name)
+		return 0.0;
+
+	size_t itemId = Find(name);
+	if (itemId == -1)
+		return 0.0;
+
+	return this->items[itemId].GetPrice();
+}
+
+double ShoppingCart::TotalPrice() const {
+	if (this->itemsCount == 0)
+		return 0.0;
+
+	double sum = 0;
+	for (size_t i = 0; i < itemsCount; i++)
+	{
+		sum += this->items[i].GetPrice();
+	}
+
+	return sum;
+}
+
+void ShoppingCart::SortByName() {
+	for (size_t i = 0; i < this->itemsCount - 1; i++)
+	{
+		int minId = i;
+		for (size_t j = i + 1; j < this->itemsCount; j++)
+		{
+			if (strcmp(this->items[minId].GetName(), this->items[j].GetName()) > 0)
+				minId = j;
+		}
+		if (minId != i)
+			std::swap(this->items[minId], this->items[i]);
 	}
 }
 
-void ShoppingCart::free() {
-	delete[] items;
-	items = nullptr;
-	maxItemsCount = 0;
-	itemsCount = 0;
-}
+bool ShoppingCart::Save(const char* name) const {
+	std::ofstream writeFile(name, std::ios::out);
 
-void ShoppingCart::Resize() {
-	maxItemsCount *= 2;
-	Item* newItems = new Item[maxItemsCount];
-	for (int i = 0; i < itemsCount; i++)
-		newItems[i] = items[i];
-	delete[] items;
-	items = newItems;
+	if (!writeFile.is_open()) {
+		std::cout << "Error opening file!" << std::endl;
+		return false;
+	}
+
+	writeFile << "Name, Amount, Price" << std::endl;
+
+	for (size_t i = 0; i < itemsCount; i++)
+	{
+		this->items[i].SaveItem(writeFile);
+	}
+	writeFile.close();
+	return true;
 }

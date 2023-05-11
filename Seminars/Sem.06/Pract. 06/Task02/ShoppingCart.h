@@ -1,34 +1,32 @@
 #pragma once
 #include "Item.h"
-#include <iostream>
 
-class ShoppingCart{
+class ShoppingCart
+{
 private:
 	Item* items = nullptr;
-	int itemsCount = 0;
-	int maxItemsCount = 0;
+	size_t itemsCount = 0;
+	size_t cartCapacity = 0;
 
 public:
 	ShoppingCart();
-	ShoppingCart(const ShoppingCart& cart);
-	ShoppingCart& operator=(const ShoppingCart& cart);
+	ShoppingCart(const ShoppingCart& other);
+	ShoppingCart& operator=(const ShoppingCart& other);
 	~ShoppingCart();
 
 	bool AddItem(const Item& item);
 	bool RemoveItem(const char* name);
-	int ItemsCount() const;
+	size_t ItemsCount() const;
 	bool Exists(const char* name) const;
 	bool IsEmpty() const;
 	double GetPriceOf(const char* name) const;
 	double TotalPrice() const;
 	void SortByName();
-	bool Save(const char* fileName) const;
+	bool Save(const char* name) const;
 
 private:
-	void copyFrom(const ShoppingCart& cart);
-	void free();
-	void IncreaseItemsCount();
-	void Resize();
-	int Find(const char* name) const;
+	void CopyFrom(const ShoppingCart& other);
+	void Free();
+	void Resize(size_t newCapacity);
+	size_t Find(const char* name) const;
 };
-

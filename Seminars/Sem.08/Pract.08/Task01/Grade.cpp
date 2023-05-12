@@ -1,45 +1,31 @@
 #include "Grade.h"
+#include <sstream>
 
-#include <cstring>
-#pragma warning(disable : 4996)
-
-
-bool Grade::isValidGrade() const {
-	return (_value >= 2 && _value <= 6) && _task.length() != 0 && _teacher != nullptr;
+Grade::Grade(int grade) {
+	SetGrade(grade);
 }
 
-void  Grade::setValue(double value) {
-	if (value >= 2 && value <= 6) {
-		_value = value;
-	}
+Grade::Grade(const char* task, int grade, const Teacher* teacher) {
+	this->task = task;
+	SetGrade(grade);
+	this->teacher = teacher;
 }
 
-void  Grade::setTask(const char* task) {
-	_task = MyString(task);
+const String& Grade::GetTask() const{
+	return task;
 }
 
-void Grade::setTeacher(const Teacher* teacher){
-	_teacher = teacher;
+int Grade::GetGrade() const{
+	return grade;
 }
 
-double Grade::getValue() const {
-	return _value;
+const char* Grade::GetTeacher() const{
+	return teacher->GetName();
 }
 
-const MyString& Grade::getTask() const {
-	return _task;
-}
+void Grade::SetGrade(int grade) {
+	if (grade < 2 || grade > 6)
+		throw std::invalid_argument("Grade must be between 2 and 6!");
 
-const Teacher* Grade::getTeacher() const{
-	return _teacher;
-}
-
-Grade::Grade(double value, const char* task, const Teacher* teacher) {
-	setValue(value);
-	setTask(task);
-	setTeacher(teacher);
-}
-
-std::ostream& operator<<(std::ostream& os, const Grade& grade) {
-	return os << grade._task << " " << *grade._teacher << " " << grade._value;
+	this->grade = grade;
 }

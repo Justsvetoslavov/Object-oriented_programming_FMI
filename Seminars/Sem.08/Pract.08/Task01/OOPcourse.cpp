@@ -1,200 +1,164 @@
-#include "OOPcourse.h"
+#include "OOPCourse.h"
+#include <sstream>
 
-void OOPcourse::copyFrom(const OOPcourse& other) {
-	_numberOfStudents = other._numberOfStudents;
-	_arraySize = other._arraySize;
+OOPCourse::OOPCourse(const Teacher* teacher, const Teacher* as1, const Teacher* as2, const Teacher* as3) {
+	if (teacher == nullptr)
+		throw std::invalid_argument("The name doesn't exist");
 
-	_students = new Student * [_arraySize] {nullptr};
-
-	for (int i = 0; i < _numberOfStudents; i++) {
-		_students[i] = other._students[i];
-	}
-
-	_lecturer = other._lecturer;
-
-	for (int i = 0; i < MAX_NUMBER_OF_ASSISTANTS; i++) {
-		_assistants[i] = other._assistants[i];
-	}
-
-}
-
-void OOPcourse::free() {
-	// Delete the array of pointers, but not the actual students 
-	delete[] _students;
-	_students = nullptr;
-
-	_lecturer = nullptr;
-	_numberOfStudents = _arraySize = 0;
-
-	for (int i = 0; i < MAX_NUMBER_OF_ASSISTANTS; i++) {
-		_assistants[i] = nullptr;
-	}
-}
-
-void OOPcourse::resize() {
-	unsigned newArraySize = _arraySize * 2;
-	Student** newStudentArray = new Student * [newArraySize] {nullptr};
-
-	for (int i = 0; i < _arraySize; i++) {
-		newStudentArray[i] = _students[i];
-	}
-
-	delete[] _students;
-	_students = newStudentArray;
-	_arraySize = newArraySize;
-}
-
-OOPcourse::OOPcourse() {
-	_students = new Student * [_arraySize];
-}
-
-OOPcourse::OOPcourse(const OOPcourse& other) {
-	copyFrom(other);
-}
-
-OOPcourse& OOPcourse::operator=(const OOPcourse& other) {
-	if (this != &other) {
-		free();
-		copyFrom(other);
-	}
-
-	return *this;
-}
-
-OOPcourse::~OOPcourse() {
-	free();
-}
-
-void OOPcourse::addStudent(Student& st) {
-	if (_numberOfStudents >= _arraySize) {
-		resize();
-	}
-
-	_students[_numberOfStudents++] = &st;
-}
-
-void OOPcourse::addGrade(unsigned FN, const char* taskName, double gradeValue, const Teacher& teacher) {
-	int foundInd = find(FN);
-	if (foundInd < 0) {
-		return;
-	}
-
-	_students[foundInd]->addGrade(gradeValue, taskName, teacher);
-}
-
-double OOPcourse::getAverageForCourse() const {
-	double res = 0;
-	unsigned totalNumberOfGrades = 0;
-
-	for (int i = 0; i < _numberOfStudents; i++) {
-
-		for (int j = 0; j < _students[i]->getNumberOfGrades(); j++) {
-			res += _students[i]->getGradeValueAtIndex(j);
-		}
-
-		totalNumberOfGrades += _students[i]->getNumberOfGrades();
-	}
-
-	if (totalNumberOfGrades == 0) {
-		return 0;
-	}
-
-	return res / totalNumberOfGrades;
-}
-
-bool OOPcourse::removeStudent(unsigned FN) {
-	int foundInd = find(FN);
-	if (foundInd < 0) {
-		return false;
-	}
-
-	_students[foundInd] = _students[_numberOfStudents - 1];
-	_numberOfStudents--;
-}
-
-double OOPcourse::getAverageGradePerTask(const char* taskName) const {
-	double res = 0;
-	unsigned numberOfStudents = 0;
-
-	for (int i = 0; i < _numberOfStudents; i++) {
-		int taskInd = _students[i]->getTaskIndex(taskName);
-
-		if (taskInd >= 0) {
-			res += _students[i]->getGradeValueAtIndex(taskInd);
-			numberOfStudents++;
-		}
-	}
-
-	if (numberOfStudents == 0) {
-		return 0;
-	}
-
-	return res / numberOfStudents;
-}
-
-double OOPcourse::getAverageFromTeacher(const Teacher& teacher) const {
-	double res = 0;
-	unsigned numberOfStudents = 0;
-
-	for (int i = 0; i < _numberOfStudents; i++) {
-		const Grade* currentGrades = _students[i]->getGrades();
-
-		for (int j = 0; j < _students[i]->getNumberOfGrades(); j++){
-			if (currentGrades[j].getTeacher() == &teacher) {
-				res += currentGrades[j].getValue();
-				numberOfStudents++;
+	teachers[0] = *teacher;
+	teachersCount = 1;
+	if (as1 != nullptr) {
+		teachers[1] = *as1;
+		teachersCount++;
+		if (as2 != nullptr) {
+			teachers[2] = *as2;
+			teachersCount++;
+			if (as3 != nullptr) {
+				teachers[3] = *as3;
+				teachersCount++;
 			}
 		}
 	}
 
-	if (numberOfStudents == 0) {
-		return 0;
-	}
-
-	return res / numberOfStudents;
+	students = new Student * [studentsCapacity];
 }
 
-int OOPcourse::find(unsigned FN) {
-	for (int i = 0; i < _numberOfStudents; i++) {
-		if (_students[i]->getFN() == FN) {
+OOPCourse::OOPCourse(const OOPCourse& other){
+	copyFrom(other);
+}
+
+OOPCourse& OOPCourse::operator=(const OOPCourse& other){
+	if (this != &other) {
+		free();
+		copyFrom(other);
+	}
+	return *this;
+}
+
+OOPCourse::~OOPCourse(){
+	free();
+}
+
+void OOPCourse::AddStudent(const char* name, int facultyNumber) {
+	if (studentsCount >= studentsCapacity)
+		Resize();
+
+	students[studentsCount++] = new Student(name, facultyNumber);
+}
+
+void OOPCourse::AddGrade(int facNum, const char* task, int grade, const Teacher* teacher){
+	int index = IndexOfStudent(facNum);
+	if (index == -1)
+		throw std::invalid_argument("There is no student with such faculty number!");
+
+	students[index]->SetGrade(task, grade, teacher);
+}
+
+void OOPCourse::ChangeGrade(int facNum, const char* task, int newGrade, const Teacher* teacher){
+	int index = IndexOfStudent(facNum);
+	if (index == -1)
+		throw std::invalid_argument("There is no student with such faculty number!");
+
+	students[index]->ChangeGrade(task, newGrade, teacher);
+}
+
+int OOPCourse::IndexOfStudent(int facNum) const{
+	for (int i = 0; i < studentsCount; i++) {
+		if (students[i]->GetFN() == facNum)
 			return i;
-		}
 	}
 	return -1;
 }
 
-OOPcourse::OOPcourse(Teacher* lecturer, Teacher* a1, Teacher* a2, Teacher* a3) : OOPcourse(){
-	_lecturer = lecturer;
-	_assistants[0] = a1;
-	_assistants[1] = a2;
-	_assistants[2] = a3;
+double OOPCourse::GetAverageForCourse() const{
+	double average = 0;
+	int count = 0;
+	for (int i = 0; i < studentsCount; i++) {
+		for (int j = 0; j < students[i]->gradesCount; j++) {
+			average += students[i]->grades[j].GetGrade();
+			count++;
+		}
+	}
+	if (count == 0)
+		return 0;
+	return average / count;
 }
 
-std::ostream& operator << (std::ostream& os, const OOPcourse& c) {
-	for (int i = 0; i < c._numberOfStudents; i++) {
-		os << *c._students[i];
+void OOPCourse::RemoveStudent(int facNum){
+	int index = IndexOfStudent(facNum);
+	if (index == -1)
+		throw std::invalid_argument("There is no such student!\n");
+
+	delete students[index];
+	for (int i = index; i < studentsCount - 1; i++) {
+		students[i] = students[i + 1];
 	}
-
-	os << *c._lecturer << std::endl;
-
-	for (int i = 0; i < MAX_NUMBER_OF_ASSISTANTS && c._assistants[i] != nullptr; i++) {
-		os << *c._assistants[i] << ' ';
-	}
-	os << std::endl;
-
-	return os;
+	studentsCount--;
 }
 
-void OOPcourse::changeGrade(unsigned FN, const char* taskName, double newGrade) {
-	int studentInd = find(FN);
-	if (studentInd < 0) {
-		return;
+double OOPCourse::GetAverageGradePerTask(const char* task) const{
+	double average = 0;
+	int count = 0;
+	for (int i = 0; i < studentsCount; i++) {
+		for (int j = 0; j < students[i]->gradesCount; j++) {
+			if (!strcmp(students[i]->grades[j].GetTask().c_str(), task)) {
+				average += students[i]->grades[j].GetGrade();
+				count++;
+			}
+		}
 	}
+	if (count == 0)
+		return 0;
+	return average / count;
+}
 
-	int taskInd = _students[studentInd]->getTaskIndex(taskName);
-	if (taskInd < 0) {
-		return;
+double OOPCourse::GetAverageFromTeacher(const char* teacher) const{
+	if (!teacher)
+		throw std::invalid_argument("Teacher name doesn't exist!");
+
+	double average = 0;
+	int count = 0;
+	for (int i = 0; i < studentsCount; i++) {
+		for (int j = 0; j < students[i]->gradesCount; j++) {
+			if (!strcmp(students[i]->grades[j].GetTeacher(), teacher)) {
+				average += students[i]->grades[j].GetGrade();
+				count++;
+			}
+		}
 	}
+	if (count == 0)
+		return 0;
+	return average / count;
+}
 
-	_students[studentInd]->setGradeAtIndex(taskInd, newGrade);
+void OOPCourse::free(){
+	for (int i = 0; i < studentsCount; i++)
+		delete students[i];
+	delete[] students;
+	students = nullptr;
+	studentsCapacity = 2;
+	studentsCount = teachersCount = 0;
+}
+
+void OOPCourse::copyFrom(const OOPCourse& other){
+	for (int i = 0; i < other.teachersCount; i++) {
+		teachers[i] = other.teachers[i];
+	}
+	teachersCount = other.teachersCount;
+	students = new Student*[other.studentsCapacity];
+	for (int i = 0; i < other.studentsCount; i++) {
+		students[i] = new Student(*other.students[i]);
+	}
+	studentsCapacity = other.studentsCapacity;
+	studentsCount = other.studentsCount;
+}
+
+void OOPCourse::Resize() {
+	studentsCapacity *= 2;
+	Student** temp = new Student * [studentsCapacity];
+	for (int i = 0; i < studentsCount; i++) {
+		temp[i] = students[i];
+	}
+	delete[] students;
+	students = temp;
 }

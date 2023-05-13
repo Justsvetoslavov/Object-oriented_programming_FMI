@@ -10,4 +10,5 @@ Tires::Tires(int id, const char *name, const char *description, int width, int p
 
 std::ostream &operator<<(std::ostream& os, const Tires& tires) {
     os << (CarPart)tires << " - " << tires.width << '/' << tires.profile << 'R' << tires.diameter;
+    return os;
 }

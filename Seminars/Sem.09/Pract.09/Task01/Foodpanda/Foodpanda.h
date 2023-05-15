@@ -17,9 +17,10 @@ public:
 	Foodpanda(Foodpanda&& other) noexcept;
 	Foodpanda& operator=(Foodpanda&& other) noexcept;
 
-	void AddRestaurant();
-	void AddNewProductsInRestaurants();
-	void ReadOrder();
+	void AddRestaurant(const MyString& restaurantName, size_t restaurantCapacity);
+	void AddNewProductsInRestaurant(const MyString& restaurantName, 
+		const MyString* products, size_t productsCount);
+	void ReadOrder(const MyString& restaurantName, const Order& order);
 private:
 	void CopyFrom(const Foodpanda& other);
 	void MoveFrom(Foodpanda&& other);

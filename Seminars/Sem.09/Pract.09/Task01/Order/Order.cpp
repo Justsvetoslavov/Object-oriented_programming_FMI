@@ -1,10 +1,14 @@
 #include "Order.h"
 
 void Order::CopyFrom(const Order& other) {
-	this->products = new Product[other.productsCount];
 	this->productsCount = other.productsCount;
 	this->products = other.products;
 	this->restaurantName = other.restaurantName;
+	this->products = new Product[other.productsCapacity];
+	for (size_t i = 0; i < productsCount; i++)
+	{
+		this->products[i] = other.products[i];
+	}
 }
 void Order::MoveFrom(Order&& other) {
 	this->products = other.products;
@@ -62,11 +66,11 @@ void Order::Resize(size_t newCapacity) {
 	delete[] temp;
 }
 
-void Order::AddProduct(const char* order) {
+void Order::AddProduct(const char* productName) {
 	if (this->productsCount >= this->productsCapacity)
 		Resize(this->productsCapacity * 2);
 
-	this->products[productsCount++] = Product(order);
+	this->products[productsCount++] = Product(productName);
 }
 
 void Order::ReceiveOrder(const Order& order) {

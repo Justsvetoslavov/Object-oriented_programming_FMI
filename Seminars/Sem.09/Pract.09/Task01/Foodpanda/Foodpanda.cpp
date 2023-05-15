@@ -10,6 +10,8 @@ void Foodpanda::CopyFrom(const Foodpanda& other) {
 }
 void Foodpanda::MoveFrom(Foodpanda&& other) {
 	this->restaurants = other.restaurants;
+	this->restaurantsCapacity = other.restaurantsCapacity;
+	this->restaurantsCount = other.restaurantsCount;
 	other.restaurants = nullptr;
 	other.restaurantsCapacity = 0;
 	other.restaurantsCount = 0;
@@ -60,63 +62,33 @@ void Foodpanda::Resize(size_t newCapacity) {
 	delete[] temp;
 }
 
-void Foodpanda::AddRestaurant() {
-	std::cout << "Enter restaurant name: ";
-	MyString restName;
-	std::cin >> restName;
-	size_t restCapacity;
-	std::cout << "Enter restaurant capacity: ";
-	std::cin >> restCapacity;
+void Foodpanda::AddRestaurant(const MyString& restaurantName, size_t restaurantCapacity) {
 	if (this->restaurantsCount >= this->restaurantsCapacity)
 		Resize(this->restaurantsCapacity * 2);
-	Restaurant rest(restName.c_str(), restCapacity);
-	this->restaurants[restaurantsCount++] = rest;
+
+	Restaurant rest(restaurantName.c_str(), restaurantCapacity);
+	this->restaurants[restaurantsCount++] = std::move(rest);
 }
 
-void Foodpanda::ReadOrder() {
-	std::cout << "Enter restaurant name: ";
-	MyString restaurantName;
-	std::cin >> restaurantName;
+void Foodpanda::ReadOrder(const MyString& restaurantName, const Order& newOrder) {
 	int restaurantId;
-
-	if (!ThisRestaurantExists(restaurantName.c_str(), restaurantId))
-		throw std::invalid_argument("This restaurant doesn't exist!");
-
-	std::cout << "Enter number of products in order: " << std::endl;
-	size_t orderCapacity;
-	std::cin >> orderCapacity;
-	Order newOrder(restaurantName, orderCapacity);
-	for (size_t i = 0; i < orderCapacity; i++)
-	{
-		std::cout << "Enter product for order: " << std::endl;
-		MyString productName;
-		std::cin >> productName;
-		newOrder.AddProduct(productName.c_str());
+	if (!ThisRestaurantExists(restaurantName.c_str(), restaurantId)) {
+		std::cout << "This restaurant doesn't exist!" << std::endl;
+		return;
 	}
 	this->restaurants[restaurantId].ReceiveOrder(newOrder);
 }
 
-void Foodpanda::AddNewProductsInRestaurants() {
-	std::cout << "Enter restaurant name: ";
-	MyString restaurantName;
-	std::cin >> restaurantName;
+void Foodpanda::AddNewProductsInRestaurant(const MyString& restaurantName, 
+	const MyString* products, size_t productsCount) {
 	int restaurantId;
-
 	if (!ThisRestaurantExists(restaurantName.c_str(), restaurantId))
 		throw std::invalid_argument("This restaurant doesn't exist!");
 
-	std::cout << "Enter products count: " << std::endl;
-	size_t productsCount;
-	std::cin >> productsCount;
 	for (size_t i = 0; i < productsCount; i++)
 	{
-		std::cout << "Enter product to be added in restaurant: "
-			<< this->restaurants[restaurantId].GetRestaurantName() << std::endl;
-		MyString productName;
-		std::cin >> productName;
-		this->restaurants[restaurantId].AddProduct(productName.c_str());
+		this->restaurants[restaurantId].AddProduct(products[i].c_str());
 	}
-
 }
 
 bool Foodpanda::ThisRestaurantExists(const char* restaurantName, int& id) const {

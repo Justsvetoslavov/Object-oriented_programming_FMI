@@ -19,7 +19,7 @@ public:
 	Order& operator=(Order&& other) noexcept;
 	~Order();
 
-	void AddProduct(const char* order);
+	void AddProduct(const char* productName);
 	const char* GetRestaurantName() const;
 	const Product* GetProducts() const;
 	size_t GetProductsCount() const;

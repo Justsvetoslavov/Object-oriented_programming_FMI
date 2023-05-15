@@ -62,9 +62,11 @@ void Restaurant::AddProduct(const MyString& productName) {
 }
 
 void Restaurant::MoveFrom(Restaurant&& other) {
+	this->productsCapacity = other.productsCapacity;
+	this->productsCount = other.productsCount;
 	this->products = other.products;
+	strcpy(this->name, other.name);
 	other.products = nullptr;
-
 	other.productsCount = 0;
 	other.productsCapacity = 0;
 }

@@ -60,3 +60,8 @@ int main()
 	q.dequeue(); // A
 }
  ```
+
+## Useful information
+- [std::vector](https://www.cplusplus.com/reference/vector/vector/?kw=vector)
+- [std::queue](https://www.cplusplus.com/reference/queue/queue/?kw=queue)
+- [std::queue](https://en.cppreference.com/w/cpp/container/stack)

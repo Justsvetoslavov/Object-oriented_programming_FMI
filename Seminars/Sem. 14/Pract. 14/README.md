@@ -32,3 +32,5 @@ int main()
 
 }
  ```
+ ![image](https://github.com/Justsvetoslavov/Object-oriented_programming_FMI/assets/49128895/8d393978-fb4c-4f67-b534-f0ef92fd1ae8)
+

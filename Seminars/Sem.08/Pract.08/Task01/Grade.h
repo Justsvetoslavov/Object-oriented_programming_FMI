@@ -1,28 +1,21 @@
 #pragma once
-
-#include "MyString.h"
+#include "String.h"
 #include "Teacher.h"
 
-class Grade {
-	double _value = 0;
-	MyString _task;
-	const Teacher* _teacher = nullptr;
+class Grade{
+private:
+	unsigned grade = 2;
+	String task;
+	const Teacher* teacher = nullptr;
 
-	void setTask(const char* task);
-	void setTeacher(const Teacher* teacher);
-
+	void SetGrade(int grade);
 public:
 	Grade() = default;
-	Grade(double value, const char* task, const Teacher* teacher);
+	Grade(int grade);
+	Grade(const char* task, int grade, const Teacher* teacher);
 
-	void setValue(double value);
-
-	double getValue() const;
-	const MyString& getTask() const;
-	const Teacher* getTeacher() const;
-
-	bool isValidGrade() const;
-
-	friend std::ostream& operator<<(std::ostream& os, const Grade& grade);
+	const String& GetTask() const;
+	int GetGrade() const;
+	const char* GetTeacher() const;
 };
 

@@ -1,43 +1,36 @@
 #pragma once
-
-#include "Student.h"
 #include "Teacher.h"
+#include "Student.h"
+#include "Grade.h"
 
-const int MAX_NUMBER_OF_ASSISTANTS = 3;
-const int START_ARRAY_SIZE = 2;
+const int max_Teachers_Count = 4;
 
-class OOPcourse {
-	// A student exists intependently, outside the course 
-	Student** _students = nullptr;
-
-	// One lecturer/assistant can teach multiple OOP courses 
-	Teacher* _lecturer = nullptr;
-	Teacher* _assistants[MAX_NUMBER_OF_ASSISTANTS]{ nullptr };
-	
-	unsigned _numberOfStudents = 0;
-	unsigned _arraySize = START_ARRAY_SIZE;
-
-	void copyFrom(const OOPcourse& other);
-	void free();
-	void resize();
-	int find(unsigned FN);
+class OOPCourse {
+private:
+	Teacher teachers[max_Teachers_Count];
+	unsigned teachersCount = 0;
+	Student** students = nullptr;
+	unsigned studentsCapacity = 2;
+	unsigned studentsCount = 0;
 
 public:
+	OOPCourse(const Teacher* teacher, const Teacher* as1 = nullptr, const Teacher* as2 = nullptr, const Teacher* as3 = nullptr);
+	OOPCourse(const OOPCourse& other);
+	OOPCourse& operator=(const OOPCourse& other);
+	~OOPCourse();
 
-	OOPcourse();
-	OOPcourse(Teacher* lecturer, Teacher* a1 = nullptr, Teacher* a2 = nullptr, Teacher* a3 = nullptr);
-	OOPcourse(const OOPcourse& other);
-	OOPcourse& operator=(const OOPcourse& other);
-	~OOPcourse();
+	void AddStudent(const char* name, int facultyNumber);
+	void AddGrade(int facNum, const char* task, int grade, const Teacher* teacher);
+	void ChangeGrade(int facNum, const char* task, int newGrade, const Teacher* teacher);
+	int IndexOfStudent(int facNum) const;
+	double GetAverageForCourse() const;
+	void RemoveStudent(int facNum);
+	double GetAverageGradePerTask(const char* task) const;
+	double GetAverageFromTeacher(const char* teacher) const;
 
-	void addStudent(Student& st);
-	void addGrade(unsigned FN, const char* taskName, double gradeValue, const Teacher& teacher);
-	double getAverageForCourse() const;
-	bool removeStudent(unsigned FN);
-	double getAverageGradePerTask(const char* taskName) const;
-	double getAverageFromTeacher(const Teacher& teacher) const;
-
-	void changeGrade(unsigned FN, const char* taskName, double newGrade);
-
-	friend std::ostream& operator << (std::ostream& os, const OOPcourse& c);
+private:
+	void free();
+	void copyFrom(const OOPCourse& other);
+	void Resize();
 };
+

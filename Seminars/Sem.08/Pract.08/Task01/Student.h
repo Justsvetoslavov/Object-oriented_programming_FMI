@@ -1,33 +1,26 @@
 #pragma once
-
+#include "String.h"
 #include "Grade.h"
+#include "Teacher.h"
 
-const int MAX_NUMBER_OF_GRADES = 7;
+const int max_Grades_Count = 7;
 
-class Student {
-	Grade _grades[MAX_NUMBER_OF_GRADES];
-	unsigned _numberOfGrades = 0;
-	unsigned _FN = 0;
-	MyString _name;
+class Student{
+private:
+	String name;
+	int facultyNumber;
+	Grade grades[max_Grades_Count];
+	unsigned gradesCount = 0;
+
+	void SetGrade(const char* task, int grade, const Teacher* teacher);
+	void ChangeGrade(const char* task, int grade, const Teacher* teacher);
 
 public:
 	Student() = default;
-	Student(const char* name, unsigned FN);
+	Student(const char* name, int facultyNumber);
 
-	const Grade* getGrades() const;
-	unsigned getNumberOfGrades() const;
-	unsigned getFN() const;
-	const MyString& getName() const;
+	int GetFN() const;
 
-	void setName(const char* name);
-	void setFN(unsigned FN);
-
-	int getTaskIndex(const char* task) const;
-
-	void addGrade(double value, const char* task, const Teacher& teacher);
-
-	double getGradeValueAtIndex(size_t ind) const;
-	void setGradeAtIndex(size_t ind, double newValue);
-
-	friend std::ostream& operator << (std::ostream& os, const Student& st);
+	friend class OOPCourse;
 };
+

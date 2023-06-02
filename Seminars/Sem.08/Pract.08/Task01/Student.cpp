@@ -1,83 +1,32 @@
 #include "Student.h"
+#include <sstream>
 
-#include <cstring>
-#pragma warning(disable : 4996)
+void Student::SetGrade(const char* type, int grade, const Teacher* teacher){
+	if (gradesCount >= 7)
+		throw std::out_of_range("This student has reached the maximum capacity of grades!\n");
 
-#include <iostream>
-
-Student::Student(const char* name, unsigned FN) {
-	setName(name);
-	setFN(FN);
-}
-
-const Grade* Student::getGrades() const {
-	return _grades;
-}
-
-unsigned Student::getNumberOfGrades() const {
-	return _numberOfGrades;
-}
-
-unsigned Student::getFN() const {
-	return _FN;
-}
-
-const MyString& Student::getName() const {
-	return _name;
-}
-
-void Student::setName(const char* name) {
-	_name = MyString(name);
-}
-
-void Student::setGradeAtIndex(size_t ind, double newValue) {
-	if (ind >= _numberOfGrades) {
-		return;
+	for (int i = 0; i < gradesCount; i++) {
+		if (!strcmp(grades[i].GetTask().c_str(), type))
+			throw std::exception("The student already has a grade\n");
 	}
-	_grades[ind].setValue(newValue);
+	grades[gradesCount++] = Grade(type, grade, teacher);
 }
 
-void Student::setFN(unsigned FN) {
-	_FN = FN;
-}
-
-double Student::getGradeValueAtIndex(size_t ind) const {
-	if (ind >= _numberOfGrades) {
-		return 0;
-	}
-
-	return _grades[ind].getValue();
-}
-
-int Student::getTaskIndex(const char* task) const {
-	for (int i = 0; i < _numberOfGrades; i++) {
-		if (strcmp(_grades[i].getTask().c_str(), task) == 0) {
-			return i;
+void Student::ChangeGrade(const char* type, int grade, const Teacher* teacher){
+	for (int i = 0; i < gradesCount; i++) {
+		if (!strcmp(grades[i].GetTask().c_str(), type)) {
+			grades[i] = Grade(type, grade, teacher);
+			return;
 		}
 	}
-	
-	return -1;
+	throw std::invalid_argument("There is no such type of grade!\n");
 }
 
-void Student::addGrade(double value, const char* task, const Teacher& teacher) {
-	if (_numberOfGrades >= MAX_NUMBER_OF_GRADES) {
-		return;
-	}
-
-	int gradeInd = getTaskIndex(task);
-	// If the task exists
-	if (gradeInd >= 0) {
-		return;
-	}
-
-	_grades[_numberOfGrades++] = Grade(value, task, &teacher);
+Student::Student(const char* name, int facultyNumber){
+	this->name = name;
+	this->facultyNumber = facultyNumber;
 }
 
-std::ostream& operator << (std::ostream& os, const Student& st) {
-	os << st._name << ' ' << st._FN << std::endl;
-	for (int i = 0; i < st._numberOfGrades; i++) {
-		os << st._grades[i] << std::endl;
-	}
-	os << std::endl;
-	return os;
+int Student::GetFN() const{
+	return facultyNumber;
 }

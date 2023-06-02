@@ -1,12 +1,13 @@
 #pragma once
+#include "String.h"
+class Teacher{
+private:
+	String name;
 
-#include "MyString.h"
-
-class Teacher {
-	MyString _name;
 public:
-	Teacher();
+	Teacher() = default;
 	Teacher(const char* name);
 
-	friend std::ostream& operator << (std::ostream& os, const Teacher& teacher);
+	const char* GetName() const;
 };
+

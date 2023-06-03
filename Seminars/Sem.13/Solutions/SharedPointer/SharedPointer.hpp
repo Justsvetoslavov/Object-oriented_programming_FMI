@@ -5,7 +5,6 @@ class SharedPointer {
 private:
 	T* data = nullptr;
 	size_t* counter = nullptr;
-
 public:
 	SharedPointer(T* data = nullptr);
 	SharedPointer(const SharedPointer<T>& other);
@@ -24,13 +23,11 @@ public:
 	size_t getCount() const;
 
 	explicit operator bool() const;
-
 private:
 	void copyFrom(const SharedPointer<T>& other);
 	void move(SharedPointer<T>&& other) noexcept;
 	void free();
 };
-
 
 template<typename T>
 SharedPointer<T>::SharedPointer(T* data) {

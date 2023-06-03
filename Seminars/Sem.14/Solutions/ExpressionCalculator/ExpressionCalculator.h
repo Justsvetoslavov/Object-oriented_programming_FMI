@@ -1,6 +1,6 @@
 #pragma once
-#include "MyString.h"
-#include "StringView.h"
+#include "../MyString/MyString.h"
+#include "../MyString/StringView.h"
 
 const short CHARACTERS_COUNT = 26;
 

@@ -1,5 +1,8 @@
+#pragma once
+
 #include "SharedPtr.hpp"
 #include <stdexcept>
+
 template <typename T>
 class WeakPtr
 {

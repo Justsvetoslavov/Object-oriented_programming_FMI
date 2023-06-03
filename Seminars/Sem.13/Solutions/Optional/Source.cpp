@@ -1,10 +1,7 @@
 #include <iostream>
 #include "Optional.hpp"
 
-
-
-int main()
-{
+int main() {
 	Optional<int> d; //no value
 
 	d.setData(3);
@@ -13,7 +10,7 @@ int main()
 
 	d.clear();
 	
-
 	std::cout << d.containsData();
 
+	return 0;
 }

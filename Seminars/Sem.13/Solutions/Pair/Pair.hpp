@@ -1,8 +1,7 @@
 #pragma once
 
 template<typename T, typename D>
-class Pair
-{
+class Pair {
 	T first;
 	D second;
 public:
@@ -20,24 +19,21 @@ Pair<T,D>::Pair(const T& first, const D& second) : first(first), second(second)
 {}
 
 template<typename T, typename D>
-const T& Pair<T, D>::getFirst() const
-{
+const T& Pair<T, D>::getFirst() const {
 	return first;
 }
+
 template<typename T, typename D>
-const D& Pair<T, D>::getSecond() const
-{
+const D& Pair<T, D>::getSecond() const {
 	return second;
 }
 
 template<typename T, typename D>
-void Pair<T, D>::setFirst(const T& newValue)
-{
+void Pair<T, D>::setFirst(const T& newValue) {
 	first = newValue;
 }
 
 template<typename T, typename D>
-void Pair<T, D>::setSecond(const D& newValue)
-{
+void Pair<T, D>::setSecond(const D& newValue) {
 	second = newValue;
 }

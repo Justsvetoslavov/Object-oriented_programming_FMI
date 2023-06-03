@@ -4,8 +4,7 @@
 #include <exception>
 
 template <typename T>
-class MyQueue
-{
+class MyQueue {
 	T* data;
 	size_t capacity;
 	size_t size;
@@ -20,10 +19,8 @@ class MyQueue
 	void free();
 public:
 	MyQueue();
-
 	MyQueue(const MyQueue<T>& other);
 	MyQueue<T>& operator=(const MyQueue<T>& other);
-
 	MyQueue(MyQueue<T>&& other);
 	MyQueue<T>& operator=(MyQueue<T>&& other);
 
@@ -35,12 +32,10 @@ public:
 	bool isEmpty() const;
 
 	~MyQueue();
-
 };
 
 template <typename T>
-MyQueue<T>::MyQueue()
-{
+MyQueue<T>::MyQueue() {
 	capacity = 4;
 	data = new T[capacity];
 	size = 0;
@@ -48,10 +43,10 @@ MyQueue<T>::MyQueue()
 }
 
 template <typename T>
-void MyQueue<T>::push(const T& obj)
-{
-	if (size == capacity)
+void MyQueue<T>::push(const T& obj) {
+	if (size == capacity) {
 		resize();
+	}
 
 	data[put] = obj; //operator=
 	(++put) %= capacity;
@@ -59,10 +54,10 @@ void MyQueue<T>::push(const T& obj)
 }
 
 template <typename T>
-void MyQueue<T>::push(T&& obj)
-{
-	if (size == capacity)
+void MyQueue<T>::push(T&& obj) {
+	if (size == capacity) {
 		resize();
+	}
 
 	data[put] = std::move(obj); //move operator =
 	(++put) %= capacity;
@@ -70,36 +65,32 @@ void MyQueue<T>::push(T&& obj)
 }
 
 template <typename T>
-bool MyQueue<T>::isEmpty() const
-{
+bool MyQueue<T>::isEmpty() const {
 	return size == 0;
 }
 
-
 template <typename T>
-const T& MyQueue<T>::peek() const
-{
-	if (isEmpty())
+const T& MyQueue<T>::peek() const {
+	if (isEmpty()) {
 		throw std::logic_error("Empty queue!");
+	}
 
 	return data[get];
 }
 
 template <typename T>
-void MyQueue<T>::pop()
-{
-	if (isEmpty())
+void MyQueue<T>::pop() {
+	if (isEmpty()) {
 		throw std::logic_error("Empty queue!");
+	}
 	(++get) %= capacity;
 	size--;
 }
 
 template <typename T>
-void MyQueue<T>::resize()
-{
+void MyQueue<T>::resize() {
 	T* resizedData = new T[capacity * 2];
-	for (size_t i = 0; i < size; i++)
-	{
+	for (size_t i = 0; i < size; ++i) {
 		resizedData[i] = data[get];
 		(++get) %= capacity;
 	}
@@ -110,10 +101,8 @@ void MyQueue<T>::resize()
 	put = size;
 }
 
-
 template <typename T>
-void MyQueue<T>::copyFrom(const MyQueue<T>& other)
-{
+void MyQueue<T>::copyFrom(const MyQueue<T>& other) {
 	data = new T[other.capacity];
 	for (int i = 0; i < other.capacity; i++)
 		data[i] = other.data[i];
@@ -127,8 +116,7 @@ void MyQueue<T>::copyFrom(const MyQueue<T>& other)
 }
 
 template <typename T>
-void MyQueue<T>::moveFrom(MyQueue<T>&& other)
-{
+void MyQueue<T>::moveFrom(MyQueue<T>&& other) {
 	get = other.get;
 	put = other.put;
 
@@ -142,22 +130,18 @@ void MyQueue<T>::moveFrom(MyQueue<T>&& other)
 }
 
 template <typename T>
-void MyQueue<T>::free()
-{
+void MyQueue<T>::free() {
 	delete[] data;
 }
 
 template <typename T>
-MyQueue<T>::MyQueue(const MyQueue<T>& other)
-{
+MyQueue<T>::MyQueue(const MyQueue<T>& other) {
 	copyFrom(other);
 }
 
 template <typename T>
-MyQueue<T>& MyQueue<T>::operator=(const MyQueue<T>& other)
-{
-	if (this != &other)
-	{
+MyQueue<T>& MyQueue<T>::operator=(const MyQueue<T>& other) {
+	if (this != &other) {
 		free();
 		copyFrom(other);
 	}
@@ -165,25 +149,20 @@ MyQueue<T>& MyQueue<T>::operator=(const MyQueue<T>& other)
 }
 
 template <typename T>
-MyQueue<T>::MyQueue(MyQueue<T>&& other)
-{
+MyQueue<T>::MyQueue(MyQueue<T>&& other) {
 	moveFrom(std::move(other));
 }
 
 template <typename T>
-MyQueue<T>& MyQueue<T>::operator=(MyQueue<T>&& other)
-{
-	if (this != &other)
-	{
+MyQueue<T>& MyQueue<T>::operator=(MyQueue<T>&& other) {
+	if (this != &other) {
 		free();
 		moveFrom(std::move(other));
 	}
 	return *this;
 }
 
-
 template <typename T>
-MyQueue<T>::~MyQueue()
-{
+MyQueue<T>::~MyQueue() {
 	free();
 }

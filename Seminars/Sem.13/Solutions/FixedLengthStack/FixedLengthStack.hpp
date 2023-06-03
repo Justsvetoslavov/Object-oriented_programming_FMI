@@ -6,7 +6,6 @@ class FixedLengthStack {
 private:
 	T data[capacity];
 	size_t size = 0;
-
 public:
 	void push(const T& obj);
 	void push(T&& obj);

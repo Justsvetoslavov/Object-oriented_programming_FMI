@@ -1,43 +1,35 @@
 #pragma once
-
 #include "Student.h"
 #include "Teacher.h"
 
-const int MAX_NUMBER_OF_ASSISTANTS = 3;
-const int START_ARRAY_SIZE = 2;
+const int TEACHERS_MAX_SIZE = 4;
 
-class OOPcourse {
-	// A student exists intependently, outside the course 
-	Student** _students = nullptr;
-
-	// One lecturer/assistant can teach multiple OOP courses 
-	Teacher* _lecturer = nullptr;
-	Teacher* _assistants[MAX_NUMBER_OF_ASSISTANTS]{ nullptr };
-	
-	unsigned _numberOfStudents = 0;
-	unsigned _arraySize = START_ARRAY_SIZE;
-
-	void copyFrom(const OOPcourse& other);
-	void free();
-	void resize();
-	int find(unsigned FN);
-
+class OOPCourse
+{
+private:
+	Teacher teachers[TEACHERS_MAX_SIZE];
+	Student* students;
+	size_t teachersCount = 0;
+	size_t studentsCount = 0;
+	size_t studentsCapacity = 0;
 public:
+	OOPCourse(const char* lecturer, const char* assistant1);
+	OOPCourse(const char* lecturer, const char* assistant1, const char* assistant2);
+	OOPCourse(const char* lecturer, const char* assistant1, const char* assistant2, const char* assistant3);
+	OOPCourse(const OOPCourse& other);
+	OOPCourse& operator=(const OOPCourse& other);
+	~OOPCourse();
 
-	OOPcourse();
-	OOPcourse(Teacher* lecturer, Teacher* a1 = nullptr, Teacher* a2 = nullptr, Teacher* a3 = nullptr);
-	OOPcourse(const OOPcourse& other);
-	OOPcourse& operator=(const OOPcourse& other);
-	~OOPcourse();
-
-	void addStudent(Student& st);
-	void addGrade(unsigned FN, const char* taskName, double gradeValue, const Teacher& teacher);
-	double getAverageForCourse() const;
-	bool removeStudent(unsigned FN);
-	double getAverageGradePerTask(const char* taskName) const;
-	double getAverageFromTeacher(const Teacher& teacher) const;
-
-	void changeGrade(unsigned FN, const char* taskName, double newGrade);
-
-	friend std::ostream& operator << (std::ostream& os, const OOPcourse& c);
+	void AddStudent(const char* stName, int fn);
+	void AddGrade(int fn, const char* taskName, double grade, const char* teacherName);
+	double GetAverigeForCourse() const;
+	void RemoveStudent(int fn);
+	double GetAverigeGradePerTask(const char* taskName) const;
+	double GetAverigeFromTeacher(const char* teacherName) const;
+private:
+	void CopyFrom(const OOPCourse& other);
+	void Free();
+	bool TeacherExists(const char* teacherName) const;
+	void Resize(size_t newCapacity);
 };
+

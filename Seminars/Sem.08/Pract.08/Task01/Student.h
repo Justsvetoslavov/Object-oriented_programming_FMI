@@ -1,33 +1,30 @@
 #pragma once
+#include "Task.h"
 
-#include "Grade.h"
+const int GRADES_MAX_COUNT = 7;
 
-const int MAX_NUMBER_OF_GRADES = 7;
-
-class Student {
-	Grade _grades[MAX_NUMBER_OF_GRADES];
-	unsigned _numberOfGrades = 0;
-	unsigned _FN = 0;
-	MyString _name;
+class Student
+{
+private:
+	char* name = nullptr;
+	int fn = 0;
+	Task tasks[GRADES_MAX_COUNT]{};
+	size_t tasksCount = 0;
 
 public:
 	Student() = default;
-	Student(const char* name, unsigned FN);
+	Student(const char* name, int fn);
+	Student(const Student& other);
+	Student& operator=(const Student& other);
+	~Student();
 
-	const Grade* getGrades() const;
-	unsigned getNumberOfGrades() const;
-	unsigned getFN() const;
-	const MyString& getName() const;
-
-	void setName(const char* name);
-	void setFN(unsigned FN);
-
-	int getTaskIndex(const char* task) const;
-
-	void addGrade(double value, const char* task, const Teacher& teacher);
-
-	double getGradeValueAtIndex(size_t ind) const;
-	void setGradeAtIndex(size_t ind, double newValue);
-
-	friend std::ostream& operator << (std::ostream& os, const Student& st);
+	void AddTask(const char* taskName, double grade, const char* teacherName);
+	int GetFn() const;
+	int GetTasksCount() const;
+	const Task* GetTasks() const;
+	void SetTask(const char* name, double grade);
+private:
+	void CopyFrom(const Student& other);
+	void Free();
 };
+

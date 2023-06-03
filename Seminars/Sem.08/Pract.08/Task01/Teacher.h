@@ -1,12 +1,20 @@
 #pragma once
+class Teacher
+{
+private:
+	char* name = nullptr;
 
-#include "MyString.h"
-
-class Teacher {
-	MyString _name;
 public:
-	Teacher();
+	Teacher() = default;
 	Teacher(const char* name);
+	Teacher(const Teacher& other);
+	Teacher& operator=(const Teacher& other);
+	~Teacher();
 
-	friend std::ostream& operator << (std::ostream& os, const Teacher& teacher);
+	const char* GetName() const;
+
+private:
+	void CopyFrom(const Teacher& other);
+	void Free();
 };
+

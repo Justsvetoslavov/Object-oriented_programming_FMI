@@ -14,3 +14,4 @@
 - [Тема 11](https://github.com/Justsvetoslavov/Object-oriented_programming_FMI/tree/master/Seminars/Sem.11) : Статично и динамично свързване. Виртуални функции. Полиморфизъм. Абстрактни класове.
 - [Тема 12](https://github.com/Justsvetoslavov/Object-oriented_programming_FMI/tree/master/Seminars/Sem.12) : Колекции от обекти в полиморфна йерархия(хетерогененконтейнер). Копиране и триене. Type casting.
 - [Тема 13](https://github.com/Justsvetoslavov/Object-oriented_programming_FMI/tree/master/Seminars/Sem.13) : Шаблони
+- [Тема 14](https://github.com/Justsvetoslavov/Object-oriented_programming_FMI/tree/master/Seminars/Sem.14) : Дървовидна структура от полиморфни обекти.

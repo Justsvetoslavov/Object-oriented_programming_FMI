@@ -9,14 +9,14 @@
 class Fruit {
 public:
     virtual void printColor() const = 0;
-	
-	virtual ~Fruit() = default;
+    
+    virtual ~Fruit() = default;
 };
 
 class Apple : public Fruit {
 public:
 	void printColor() const override {
-		std::cout << "Red or green!\n ";
+		std::cout << "Red or green!\n";
 	}
 };
 
@@ -30,12 +30,12 @@ public:
 class Lemon : public Fruit {
 public:
     size_t sourness;
-
-	Lemon(size_t sourness) : sourness(sourness) {}
-	
-	void printColor() const override {
-		std::cout << "Yellow!\n";
-	}
+    
+    Lemon(size_t sourness) : sourness(sourness) {}
+    
+    void printColor() const override {
+    	std::cout << "Yellow!\n";
+    }
 };
 
 class FruitStore {
@@ -44,17 +44,17 @@ private:
 	size_t capacity;
 	size_t count;
 public:
-    FruitStore();
-    FruitStore(const FruitStore&);
-    FruitStore& operator=(const FruitStore&);
-    ~FruitStore();
+	FruitStore();
+    	FruitStore(const FruitStore&);
+    	FruitStore& operator=(const FruitStore&);
+    	~FruitStore();
 	
-    void addApple();
-    void addOrange();
-    void addLemon(size_t sourness);
+    	void addApple();
+    	void addOrange();
+    	void addLemon(size_t sourness);
 private:          
-    void copyFrom(const FruitStore& other);
-    void free();
+    	void copyFrom(const FruitStore& other);
+    	void free();
 };
 
 void FruitStore::addApple() {
@@ -77,7 +77,7 @@ void FruitStore::addLemon(size_t sourness) {
 void FruitStore::free() {
 	for(size_t i = 0; i < count; ++i) {
 		delete fruits[i];
-    }
+    	}
 	
 	delete[] fruits;
 }
@@ -143,7 +143,7 @@ void FruitStore::copyFrom(const FruitStore& other) {
 	
 	for(size_t i = 0; i < other.count; ++i) {
 		fruits[i] = other.fruits[u]->clone();
-    }
+    	}
 		
 	count = other.count;
 	capacity = other.capacity;
@@ -198,9 +198,9 @@ void FruitStore::copyFrom(const FruitStore& other) {
 
 To and from void pointer:
 ```
-int i = 10;
-void* v = static_cast<void*>(&i);
-int* ip = static_cast<int*>(v);
+	int i = 10;
+	void* v = static_cast<void*>(&i);
+	int* ip = static_cast<int*>(v);
 ```
 
 ## Dynamic cast

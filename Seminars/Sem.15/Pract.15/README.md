@@ -84,5 +84,6 @@ std::cout << test1.getAt(0,1); //4
 - Нека цялата комуникация към заявките става през някаква Facade-а
 
 Заключение:
-![3bfacad0-fd82-414c-9453-82450f8de174_Untitled](https://github.com/Justsvetoslavov/Object-oriented_programming_FMI/assets/49128895/ca7df815-8fea-45a6-a329-1dde7794e684)
+
+<img src="https://github.com/Justsvetoslavov/Object-oriented_programming_FMI/assets/49128895/ca7df815-8fea-45a6-a329-1dde7794e684" width="400px">
 

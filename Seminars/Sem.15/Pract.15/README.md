@@ -85,5 +85,5 @@ std::cout << test1.getAt(0,1); //4
 
 Заключение:
 
-<img src="https://github.com/Justsvetoslavov/Object-oriented_programming_FMI/assets/49128895/ca7df815-8fea-45a6-a329-1dde7794e684" width="400px">
+<img src="https://github.com/Justsvetoslavov/Object-oriented_programming_FMI/assets/49128895/ca7df815-8fea-45a6-a329-1dde7794e684" width="600px">
 

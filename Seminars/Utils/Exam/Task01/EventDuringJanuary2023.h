@@ -5,6 +5,7 @@
 class EventDuringJanuary2023 {
 private:
 	const static unsigned FirstDay = 7;
+
 public:
 	bool AddDay(unsigned day);
 	bool RemoveDay(unsigned day);

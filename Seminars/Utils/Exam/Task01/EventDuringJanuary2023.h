@@ -9,7 +9,7 @@ private:
 public:
 	bool AddDay(unsigned day);
 	bool RemoveDay(unsigned day);
-	bool ContainsDay(unsigned day) const;
+	bool ContainsDay(unsigned long day) const;
 	bool CheckIfDayIsPresent(unsigned day) const;
 	unsigned HowManyOnDayOfWeek(unsigned dayOfWeek);
 

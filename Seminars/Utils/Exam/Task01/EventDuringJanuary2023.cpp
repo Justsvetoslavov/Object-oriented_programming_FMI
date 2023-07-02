@@ -40,7 +40,7 @@ unsigned EventDuringJanuary2023::HowManyOnDayOfWeek(unsigned dayOfWeek) {
 
 	unsigned counter = 0;
 	unsigned offset = (LastDayOfWeek == dayOfWeek) ? 0 : dayOfWeek;
-	for (unsigned i = 1 + offset; i <= MaxDays; i += LastDayOfWeek) {
+	for (uint32_t i = 1 + offset; i <= MaxDays; i += LastDayOfWeek) {
 		if (ContainsDay(i)) {
 			++counter;
 		}

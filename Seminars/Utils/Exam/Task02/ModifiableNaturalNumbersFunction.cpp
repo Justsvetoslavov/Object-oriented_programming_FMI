@@ -1,6 +1,8 @@
 #include "ModifiableNaturalNumbersFunction.hpp"
 
 #include <iostream>
+ModifiableNaturalNumbersFunction::ModifiableNaturalNumbersFunction() 
+	: ModifiableNaturalNumbersFunction([](unsigned n){ return n; }, 2) {}
 
 ModifiableNaturalNumbersFunction::ModifiableNaturalNumbersFunction(UnaryUnsignedFunction pFunc, unsigned pointsToChange)
 	: NaturalNumbersFunction(pFunc) {

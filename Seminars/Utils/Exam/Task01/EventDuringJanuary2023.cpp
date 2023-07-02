@@ -24,7 +24,7 @@ bool EventDuringJanuary2023::RemoveDay(unsigned day) {
 	return true;
 }
 
-bool EventDuringJanuary2023::ContainsDay(unsigned day) const {
+bool EventDuringJanuary2023::ContainsDay(unsigned long day) const {
 	if (0 == day || day > MaxDays) {
 		return false;
 	}

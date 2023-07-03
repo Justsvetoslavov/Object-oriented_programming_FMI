@@ -20,7 +20,7 @@ bool EventDuringJanuary2023::RemoveDay(unsigned day) {
 		return false;
 	}
 
-	m_days ^= (1 << day);
+	m_days &= ~(1 << day);
 	return true;
 }
 
